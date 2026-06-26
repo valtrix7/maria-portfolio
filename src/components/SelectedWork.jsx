@@ -139,7 +139,7 @@ const SelectedWork = () => {
   }, []);
 
   return (
-    <section className="selected-work" id="work" ref={sectionRef}>
+    <section className="selected-work" id="work" data-section="selected-work" ref={sectionRef}>
       <div className="container work-header">
         <div className="label">Selected Work</div>
         <h2 className="display-lg" style={{ marginTop: '16px', marginBottom: '20px' }}>

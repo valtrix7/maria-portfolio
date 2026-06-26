@@ -84,7 +84,7 @@ const Recognition = () => {
   }, []);
 
   return (
-    <section className="recognition" id="recognition" ref={sectionRef}>
+    <section className="recognition" id="recognition" data-section="recognition" ref={sectionRef}>
       <div className="container">
         <div className="recognition-header">
           <div className="label">Recognition</div>

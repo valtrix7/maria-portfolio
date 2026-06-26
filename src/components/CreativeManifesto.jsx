@@ -69,7 +69,7 @@ const CreativeManifesto = () => {
   }, []);
 
   return (
-    <section className="manifesto" ref={sectionRef}>
+    <section className="manifesto" data-section="creative-manifesto" ref={sectionRef}>
       <div className="manifesto-marquee manifesto-marquee-top">
         <div className="manifesto-marquee-track" ref={marquee1}>
           <span>MOTION</span><span className="mm-dot"></span>

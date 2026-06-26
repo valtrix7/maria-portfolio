@@ -54,7 +54,7 @@ const Toolbox = () => {
   }, []);
 
   return (
-    <section className="toolbox" id="tools" ref={sectionRef}>
+    <section className="toolbox" id="tools" data-section="toolbox" ref={sectionRef}>
       <div className="container">
         <div className="toolbox-header">
           <div className="label">Toolbox</div>

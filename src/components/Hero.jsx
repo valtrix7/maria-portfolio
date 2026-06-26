@@ -152,7 +152,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="hero" id="hero" ref={heroRef}>
+    <section className="hero" id="hero" data-section="hero" ref={heroRef}>
       {/* Giant background watermark text */}
       <div className="hero-bg-text">MOTION</div>
 

@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Header from './components/Header';
+import AnimationCanvas from './components/AnimationCanvas';
 import Hero from './components/Hero';
 import About from './components/About';
 import CreativeManifesto from './components/CreativeManifesto';
@@ -51,7 +52,7 @@ function App() {
 
   return (
     <>
-      <div className="grain" />
+      <AnimationCanvas />
       <div className="cursor-dot" ref={cursorDotRef} />
       <div className="cursor-ring" ref={cursorRingRef} />
       <Header />

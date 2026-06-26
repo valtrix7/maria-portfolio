@@ -52,7 +52,7 @@ const Contact = () => {
   }, []);
 
   return (
-    <section className="contact" id="contact" ref={sectionRef}>
+    <section className="contact" id="contact" data-section="contact" ref={sectionRef}>
       <LineReveal />
       <div className="container">
         <div className="contact-display-text">

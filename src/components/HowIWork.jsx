@@ -90,7 +90,7 @@ const HowIWork = () => {
   }, []);
 
   return (
-    <section className="how-i-work" id="process" ref={sectionRef}>
+    <section className="how-i-work" id="process" data-section="how-i-work" ref={sectionRef}>
       <div className="container">
         <div className="process-header">
           <div className="label">How I Work</div>
