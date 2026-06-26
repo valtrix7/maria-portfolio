@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import Navbar from './components/Navbar';
+import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
 import CreativeManifesto from './components/CreativeManifesto';
@@ -54,7 +54,7 @@ function App() {
       <div className="grain" />
       <div className="cursor-dot" ref={cursorDotRef} />
       <div className="cursor-ring" ref={cursorRingRef} />
-      <Navbar />
+      <Header />
       <main>
         <Hero />
         <About />
