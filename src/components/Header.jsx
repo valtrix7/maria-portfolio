@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import gsap from 'gsap';
+import MenuCard from './MenuCard';
 
 const NAV_LINKS = [
   { label: 'About', href: '#about' },
@@ -45,8 +46,6 @@ const Header = () => {
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
-  const closeMenu = () => setMenuOpen(false);
-
   return (
     <>
       <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
@@ -67,34 +66,17 @@ const Header = () => {
 
           <button
             className="hamburger-btn"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
           >
-            <span className={`hamburger-line ${menuOpen ? 'open' : ''}`} />
-            <span className={`hamburger-line ${menuOpen ? 'open' : ''}`} />
-            <span className={`hamburger-line ${menuOpen ? 'open' : ''}`} />
+            <span className="hamburger-line" />
+            <span className="hamburger-line" />
+            <span className="hamburger-line" />
           </button>
         </div>
       </header>
 
-      {menuOpen && (
-        <div className="mobile-menu">
-          {NAV_LINKS.map((link, i) => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={closeMenu}
-              className="mobile-menu-link"
-              style={{ animationDelay: `${0.1 + i * 0.05}s` }}
-            >
-              {link.label}
-            </a>
-          ))}
-          <a href="#contact" onClick={closeMenu} className="mobile-menu-cta">
-            Let's Talk
-          </a>
-        </div>
-      )}
+      <MenuCard isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
     </>
   );
 };
