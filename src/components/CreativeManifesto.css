@@ -1,0 +1,103 @@
+.manifesto {
+  background: var(--bg);
+  padding: clamp(80px, 10vw, 160px) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.manifesto-content {
+  padding: clamp(60px, 8vw, 120px) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  perspective: 600px;
+}
+
+.manifesto-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: baseline;
+}
+
+.manifesto-word {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(48px, 8vw, 120px);
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.manifesto-word.accent {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.manifesto-sub {
+  font-size: clamp(18px, 1.6vw, 24px);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-top: 8px;
+}
+
+/* Spinning badge */
+.manifesto-spin-wrap {
+  position: absolute;
+  top: 50%;
+  right: clamp(40px, 8vw, 120px);
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.manifesto-spin {
+  will-change: transform;
+}
+
+/* Marquees */
+.manifesto-marquee {
+  overflow: hidden;
+  opacity: 0.08;
+  white-space: nowrap;
+}
+
+.manifesto-marquee-top {
+  margin-bottom: 0;
+}
+
+.manifesto-marquee-bottom {
+  margin-top: 0;
+}
+
+.manifesto-marquee-track {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(14px, 1.5vw, 20px);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  width: max-content;
+}
+
+.manifesto-marquee-track.reverse {
+  animation: none;
+}
+
+.mm-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .manifesto-main { gap: 12px; }
+  .manifesto-spin-wrap { display: none; }
+}

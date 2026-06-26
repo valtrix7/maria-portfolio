@@ -1,0 +1,191 @@
+.selected-work {
+  background: var(--bg);
+}
+
+.work-header {
+  margin-bottom: 80px;
+}
+
+/* Horizontal scroll */
+.h-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: #050505;
+}
+
+.h-track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+}
+
+/* Each slide = full viewport width */
+.h-slide {
+  flex-shrink: 0;
+  width: 100vw;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(40px, 6vw, 120px);
+  gap: clamp(32px, 4vw, 80px);
+}
+
+.h-slide-frame {
+  flex: 1;
+  height: 70dvh;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.h-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  will-change: transform;
+}
+
+/* Slide info */
+.h-slide-info {
+  width: clamp(220px, 28vw, 400px);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.h-slide-category {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.h-slide-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.h-slide-subtitle {
+  font-size: clamp(15px, 1.2vw, 18px);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.h-slide-year {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  margin-top: 8px;
+}
+
+/* HUD overlay */
+.h-hud {
+  position: absolute;
+  bottom: 48px;
+  left: clamp(40px, 6vw, 120px);
+  right: clamp(40px, 6vw, 120px);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.h-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.h-counter span:first-child {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.h-counter-sep {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin: 0 2px;
+}
+
+.h-counter-total {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* Progress bar */
+.h-progress {
+  flex: 1;
+  height: 2px;
+  background: var(--border-light);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.h-progress-fill {
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+}
+
+/* Dots */
+.h-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.h-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text);
+  opacity: 0.3;
+  transition: width 0.4s var(--ease), opacity 0.4s var(--ease);
+}
+
+@media (max-width: 768px) {
+  .h-slide {
+    flex-direction: column;
+    padding: 60px 24px 100px;
+    gap: 24px;
+    justify-content: center;
+  }
+  .h-slide-frame {
+    width: 100%;
+    height: 50dvh;
+  }
+  .h-slide-info {
+    width: 100%;
+  }
+  .h-hud {
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+  }
+  .h-dots {
+    display: none;
+  }
+}
