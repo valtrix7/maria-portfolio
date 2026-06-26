@@ -266,7 +266,6 @@ section {
 }
 
 .hamburger-btn {
-  display: none;
   width: 36px;
   height: 36px;
   flex-direction: column;
@@ -299,7 +298,6 @@ section {
 
 @media (max-width: 768px) {
   .header-nav { display: none !important; }
-  .hamburger-btn { display: flex !important; }
   .header-cta { display: none !important; }
 }
 
@@ -486,7 +484,7 @@ section {
 .menu-overlay {
   position: fixed;
   inset: 0;
-  z-index: 9998;
+  z-index: 10001;
   background: #00000080;
   display: flex;
   align-items: center;
