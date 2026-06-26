@@ -190,25 +190,32 @@ section {
 }
 
 .menu-trigger {
-  background: transparent;
-  border: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
   cursor: pointer;
-  padding: 8px 0;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   gap: 8px;
+  transition: background 0.3s ease;
 }
-.menu-trigger-text {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  transition: color 0.3s ease;
+.menu-trigger:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
-.menu-trigger:hover .menu-trigger-text {
-  color: var(--text);
+.menu-trigger-line {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  background: var(--text-secondary);
+  border-radius: 2px;
+}
+.header-spacer {
+  width: 22px;
+  flex-shrink: 0;
 }
 
 /* ---------- Horizontal Scroll Section ---------- */

@@ -42,8 +42,12 @@ const Header = () => {
           onClick={() => setMenuOpen(true)}
           aria-label="Open menu"
         >
-          <span className="menu-trigger-text">MENU</span>
+          <span className="menu-trigger-line" />
+          <span className="menu-trigger-line" />
+          <span className="menu-trigger-line" />
         </button>
+
+        <div className="header-spacer" />
       </header>
 
       <MenuCard isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
