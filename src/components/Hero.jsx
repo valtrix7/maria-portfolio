@@ -9,126 +9,77 @@ const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+const SERVICES = [
+  { num: '01', label: 'Motion Design' },
+  { num: '02', label: 'Brand Identity' },
+  { num: '03', label: 'Visual Direction' },
+  { num: '04', label: 'Creative Strategy' },
+];
+
 const Hero = () => {
   const heroRef = useRef(null);
-  const nameRef = useRef(null);
-  const outlineRef = useRef(null);
-  const badgeRef = useRef(null);
-  const ctaRef = useRef(null);
+  const headlineRef = useRef(null);
   const contentRef = useRef(null);
-  const orbitRef = useRef(null);
 
   useEffect(() => {
     const reduce = prefersReducedMotion();
 
     const ctx = gsap.context(() => {
-      // Reduced motion: show everything, no entrance choreography or scrub.
       if (reduce) {
-        gsap.set(
-          [
-            '.hero-bg-text',
-            nameRef.current,
-            outlineRef.current,
-            badgeRef.current,
-            ctaRef.current,
-            '.hero-subtitle',
-            orbitRef.current,
-          ],
-          { opacity: 1, y: 0, x: 0, scale: 1, rotation: 0 }
-        );
+        gsap.set(['.hero-kicker', '.hero-headline-word', '.hero-subtext', '.hero-service', '.hero-visual'], {
+          opacity: 1, y: 0, x: 0, scale: 1,
+        });
         return;
       }
 
-      // ---------- Entrance timeline ----------
-      const tl = gsap.timeline({ delay: 0.1 });
+      const tl = gsap.timeline({ delay: 0.2 });
 
-      // Background watermark slide in
-      tl.fromTo(
-        '.hero-bg-text',
-        { x: 200, opacity: 0 },
-        { x: 0, opacity: 1, duration: 1.6, ease: 'power3.out' },
+      // Kicker
+      tl.fromTo('.hero-kicker',
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
         0
       );
 
-      // Name letters, masked rise with elastic settle
-      const nameEl = nameRef.current;
-      if (nameEl) {
-        const lines = nameEl.querySelectorAll('.hero-name-line');
-        lines.forEach((line, lineIndex) => {
-          const text = line.textContent;
-          line.innerHTML = '';
-          text.split('').forEach((char) => {
-            const wrap = document.createElement('span');
-            wrap.className = 'hero-letter-mask';
-            const span = document.createElement('span');
-            span.className = 'hero-letter';
-            span.textContent = char === ' ' ? '\u00A0' : char;
-            wrap.appendChild(span);
-            line.appendChild(wrap);
-          });
-
-          tl.fromTo(
-            line.querySelectorAll('.hero-letter'),
-            { yPercent: 115 },
-            {
-              yPercent: 0,
-              duration: 1.2,
-              stagger: 0.035,
-              ease: 'power4.out',
-            },
-            0.2 + lineIndex * 0.14
-          );
-        });
-      }
-
-      // Outline line clip reveal
-      if (outlineRef.current) {
-        tl.fromTo(
-          outlineRef.current,
-          { clipPath: 'inset(0 100% 0 0)' },
-          { clipPath: 'inset(0 0% 0 0)', duration: 1.5, ease: 'power4.inOut' },
-          0.45
-        );
-      }
-
-      // Badge scale pop
-      tl.fromTo(
-        badgeRef.current,
-        { scale: 0, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.8, ease: 'back.out(1.7)' },
-        1.1
+      // Headline words stagger
+      tl.fromTo('.hero-headline-word',
+        { y: 80, opacity: 0, rotateX: 40 },
+        { y: 0, opacity: 1, rotateX: 0, duration: 1.2, stagger: 0.12, ease: 'power4.out' },
+        0.15
       );
 
-      // Subtitle slide up
-      tl.fromTo(
-        '.hero-subtitle',
-        { y: 24, opacity: 0 },
+      // Subtext
+      tl.fromTo('.hero-subtext',
+        { y: 30, opacity: 0 },
         { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
-        1.0
+        0.6
       );
 
-      // CTA slide up
-      tl.fromTo(
-        ctaRef.current,
-        { y: 32, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
-        1.2
+      // Description
+      tl.fromTo('.hero-desc',
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
+        0.8
       );
 
-      // Orbit badge drop in
-      if (orbitRef.current) {
-        tl.fromTo(
-          orbitRef.current,
-          { scale: 0.6, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 1, ease: 'power3.out' },
-          0.9
-        );
-      }
+      // Services stagger
+      tl.fromTo('.hero-service',
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'power3.out' },
+        0.9
+      );
 
-      // ---------- Scrubbed parallax (hands off into the pinned section) ----------
+      // Visual image
+      tl.fromTo('.hero-visual',
+        { scale: 1.1, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 1.4, ease: 'power3.out' },
+        0.3
+      );
+
+      // Parallax on scroll
       gsap.to(contentRef.current, {
-        y: -80,
-        opacity: 0.35,
+        y: -60,
+        opacity: 0.3,
         ease: 'none',
         scrollTrigger: {
           trigger: heroRef.current,
@@ -138,8 +89,8 @@ const Hero = () => {
         },
       });
 
-      gsap.to('.hero-bg-text', {
-        x: -320,
+      gsap.to('.hero-visual', {
+        y: -40,
         ease: 'none',
         scrollTrigger: {
           trigger: heroRef.current,
@@ -148,15 +99,6 @@ const Hero = () => {
           scrub: 1.5,
         },
       });
-
-      // Orbit continuous spin (independent of scroll)
-      gsap.to('.hero-orbit', {
-        rotation: 360,
-        duration: 22,
-        repeat: -1,
-        ease: 'none',
-        transformOrigin: '50% 50%',
-      });
     }, heroRef);
 
     return () => ctx.revert();
@@ -164,64 +106,48 @@ const Hero = () => {
 
   return (
     <section className="hero" id="hero" data-section="hero" ref={heroRef}>
-      {/* Giant background watermark */}
-      <div className="hero-bg-text">MOTION</div>
+      {/* Warm gradient overlay */}
+      <div className="hero-gradient" />
 
-      {/* Orbit badge */}
-      <div className="hero-orbit-wrap" ref={orbitRef}>
-        <div className="hero-orbit">
-          <svg viewBox="0 0 100 100" width="110" height="110">
-            <defs>
-              <path
-                id="circlePath"
-                d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
-              />
-            </defs>
-            <text fill="#E8611A" fontSize="7.5" fontWeight="700" letterSpacing="3">
-              <textPath href="#circlePath">
-                AVAILABLE FOR WORK * MOTION * DESIGN * ANIMATION *
-              </textPath>
-            </text>
-          </svg>
-          <div className="hero-orbit-dot"></div>
-          <div className="hero-orbit-core">MI</div>
+      <div className="container hero-layout" ref={contentRef}>
+        {/* Left column: text */}
+        <div className="hero-text-col">
+          <span className="hero-kicker">Hey, I'm a</span>
+
+          <h1 className="hero-headline" ref={headlineRef}>
+            <span className="hero-headline-word">Motion</span>
+            <span className="hero-headline-word">Designer</span>
+          </h1>
+
+          <div className="hero-right-text">
+            <p className="hero-subtext">
+              Great design should feel invisible.
+            </p>
+            <p className="hero-desc">
+              From concept to screen, I craft visual stories through motion, design, and strategic thinking.
+            </p>
+          </div>
+        </div>
+
+        {/* Services row */}
+        <div className="hero-services">
+          {SERVICES.map((s) => (
+            <div key={s.num} className="hero-service">
+              <span className="hero-service-num">{s.num}</span>
+              <span className="hero-service-label">{s.label}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="container hero-content" ref={contentRef}>
-        <div className="hero-top-row">
-          <div className="hero-label label" ref={badgeRef}>
-            Motion Graphics &amp; Design
-          </div>
-          <div className="hero-year">©2026</div>
-        </div>
-
-        <h1 className="hero-name" ref={nameRef}>
-          <span className="hero-name-line">MARIA</span>
-          <span className="hero-name-line hero-name-outline" ref={outlineRef}>
-            ISLAM
-          </span>
-        </h1>
-
-        <div className="hero-bottom">
-          <p className="body-lg hero-subtitle">
-            Crafting visual stories through motion, design, and strategic
-            thinking. Bringing brands to life with purposeful animation.
-          </p>
-          <div className="hero-cta" ref={ctaRef}>
-            <a href="#work" className="btn btn-primary">
-              View Work
-            </a>
-            <a href="#contact" className="btn btn-outline">
-              Get in Touch
-            </a>
-          </div>
-        </div>
+      {/* Visual: warm gradient portrait placeholder */}
+      <div className="hero-visual">
+        <div className="hero-visual-inner" />
       </div>
 
       {/* Scroll cue */}
       <div className="hero-scroll">
-        <span className="hero-scroll-line"></span>
+        <span className="hero-scroll-line" />
       </div>
     </section>
   );
