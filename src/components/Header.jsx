@@ -35,7 +35,17 @@ const Header = () => {
   return (
     <>
       <header className={`header ${scrolled ? 'header--scrolled' : ''}`}>
-        <a href="#" className="header-logo">M</a>
+        <a href="#" className="header-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 20V4h3.5l4.5 7.5L15.5 4H19v16h-3v-9.5L12 18l-4-7.5V20H3z" fill="url(#logo-grad)" />
+            <defs>
+              <linearGradient id="logo-grad" x1="3" y1="4" x2="19" y2="20" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#E8611A" />
+                <stop offset="1" stopColor="#ff8a56" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </a>
 
         <button
           className="menu-trigger"
@@ -46,8 +56,6 @@ const Header = () => {
           <span className="menu-trigger-line" />
           <span className="menu-trigger-line" />
         </button>
-
-        <div className="header-spacer" />
       </header>
 
       <MenuCard isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
