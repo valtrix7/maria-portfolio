@@ -52,9 +52,10 @@ const Header = () => {
           onClick={() => setMenuOpen(true)}
           aria-label="Open menu"
         >
-          <span className="menu-trigger-line" />
-          <span className="menu-trigger-line" />
-          <span className="menu-trigger-line" />
+          <span className="menu-burger">
+            <span className="menu-burger-line menu-burger-line--1" />
+            <span className="menu-burger-line menu-burger-line--2" />
+          </span>
         </button>
       </header>
 
