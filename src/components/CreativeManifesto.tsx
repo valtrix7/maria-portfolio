@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './CreativeManifesto.css';
@@ -9,14 +9,13 @@ const isMobile = () =>
   typeof window !== 'undefined' && window.innerWidth <= 768;
 
 const CreativeManifesto = () => {
-  const sectionRef = useRef(null);
-  const marquee1 = useRef(null);
-  const marquee2 = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const marquee1 = useRef<HTMLDivElement>(null);
+  const marquee2 = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mobile = isMobile();
     const ctx = gsap.context(() => {
-      // Big text word reveal — faster on mobile
       gsap.fromTo('.manifesto-word',
         { y: mobile ? 60 : 120, opacity: 0, rotateX: mobile ? -30 : -60 },
         {
@@ -31,7 +30,6 @@ const CreativeManifesto = () => {
         }
       );
 
-      // Sub text
       gsap.fromTo('.manifesto-sub',
         { y: mobile ? 20 : 30, opacity: 0 },
         {
@@ -45,7 +43,6 @@ const CreativeManifesto = () => {
         }
       );
 
-      // Counter spin — skip on mobile
       if (!mobile) {
         gsap.fromTo('.manifesto-spin',
           { rotation: 0 },
@@ -62,7 +59,6 @@ const CreativeManifesto = () => {
         );
       }
 
-      // Marquees — slower on mobile
       if (marquee1.current) {
         gsap.to(marquee1.current, { x: '-50%', duration: mobile ? 15 : 20, repeat: -1, ease: 'none' });
       }
@@ -94,7 +90,7 @@ const CreativeManifesto = () => {
       <div className="container manifesto-content">
         <div className="manifesto-main">
           <span className="manifesto-word">I</span>
-          <span className="manifesto-word">don't</span>
+          <span className="manifesto-word">don&apos;t</span>
           <span className="manifesto-word">just</span>
           <span className="manifesto-word accent">design.</span>
         </div>
@@ -106,7 +102,7 @@ const CreativeManifesto = () => {
         </div>
         <p className="manifesto-sub">
           Every frame is intentional. Every transition tells a story.
-          Motion isn't decoration — it's communication.
+          Motion isn&apos;t decoration — it&apos;s communication.
         </p>
       </div>
 

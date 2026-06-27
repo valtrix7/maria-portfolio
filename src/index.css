@@ -1,5 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
 
+@theme {
+  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Space Grotesk', ui-monospace, monospace;
+
+  --color-background: #0a0a0a;
+  --color-foreground: #ededed;
+  --color-primary: #E8611A;
+  --color-primary-light: #FF7A33;
+  --color-secondary: #777777;
+  --color-muted: #444444;
+  --color-destructive: #ef4444;
+  --color-border: #1f1f1f;
+  --color-border-light: #2a2a2a;
+  --color-surface: #111111;
+  --color-surface-elevated: #161616;
+  --color-accent: #E8611A;
+  --color-accent-light: #FF7A33;
+}
+
+/* ── View Transition ── */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
@@ -10,6 +31,7 @@ html[data-magicui-theme-vt="active"]::view-transition-group(root) {
   animation-duration: var(--magicui-theme-toggle-vt-duration);
 }
 
+/* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
@@ -18,9 +40,9 @@ html {
 }
 
 body {
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #0a0a0a;
-  color: #888;
+  font-family: var(--font-sans);
+  background: var(--color-background);
+  color: var(--color-secondary);
   line-height: 1.6;
   overflow-x: hidden;
 }
@@ -30,23 +52,25 @@ a { text-decoration: none; color: inherit; }
 ul, ol { list-style: none; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 
+/* ── CSS Variables (backward compat) ── */
 :root {
-  --bg: #0a0a0a;
-  --bg-elevated: #111111;
-  --bg-surface: #161616;
-  --accent: #E8611A;
-  --accent-light: #FF7A33;
-  --text: #FFFFFF;
-  --text-secondary: #777777;
-  --text-muted: #444444;
-  --border: #1f1f1f;
-  --border-light: #2a2a2a;
+  --bg: var(--color-background);
+  --bg-elevated: var(--color-surface);
+  --bg-surface: var(--color-surface-elevated);
+  --accent: var(--color-primary);
+  --accent-light: var(--color-primary-light);
+  --text: var(--color-foreground);
+  --text-secondary: var(--color-secondary);
+  --text-muted: var(--color-muted);
+  --border: var(--color-border);
+  --border-light: var(--color-border-light);
   --section-py: clamp(100px, 14vw, 200px);
   --container-px: clamp(24px, 5vw, 80px);
   --container-max: 1400px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* ── Container ── */
 .container {
   width: 100%;
   max-width: var(--container-max);
@@ -59,9 +83,9 @@ section {
   position: relative;
 }
 
-/* ---------- Typography ---------- */
+/* ── Typography ── */
 .display-xl {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(56px, 9vw, 140px);
   font-weight: 900;
   color: var(--text);
@@ -71,7 +95,7 @@ section {
 }
 
 .display-lg {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(40px, 6vw, 80px);
   font-weight: 800;
   color: var(--text);
@@ -80,7 +104,7 @@ section {
 }
 
 .heading-lg {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(32px, 4vw, 56px);
   font-weight: 700;
   color: var(--text);
@@ -89,7 +113,7 @@ section {
 }
 
 .heading-md {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(22px, 2.5vw, 32px);
   font-weight: 600;
   color: var(--text);
@@ -117,7 +141,7 @@ section {
   text-transform: uppercase;
 }
 
-/* ---------- Buttons ---------- */
+/* ── Buttons ── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -163,10 +187,10 @@ section {
   color: var(--accent-light);
 }
 
-/* ---------- Utilities ---------- */
+/* ── Utilities ── */
 .split-line { overflow: hidden; }
 
-/* ---------- Header ---------- */
+/* ── Header ── */
 .header {
   position: fixed;
   top: 24px;
@@ -240,7 +264,7 @@ section {
   margin-left: 0;
 }
 
-/* ---------- Horizontal Scroll Section ---------- */
+/* ── Horizontal Scroll Section ── */
 .horizontal-scroll-wrapper {
   position: relative;
   overflow: hidden;
@@ -253,14 +277,7 @@ section {
   will-change: transform;
 }
 
-/* ---------- Section Dividers ---------- */
-.section-divider {
-  width: 100%;
-  height: 1px;
-  background: var(--border);
-}
-
-/* ---------- Grain Overlay ---------- */
+/* ── Grain Overlay ── */
 .grain {
   position: fixed;
   top: -50%;
@@ -275,13 +292,13 @@ section {
   background-size: 256px 256px;
 }
 
-/* ---------- Selection ---------- */
+/* ── Selection ── */
 ::selection {
   background: var(--accent);
   color: var(--text);
 }
 
-/* ---------- Transition Utilities ---------- */
+/* ── Transition Utilities ── */
 .img-reveal {
   position: relative;
   overflow: hidden;
@@ -309,12 +326,10 @@ section {
   transform-origin: left center;
 }
 
-/* Magnetic hover effect */
 .magnetic {
   transition: transform 0.4s var(--ease);
 }
 
-/* Glow hover */
 .glow-hover {
   position: relative;
   overflow: hidden;
@@ -338,7 +353,6 @@ section {
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* Border glow on hover */
 .border-glow {
   position: relative;
 }
@@ -362,7 +376,6 @@ section {
   opacity: 1;
 }
 
-/* Text gradient */
 .text-gradient {
   background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
@@ -370,7 +383,6 @@ section {
   background-clip: text;
 }
 
-/* Smooth scroll snap container */
 .scroll-snap {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -380,7 +392,7 @@ section {
   scroll-snap-align: center;
 }
 
-/* ---------- Menu Card ---------- */
+/* ── Menu Card ── */
 .menu-overlay {
   position: fixed;
   inset: 0;
@@ -444,7 +456,7 @@ section {
 }
 
 .menu-clock {
-  font-family: 'Space Grotesk', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.3);
@@ -497,7 +509,7 @@ section {
 }
 
 .menu-nav-index {
-  font-family: 'Space Grotesk', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.15);
@@ -510,7 +522,7 @@ section {
 }
 
 .menu-nav-label {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-display);
   font-size: 28px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.2);
@@ -597,7 +609,6 @@ section {
    ========================================================================== */
 
 @media (max-width: 768px) {
-  /* Header — full-width pill on mobile */
   .header {
     width: calc(100% - 32px);
     max-width: none;
@@ -605,7 +616,6 @@ section {
     padding: 10px 16px;
   }
 
-  /* Buttons — bigger touch targets */
   .btn {
     padding: 14px 28px;
     font-size: 13px;
@@ -617,7 +627,6 @@ section {
     justify-content: center;
   }
 
-  /* Typography — tighter mobile spacing */
   .display-xl {
     font-size: clamp(40px, 12vw, 80px);
   }
@@ -630,7 +639,6 @@ section {
     font-size: clamp(26px, 7vw, 40px);
   }
 
-  /* Menu card — full-width on mobile */
   .menu-card {
     width: 92vw;
     max-height: 90vh;
@@ -641,17 +649,14 @@ section {
     font-size: 22px;
   }
 
-  /* Reduce section padding on mobile */
   section {
     padding-block: clamp(60px, 10vw, 100px);
   }
 
-  /* Horizontal scroll sections */
   .horizontal-scroll-track {
     gap: 20px;
   }
 
-  /* Touch-friendly hover states — disable hover effects on touch */
   .hover-target:hover,
   .glow-hover:hover,
   .border-glow:hover {

@@ -1,12 +1,45 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, ReactNode } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+interface SectionRevealProps {
+  children: ReactNode;
+  direction?: 'up' | 'down' | 'left' | 'right';
+  delay?: number;
+}
+
+interface TextRevealProps {
+  children: ReactNode;
+  className?: string;
+  as?: keyof JSX.IntrinsicElements;
+  delay?: number;
+  stagger?: number;
+  split?: 'chars' | 'words';
+}
+
+interface ImageRevealProps {
+  src: string;
+  alt?: string;
+  className?: string;
+}
+
+interface LineRevealProps {
+  className?: string;
+}
+
+interface FadeUpProps {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  duration?: number;
+  stagger?: number;
+}
+
 /* Clip-path curtain reveal for any section */
-export const SectionReveal = ({ children, direction = 'up', delay = 0 }) => {
-  const ref = useRef(null);
+export const SectionReveal: React.FC<SectionRevealProps> = ({ children, direction = 'up', delay = 0 }) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -43,8 +76,8 @@ export const SectionReveal = ({ children, direction = 'up', delay = 0 }) => {
 };
 
 /* Text split reveal with character animation */
-export const TextReveal = ({ children, className = '', as: Tag = 'div', delay = 0, stagger = 0.03, split = 'chars' }) => {
-  const ref = useRef(null);
+export const TextReveal: React.FC<TextRevealProps> = ({ children, className = '', as: Tag = 'div', delay = 0, stagger = 0.03, split = 'chars' }) => {
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -54,7 +87,7 @@ export const TextReveal = ({ children, className = '', as: Tag = 'div', delay = 
       if (split === 'words') {
         const text = el.textContent;
         el.innerHTML = '';
-        text.split(' ').forEach((word, i, arr) => {
+        text?.split(' ').forEach((word, i, arr) => {
           const span = document.createElement('span');
           span.style.display = 'inline-block';
           span.style.overflow = 'hidden';
@@ -82,7 +115,7 @@ export const TextReveal = ({ children, className = '', as: Tag = 'div', delay = 
       } else {
         const text = el.textContent;
         el.innerHTML = '';
-        text.split('').forEach((char) => {
+        text?.split('').forEach((char) => {
           const span = document.createElement('span');
           span.style.display = 'inline-block';
           span.style.overflow = 'hidden';
@@ -113,8 +146,8 @@ export const TextReveal = ({ children, className = '', as: Tag = 'div', delay = 
 };
 
 /* Image reveal with scale + clip-path */
-export const ImageReveal = ({ src, alt = '', className = '' }) => {
-  const ref = useRef(null);
+export const ImageReveal: React.FC<ImageRevealProps> = ({ src, alt = '', className = '' }) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -155,8 +188,8 @@ export const ImageReveal = ({ src, alt = '', className = '' }) => {
 };
 
 /* Horizontal line reveal */
-export const LineReveal = ({ className = '' }) => {
-  const ref = useRef(null);
+export const LineReveal: React.FC<LineRevealProps> = ({ className = '' }) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -177,8 +210,8 @@ export const LineReveal = ({ className = '' }) => {
 };
 
 /* Fade up with scale */
-export const FadeUp = ({ children, className = '', delay = 0, duration = 1, stagger = 0 }) => {
-  const ref = useRef(null);
+export const FadeUp: React.FC<FadeUpProps> = ({ children, className = '', delay = 0, duration = 1, stagger = 0 }) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;

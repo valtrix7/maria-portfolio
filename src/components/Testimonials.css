@@ -1,0 +1,128 @@
+/* ==========================================================================
+   Testimonials — Pinned card stack
+   ========================================================================== */
+
+.testimonials {
+  position: relative;
+  background: var(--bg);
+  overflow: hidden;
+  padding-block: var(--section-py);
+}
+
+.test-header {
+  margin-bottom: clamp(32px, 4vw, 60px);
+}
+
+/* ─── Pin container ─── */
+.test-pin {
+  position: relative;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ─── Cards ─── */
+.test-cards-container {
+  position: relative;
+  height: 420px;
+  width: 380px;
+  max-width: 90vw;
+  perspective: 1000px;
+}
+
+/* ─── Card ─── */
+.test-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  gap: 20px !important;
+  will-change: transform, opacity;
+}
+
+.test-quote {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(14px, 1.2vw, 17px);
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  margin: 0;
+  font-style: italic;
+  max-width: 85%;
+  margin-inline: auto;
+}
+
+/* ─── Stars ─── */
+.test-stars {
+  color: var(--accent, #E8611A);
+}
+
+/* ─── Author ─── */
+.test-author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+}
+
+.test-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(120, 113, 108, 0.3);
+  flex-shrink: 0;
+}
+
+.test-author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.test-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.test-role {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ==========================================================================
+   Mobile
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .test-cards-container {
+    height: 380px;
+    width: 320px;
+  }
+
+  .test-card {
+    padding: 20px !important;
+  }
+
+  .test-quote {
+    font-size: 13px;
+  }
+
+  .test-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .test-name {
+    font-size: 14px;
+  }
+}

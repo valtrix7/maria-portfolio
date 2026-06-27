@@ -5,7 +5,7 @@ const TRAIL_LENGTH = 20;
 const GRAIN_COUNT = 1500;
 const ORB_COUNT = 3;
 
-const SECTION_COLORS = {
+const SECTION_COLORS: Record<string, { r: number; g: number; b: number }> = {
   hero: { r: 232, g: 97, b: 26 },
   'frame-sequence': { r: 232, g: 97, b: 26 },
   about: { r: 177, g: 108, b: 234 },
@@ -27,12 +27,12 @@ const ORB_CONFIGS = [
 ];
 
 export default function AnimationCanvas() {
-  const canvasRef = useRef(null);
-  const ctxRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const dprRef = useRef(1);
   const sizeRef = useRef({ w: 0, h: 0 });
 
-  const trailRef = useRef([]);
+  const trailRef = useRef<Array<{ x: number; y: number }>>([]);
   const mouseRef = useRef({ x: -100, y: -100 });
 
   const orbStateRef = useRef(
@@ -52,7 +52,7 @@ export default function AnimationCanvas() {
   const sectionColorRef = useRef({ ...DEFAULT_COLOR });
   const targetColorRef = useRef({ ...DEFAULT_COLOR });
 
-  const grainPreRef = useRef(null);
+  const grainPreRef = useRef<Float32Array | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -74,7 +74,7 @@ export default function AnimationCanvas() {
     resize();
     window.addEventListener('resize', resize);
 
-    const onMouseMove = (e) => {
+    const onMouseMove = (e: MouseEvent) => {
       mouseRef.current.x = e.clientX * dprRef.current;
       mouseRef.current.y = e.clientY * dprRef.current;
     };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin';
@@ -13,9 +13,6 @@ const prefersReducedMotion = () =>
 const isMobile = () =>
   typeof window !== 'undefined' && window.innerWidth <= 768;
 
-// Five organic blob shapes the morphing path cycles through.
-// Each is a closed cubic-bezier path of roughly equal "weight" so the morph
-// stays smooth without crossing over itself.
 const BLOB_PATHS = [
   'M430,250 C430,340 350,430 250,430 C150,430 70,340 70,250 C70,160 150,70 250,70 C350,70 430,160 430,250 Z',
   'M440,230 C440,360 360,440 250,440 C140,440 50,360 60,240 C70,120 150,60 260,60 C370,60 440,120 440,230 Z',
@@ -24,10 +21,10 @@ const BLOB_PATHS = [
   'M415,235 C420,345 345,425 245,425 C145,425 75,345 80,245 C85,145 165,75 255,80 C345,85 410,135 415,235 Z',
 ];
 
-const Contact = () => {
-  const sectionRef = useRef(null);
-  const morphPathRef = useRef(null);
-  const morphPath2Ref = useRef(null);
+const Contact: React.FC = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const morphPathRef = useRef<SVGPathElement>(null);
+  const morphPath2Ref = useRef<SVGPathElement>(null);
 
   useEffect(() => {
     const mobile = isMobile();
@@ -44,8 +41,6 @@ const Contact = () => {
       }
 
       // ---------- Dynamic Morphing: cycle through the blob shapes ----------
-      // Two layered paths morph independently at different speeds for a
-      // living, breathing background behind the CTA.
       if (path) {
         const tl = gsap.timeline({ repeat: -1, defaults: { ease: 'none' } });
         BLOB_PATHS.slice(1).forEach((d) => {
@@ -55,7 +50,6 @@ const Contact = () => {
       }
       if (path2) {
         const tl2 = gsap.timeline({ repeat: -1, defaults: { ease: 'none' } });
-        // Offset cycle so the two layers are out of phase.
         const cycle = [...BLOB_PATHS.slice(2), ...BLOB_PATHS.slice(0, 2)];
         cycle.forEach((d) => {
           tl2.to(path2, { morphSVG: { shape: d, smooth: true }, duration: 8, ease: 'power1.inOut' });
@@ -63,7 +57,6 @@ const Contact = () => {
         tl2.to(path2, { morphSVG: { shape: cycle[0], smooth: true }, duration: 8, ease: 'power1.inOut' });
       }
 
-      // Slow rotation on the morph containers for added life.
       gsap.to('.ct-morph', { rotation: 360, duration: 60, repeat: -1, ease: 'none', transformOrigin: '50% 50%' });
       gsap.to('.ct-morph-2', { rotation: -360, duration: 80, repeat: -1, ease: 'none', transformOrigin: '50% 50%' });
 
@@ -140,7 +133,6 @@ const Contact = () => {
 
   return (
     <section className="ct" id="contact" data-section="contact" ref={sectionRef}>
-      {/* Dynamic morphing SVG blobs */}
       <div className="ct-blobs">
         <svg className="ct-morph" viewBox="0 0 500 500">
           <path
@@ -169,7 +161,7 @@ const Contact = () => {
 
       <div className="container">
         <div className="ct-display">
-          <span className="ct-word-wrap"><span className="ct-word">Let's</span></span>
+          <span className="ct-word-wrap"><span className="ct-word">Let&apos;s</span></span>
           <span className="ct-word-wrap"><span className="ct-word ct-accent">create</span></span>
           <span className="ct-word-wrap"><span className="ct-word">something</span></span>
           <span className="ct-word-wrap"><span className="ct-word ct-accent">extraordinary</span></span>
@@ -177,7 +169,7 @@ const Contact = () => {
 
         <div className="ct-sub">
           <p className="body-lg">
-            Ready to bring your vision to life? I'm always open to new projects
+            Ready to bring your vision to life? I&apos;m always open to new projects
             and creative collaborations.
           </p>
           <div className="ct-links">

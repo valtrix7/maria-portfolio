@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './ShaderGallery.css';
@@ -82,12 +82,12 @@ const fragmentShader = /* glsl */ `
 `;
 
 const ShaderGallery = () => {
-  const sectionRef = useRef(null);
-  const pinRef = useRef(null);
-  const canvasRef = useRef(null);
-  const counterRef = useRef(null);
-  const progressRef = useRef(null);
-  const fallbackRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const fallbackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -118,7 +118,7 @@ const ShaderGallery = () => {
       .catch(showFallback);
 
     // ---- WebGL scene setup, returns a disposer ----
-    function setup(THREE) {
+    function setup(THREE: typeof import('three')) {
     let renderer;
     try {
       renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -128,10 +128,10 @@ const ShaderGallery = () => {
       return undefined;
     }
 
-    let rafId = null;
-    let trigger = null;
+    let rafId: number | null = null;
+    let trigger: ScrollTrigger | null = null;
     let disposed = false;
-    const meshes = [];
+    const meshes: Array<THREE.Mesh | null> = [];
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
@@ -169,7 +169,7 @@ const ShaderGallery = () => {
     const loader = new THREE.TextureLoader();
     loader.crossOrigin = 'anonymous';
 
-    const buildMesh = (texture, i) => {
+    const buildMesh = (texture: THREE.Texture, i: number) => {
       texture.colorSpace = THREE.SRGBColorSpace;
       texture.minFilter = THREE.LinearFilter;
       const material = new THREE.ShaderMaterial({
@@ -223,7 +223,7 @@ const ShaderGallery = () => {
         if (!mesh) continue;
         const worldX = currentX + i * gap;
         const screenX = worldX / (viewW / 2);
-        const u = mesh.material.uniforms;
+        const u = (mesh.material as THREE.ShaderMaterial).uniforms;
         u.uScreenX.value = screenX;
         u.uVelocity.value = velocity;
         u.uTime.value = t;
@@ -270,7 +270,7 @@ const ShaderGallery = () => {
       geometry.dispose();
       meshes.forEach((m) => {
         if (!m) return;
-        m.material.uniforms.uTexture.value?.dispose();
+        (m.material as THREE.ShaderMaterial).uniforms.uTexture.value?.dispose();
         m.material.dispose();
       });
       renderer.dispose();

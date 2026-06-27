@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Hero.css';
@@ -27,11 +27,11 @@ const isMobile = () =>
   typeof window !== 'undefined' && window.innerWidth <= 768;
 
 const Hero = () => {
-  const heroRef = useRef(null);
-  const glowRef = useRef(null);
+  const heroRef = useRef<HTMLElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
   const mouse = useRef({ x: 0, y: 0 });
 
-  const handleMouseMove = useCallback((e) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
     if (isMobile()) return;
     const rect = heroRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -57,39 +57,31 @@ const Hero = () => {
 
       const tl = gsap.timeline({ delay: mobile ? 0.1 : 0.3 });
 
-      // Nav
       tl.fromTo('.hero-nav', { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, 0);
-
-      // Kicker
       tl.fromTo('.hero-kicker', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, 0.15);
 
-      // Name words — faster on mobile
       tl.fromTo('.hero-name-word',
         { y: mobile ? 50 : 90, opacity: 0 },
         { y: 0, opacity: 1, duration: mobile ? 0.8 : 1.2, stagger: mobile ? 0.08 : 0.12, ease: 'power4.out' },
         0.2
       );
 
-      // Portrait — scale up with spring feel
       tl.fromTo('.hero-portrait',
         { scale: 1.12, opacity: 0 },
         { scale: 1, opacity: 1, duration: mobile ? 1 : 1.4, ease: 'power3.out' },
         0.3
       );
 
-      // Right column
       tl.fromTo('.hero-headline-right', { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, mobile ? 0.5 : 0.7);
       tl.fromTo('.hero-desc-right', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, mobile ? 0.6 : 0.85);
       tl.fromTo('.hero-cta-btn', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, mobile ? 0.7 : 0.95);
 
-      // Expertise — stagger faster on mobile
       tl.fromTo('.hero-expertise-item',
         { y: mobile ? 15 : 20, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.4, stagger: mobile ? 0.05 : 0.07, ease: 'power3.out' },
         mobile ? 0.8 : 1.0
       );
 
-      // Portrait parallax — lighter on mobile
       if (!mobile) {
         gsap.to('.hero-portrait', {
           y: -30,
@@ -103,7 +95,6 @@ const Hero = () => {
         });
       }
 
-      // Mobile: subtle gyroscope-inspired tilt on scroll
       if (mobile) {
         gsap.to('.hero-portrait', {
           y: -15,
@@ -115,8 +106,6 @@ const Hero = () => {
             scrub: 2,
           },
         });
-
-        // Fade glow spots on mobile for performance
         gsap.set('.hero-glow-spot', { opacity: 0.4 });
       }
     }, heroRef);
@@ -127,26 +116,20 @@ const Hero = () => {
   return (
     <section className="hero-wrapper" ref={heroRef} onMouseMove={handleMouseMove}>
       <div className="hero-container">
-        {/* Cursor-reactive glow */}
         <div className="hero-glow" ref={glowRef} />
-
-        {/* Ambient glow spots */}
         <div className="hero-glow-spot hero-glow-spot--1" />
         <div className="hero-glow-spot hero-glow-spot--2" />
         <div className="hero-glow-spot hero-glow-spot--3" />
 
-        {/* Main content */}
         <div className="hero-content">
-          {/* Left: Name */}
           <div className="hero-left">
-            <span className="hero-kicker">Hey, I'm a</span>
+            <span className="hero-kicker">Hey, I&apos;m a</span>
             <h1 className="hero-name">
               <span className="hero-name-word">Creative</span>
               <span className="hero-name-word">Director</span>
             </h1>
           </div>
 
-          {/* Center: Portrait */}
           <div className="hero-center">
             <div className="hero-portrait-glow" />
             <img
@@ -157,7 +140,6 @@ const Hero = () => {
             />
           </div>
 
-          {/* Right: Headline + Desc */}
           <div className="hero-right">
             <p className="hero-headline-right">
               Great design should feel invisible.
@@ -172,7 +154,6 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Bottom expertise */}
         <div className="hero-expertise">
           {EXPERTISE.map((item) => (
             <div key={item.num} className="hero-expertise-item">

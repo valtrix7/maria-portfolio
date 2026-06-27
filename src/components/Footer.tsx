@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Footer.css';
@@ -8,8 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 const isMobile = () =>
   typeof window !== 'undefined' && window.innerWidth <= 768;
 
-const Footer = () => {
-  const footerRef = useRef(null);
+const Footer: React.FC = () => {
+  const footerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mobile = isMobile();
@@ -46,7 +46,7 @@ const Footer = () => {
       );
 
       // SVG wave animation — slower on mobile
-      const wave = footerRef.current?.querySelector('.ft-wave-path');
+      const wave = footerRef.current?.querySelector<SVGPathElement>('.ft-wave-path');
       if (wave) {
         gsap.fromTo(wave,
           { attr: { d: 'M0,40 Q150,0 300,40 T600,40 T900,40 T1200,40 T1500,40 V80 H0 Z' } },
@@ -66,7 +66,6 @@ const Footer = () => {
 
   return (
     <footer className="ft" ref={footerRef}>
-      {/* Animated SVG wave */}
       <svg className="ft-wave" viewBox="0 0 1500 80" preserveAspectRatio="none">
         <path
           className="ft-wave-path"

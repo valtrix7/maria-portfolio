@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, ReactNode } from 'react';
 import { motion, useSpring } from 'motion/react';
 
 const DESKTOP_POINTER_QUERY = '(any-hover: hover) and (any-pointer: fine)';
 
-function isTrackablePointer(pointerType) {
+function isTrackablePointer(pointerType: string) {
   return pointerType !== 'touch';
 }
 
@@ -37,7 +37,11 @@ function CursorSVG() {
   );
 }
 
-export default function SmoothCursor({ cursor = <CursorSVG /> }) {
+interface SmoothCursorProps {
+  cursor?: ReactNode;
+}
+
+export default function SmoothCursor({ cursor = <CursorSVG /> }: SmoothCursorProps) {
   const lastMousePos = useRef({ x: 0, y: 0 });
   const velocity = useRef({ x: 0, y: 0 });
   const lastUpdateTime = useRef(Date.now());
@@ -64,10 +68,10 @@ export default function SmoothCursor({ cursor = <CursorSVG /> }) {
   useEffect(() => {
     if (!isEnabled) return;
 
-    let timeout = null;
+    let timeout: ReturnType<typeof setTimeout> | null = null;
     let rafId = 0;
 
-    const updateVelocity = (pos) => {
+    const updateVelocity = (pos: { x: number; y: number }) => {
       const now = Date.now();
       const dt = now - lastUpdateTime.current;
       if (dt > 0) {
@@ -80,7 +84,7 @@ export default function SmoothCursor({ cursor = <CursorSVG /> }) {
       lastMousePos.current = pos;
     };
 
-    const onMove = (e) => {
+    const onMove = (e: PointerEvent) => {
       if (!isTrackablePointer(e.pointerType)) return;
       setIsVisible(true);
 
@@ -107,7 +111,7 @@ export default function SmoothCursor({ cursor = <CursorSVG /> }) {
       }
     };
 
-    const throttled = (e) => {
+    const throttled = (e: PointerEvent) => {
       if (rafId) return;
       rafId = requestAnimationFrame(() => {
         onMove(e);

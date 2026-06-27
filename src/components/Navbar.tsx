@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);

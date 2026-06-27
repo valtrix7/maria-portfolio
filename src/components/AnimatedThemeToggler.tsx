@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 
-function polygonCollapsed(cx, cy, vertexCount) {
+type TransitionVariant = 'circle' | 'square' | 'triangle' | 'diamond' | 'hexagon' | 'rectangle' | 'star';
+
+function polygonCollapsed(cx: number, cy: number, vertexCount: number): string {
   const pairs = Array.from(
     { length: vertexCount },
     () => `${cx}px ${cy}px`
@@ -9,7 +11,14 @@ function polygonCollapsed(cx, cy, vertexCount) {
   return `polygon(${pairs})`;
 }
 
-function getThemeTransitionClipPaths(variant, cx, cy, maxRadius, viewportWidth, viewportHeight) {
+function getThemeTransitionClipPaths(
+  variant: TransitionVariant,
+  cx: number,
+  cy: number,
+  maxRadius: number,
+  viewportWidth: number,
+  viewportHeight: number
+): [string, string] {
   switch (variant) {
     case 'circle':
       return [
@@ -71,7 +80,7 @@ function getThemeTransitionClipPaths(variant, cx, cy, maxRadius, viewportWidth, 
     case 'star': {
       const R = maxRadius * Math.SQRT2 * 1.03;
       const innerRatio = 0.42;
-      const starPolygon = (radius) => {
+      const starPolygon = (radius: number) => {
         const verts = [];
         for (let i = 0; i < 5; i++) {
           const outerA = -Math.PI / 2 + (i * 2 * Math.PI) / 5;
@@ -96,15 +105,22 @@ function getThemeTransitionClipPaths(variant, cx, cy, maxRadius, viewportWidth, 
   }
 }
 
+interface AnimatedThemeTogglerProps {
+  duration?: number;
+  variant?: TransitionVariant;
+  fromCenter?: boolean;
+  className?: string;
+}
+
 export default function AnimatedThemeToggler({
   duration = 400,
   variant = 'circle',
   fromCenter = false,
   className = '',
-}) {
+}: AnimatedThemeTogglerProps) {
   const shape = variant;
   const [isDark, setIsDark] = useState(true);
-  const buttonRef = useRef(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const updateTheme = () => {
@@ -126,8 +142,8 @@ export default function AnimatedThemeToggler({
     const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
     const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
 
-    let x;
-    let y;
+    let x: number;
+    let y: number;
     if (fromCenter) {
       x = viewportWidth / 2;
       y = viewportHeight / 2;

@@ -1,8 +1,13 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import AnimatedThemeToggler from './AnimatedThemeToggler';
 
-const NAV_LINKS = [
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+const NAV_LINKS: NavItem[] = [
   { label: 'Home', href: '#hero' },
   { label: 'My Project', href: '#my-project' },
   { label: 'Services', href: '#toolbox' },
@@ -56,13 +61,18 @@ function LinkedInIcon() {
   );
 }
 
-export default function MenuCard({ isOpen, onClose }) {
+interface MenuCardProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function MenuCard({ isOpen, onClose }: MenuCardProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const cardRef = useRef(null);
-  const overlayRef = useRef(null);
-  const navLinksRef = useRef([]);
-  const bottomRef = useRef(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const navLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   const animateIn = useCallback(() => {
     const card = cardRef.current;
@@ -106,12 +116,12 @@ export default function MenuCard({ isOpen, onClose }) {
 
   useEffect(() => {
     if (!isOpen) return;
-    const onKey = (e) => { if (e.key === 'Escape') animateOut(); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') animateOut(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [isOpen, animateOut]);
 
-  const handleNavClick = (href, index) => {
+  const handleNavClick = (href: string, index: number) => {
     setActiveIndex(index);
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: 'smooth' });

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
@@ -40,10 +40,10 @@ const steps = [
   },
 ];
 
-const HowIWork = () => {
-  const sectionRef = useRef(null);
-  const pathRef = useRef(null);
-  const cardsRef = useRef([]);
+const HowIWork: React.FC = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const reduce = prefersReducedMotion();
@@ -145,7 +145,7 @@ const HowIWork = () => {
       });
 
       // ---------- Timeline dots pop as the path reaches them ----------
-      gsap.utils.toArray('.hw-dot').forEach((dot) => {
+      gsap.utils.toArray<HTMLElement>('.hw-dot').forEach((dot) => {
         gsap.fromTo(dot,
           { scale: 0, opacity: 0 },
           {
@@ -191,8 +191,6 @@ const HowIWork = () => {
         </div>
 
         <div className="hw-timeline">
-          {/* DrawSVG connector: a single hand-drawn curve from top to bottom.
-              Desktop = S-curve that weaves between left/right cards. */}
           <svg
             className="hw-line-svg"
             viewBox="0 0 400 800"
@@ -223,12 +221,10 @@ const HowIWork = () => {
             </defs>
           </svg>
 
-          {/* Timeline dots */}
           {steps.map((_, i) => (
             <div key={i} className="hw-dot" style={{ top: `${10 + i * 26}%` }} />
           ))}
 
-          {/* Bento cards */}
           {steps.map((step, i) => (
             <div
               key={step.num}
@@ -248,7 +244,6 @@ const HowIWork = () => {
             </div>
           ))}
 
-          {/* Decorative SVG shapes */}
           <svg className="hw-deco-circle hw-deco-1" viewBox="0 0 200 200" fill="none">
             <circle cx="100" cy="100" r="90" stroke="var(--accent)" strokeWidth="0.5" opacity="0.3" />
             <circle cx="100" cy="100" r="60" stroke="var(--accent)" strokeWidth="0.5" opacity="0.2" />

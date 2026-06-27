@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -13,15 +13,14 @@ import SelectedWork from './components/SelectedWork';
 import HowIWork from './components/HowIWork';
 import Toolbox from './components/Toolbox';
 import Recognition from './components/Recognition';
+import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
-import Footer from './components/Footer';
+import { CinematicFooter } from './components/ui/motion-footer';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   useEffect(() => {
-    // lerp-based smoothing gives consistent inertia across wheel + touch,
-    // syncTouch mirrors native touch scroll while staying in sync with Lenis.
     const lenis = new Lenis({
       lerp: 0.09,
       smoothWheel: true,
@@ -33,13 +32,10 @@ function App() {
 
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Drive Lenis off GSAP's ticker (single RAF source, no double-stepping).
-    const tickerCb = (time) => lenis.raf(time * 1000);
+    const tickerCb = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tickerCb);
     gsap.ticker.lagSmoothing(0);
 
-    // Re-measure all pinned / scrubbed triggers once fonts + images settle,
-    // so the FrameSequence pin length and scrub offsets are correct.
     const refresh = () => ScrollTrigger.refresh();
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(refresh);
@@ -66,9 +62,10 @@ function App() {
         <HowIWork />
         <Toolbox />
         <Recognition />
+        <Testimonials />
         <Contact />
-        <Footer />
       </main>
+      <CinematicFooter />
     </>
   );
 }

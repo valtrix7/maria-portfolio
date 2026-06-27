@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextReveal, ImageReveal, LineReveal } from './Transitions';
@@ -10,7 +10,7 @@ const isMobile = () =>
   typeof window !== 'undefined' && window.innerWidth <= 768;
 
 const About = () => {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const mobile = isMobile();
@@ -35,7 +35,6 @@ const About = () => {
         }
       );
 
-      // Parallax on portrait — lighter on mobile
       if (!mobile) {
         gsap.to('.about-portrait img', {
           y: -40,
@@ -69,7 +68,7 @@ const About = () => {
               Designing the unseen motion
             </TextReveal>
             <p className="body-lg" style={{ marginBottom: '20px' }}>
-              I'm Maria Islam, a motion graphics designer who believes every brand has a story
+              I&apos;m Maria Islam, a motion graphics designer who believes every brand has a story
               waiting to move. With over 3 years of experience, I transform static ideas into
               compelling visual narratives.
             </p>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Draggable } from 'gsap/Draggable';
@@ -25,12 +25,12 @@ const tools = [
   { name: 'DaVinci Resolve', icon: 'DR', color: '#FF6B6B', level: 82 },
 ];
 
-const Toolbox = () => {
-  const sectionRef = useRef(null);
-  const trackRef = useRef(null);
-  const progressRef = useRef(null);
-  const indexRef = useRef(null);
-  const dragInstRef = useRef(null);
+const Toolbox: React.FC = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const indexRef = useRef<HTMLSpanElement>(null);
+  const dragInstRef = useRef<ReturnType<typeof Draggable.create>[number] | null>(null);
 
   useEffect(() => {
     const mobile = isMobile();
@@ -49,19 +49,19 @@ const Toolbox = () => {
       );
 
       const track = trackRef.current;
-      const cards = track ? Array.from(track.querySelectorAll('.tb-card')) : [];
+      const cards = track ? Array.from(track.querySelectorAll<HTMLElement>('.tb-card')) : [];
 
       // Helper: card step width (card + gap).
       const getStep = () => {
         if (!cards[0]) return 300;
-        const style = window.getComputedStyle(track);
+        const style = window.getComputedStyle(track!);
         const gap = parseFloat(style.columnGap || style.gap || '24');
         return cards[0].offsetWidth + gap;
       };
 
       const getMax = () => {
         if (!track || !cards[0]) return 0;
-        return Math.max(0, track.scrollWidth - track.parentElement.offsetWidth);
+        return Math.max(0, track.scrollWidth - track.parentElement!.offsetWidth);
       };
 
       // ---------- Card entrance ----------
@@ -78,7 +78,7 @@ const Toolbox = () => {
       }
 
       // ---------- Skill bar fills ----------
-      gsap.utils.toArray('.tb-level-fill').forEach((fill) => {
+      gsap.utils.toArray<HTMLElement>('.tb-level-fill').forEach((fill) => {
         const width = fill.dataset.level;
         gsap.fromTo(fill,
           { width: '0%' },
@@ -94,7 +94,7 @@ const Toolbox = () => {
       // ---------- Swipe Slider: Draggable + Inertia + snap ----------
       // Active card scales up; neighbors dim down. Drag/flick to advance; snaps
       // to the nearest card on release. Progress rail + index reflect position.
-      const updateHUD = (x) => {
+      const updateHUD = (x: number) => {
         const step = getStep();
         const max = getMax();
         if (progressRef.current) {
@@ -107,9 +107,9 @@ const Toolbox = () => {
         }
       };
 
-      const applyCardStates = (x) => {
+      const applyCardStates = (x: number) => {
         const step = getStep();
-        const containerCenter = track.parentElement.offsetWidth / 2;
+        const containerCenter = track!.parentElement!.offsetWidth / 2;
         cards.forEach((card) => {
           const cardCenter = card.offsetLeft + card.offsetWidth / 2 + x;
           const dist = Math.abs(cardCenter - containerCenter);
@@ -134,25 +134,25 @@ const Toolbox = () => {
           throwResistance: 2500,
           cursor: 'grab',
           activeCursor: 'grabbing',
-          onDrag() {
+          onDrag(this: { x: number }) {
             applyCardStates(this.x);
             updateHUD(this.x);
           },
-          onThrowUpdate() {
+          onThrowUpdate(this: { x: number }) {
             applyCardStates(this.x);
             updateHUD(this.x);
           },
-          onDragEnd() {
+          onDragEnd(this: { x: number }) {
             // Snap to nearest card on release.
             const step = getStep();
             const target = Math.max(-getMax(), Math.min(0, Math.round(this.x / step) * step));
-            gsap.to(track, {
+            gsap.to(track!, {
               x: target,
               duration: 0.5,
               ease: 'power3.out',
               onUpdate() {
-                applyCardStates(gsap.getProperty(track, 'x'));
-                updateHUD(gsap.getProperty(track, 'x'));
+                applyCardStates(gsap.getProperty(track!, 'x') as number);
+                updateHUD(gsap.getProperty(track!, 'x') as number);
               },
             });
           },
@@ -168,7 +168,7 @@ const Toolbox = () => {
             start: 'top 80%',
             end: 'bottom 60%',
             scrub: false,
-            onEnter: () => applyCardStates(gsap.getProperty(track, 'x')),
+            onEnter: () => applyCardStates(gsap.getProperty(track, 'x') as number),
           },
         });
 
@@ -176,14 +176,14 @@ const Toolbox = () => {
         const onResize = () => {
           if (!dragInstRef.current) return;
           dragInstRef.current.applyBounds({ minX: -getMax(), maxX: 0 });
-          applyCardStates(gsap.getProperty(track, 'x'));
+          applyCardStates(gsap.getProperty(track, 'x') as number);
         };
         window.addEventListener('resize', onResize);
         return () => window.removeEventListener('resize', onResize);
       }
 
       // ---------- Marquee ----------
-      const marquee = sectionRef.current?.querySelector('.tb-marquee-track');
+      const marquee = sectionRef.current?.querySelector<HTMLElement>('.tb-marquee-track');
       if (marquee && !reduce) {
         gsap.to(marquee, { x: '-50%', duration: mobile ? 20 : 30, repeat: -1, ease: 'none' });
       }
@@ -197,7 +197,6 @@ const Toolbox = () => {
 
   return (
     <section className="tb" id="tools" data-section="toolbox" ref={sectionRef}>
-      {/* Background decorative shapes */}
       <svg className="tb-deco tb-deco-1" viewBox="0 0 300 300" fill="none">
         <polygon points="150,30 270,240 30,240" stroke="var(--accent)" strokeWidth="0.5" />
         <polygon points="150,70 230,210 70,210" stroke="var(--accent)" strokeWidth="0.5" />
@@ -222,7 +221,6 @@ const Toolbox = () => {
         </div>
       </div>
 
-      {/* Swipeable carousel */}
       <div className="tb-carousel">
         <div className="tb-carousel-viewport">
           <div className="tb-track" ref={trackRef}>
@@ -253,7 +251,6 @@ const Toolbox = () => {
           </div>
         </div>
 
-        {/* Slider HUD */}
         <div className="tb-slider-hud">
           <div className="tb-slider-index">
             <span ref={indexRef}>01</span>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './SelectedWork.css';
@@ -47,12 +47,12 @@ const isMobile = () =>
   typeof window !== 'undefined' && window.innerWidth <= 768;
 
 const SelectedWork = () => {
-  const sectionRef = useRef(null);
-  const wrapperRef = useRef(null);
-  const trackRef = useRef(null);
-  const counterRef = useRef(null);
-  const progressRef = useRef(null);
-  const dotsRef = useRef([]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const dotsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const mobile = isMobile();
@@ -99,11 +99,10 @@ const SelectedWork = () => {
         }
       });
 
-      // Per-slide animations
-      const slideEls = gsap.utils.toArray('.h-slide');
+      const slideEls = gsap.utils.toArray<HTMLElement>('.h-slide');
       slideEls.forEach((slide, i) => {
-        const img = slide.querySelector('.h-slide-img');
-        const info = slide.querySelector('.h-slide-info');
+        const img = slide.querySelector('.h-slide-img') as HTMLElement;
+        const info = slide.querySelector('.h-slide-info') as HTMLElement;
 
         if (img) {
           gsap.fromTo(img,
@@ -121,7 +120,7 @@ const SelectedWork = () => {
         }
 
         if (info) {
-          gsap.fromTo(info.children,
+          gsap.fromTo(info.children as unknown as HTMLElement[],
             { y: 30, opacity: 0 },
             {
               y: 0, opacity: 1,
@@ -166,7 +165,7 @@ const SelectedWork = () => {
           </div>
           <div className="h-dots">
             {slides.map((_, i) => (
-              <div className="h-dot" key={i} ref={(el) => (dotsRef.current[i] = el)}></div>
+              <div className="h-dot" key={i} ref={(el) => { dotsRef.current[i] = el; }}></div>
             ))}
           </div>
         </div>

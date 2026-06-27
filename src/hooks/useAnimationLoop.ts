@@ -1,7 +1,13 @@
 import { useEffect, useRef } from 'react';
 
-export default function useAnimationLoop(callback) {
-  const rafRef = useRef(null);
+interface AnimationFrame {
+  frame: number;
+  time: number;
+  delta: number;
+}
+
+export default function useAnimationLoop(callback: (frame: AnimationFrame) => void) {
+  const rafRef = useRef<number | null>(null);
   const callbackRef = useRef(callback);
   const frameRef = useRef(0);
   const lastTimeRef = useRef(0);
@@ -9,7 +15,7 @@ export default function useAnimationLoop(callback) {
   callbackRef.current = callback;
 
   useEffect(() => {
-    const loop = (time) => {
+    const loop = (time: number) => {
       if (document.hidden) {
         rafRef.current = requestAnimationFrame(loop);
         return;

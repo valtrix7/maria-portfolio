@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './FrameSequence.css';
@@ -21,13 +21,13 @@ const TOTAL_FRAMES = 180;
 const SCROLL_PER_FRAME = 300;
 
 const FrameSequence = () => {
-  const sectionRef = useRef(null);
-  const pinRef = useRef(null);
-  const counterRef = useRef(null);
-  const railRef = useRef(null);
-  const stageRef = useRef(null);
-  const headlineRef = useRef(null);
-  const accentBarRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const railRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLHeadingElement>(null);
+  const accentBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const reduce = prefersReducedMotion();

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Recognition.css';
@@ -37,9 +37,9 @@ const testimonials = [
   },
 ];
 
-const Recognition = () => {
-  const sectionRef = useRef(null);
-  const countersRef = useRef([]);
+const Recognition: React.FC = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const countersRef = useRef<(HTMLSpanElement | null)[]>([]);
 
   useEffect(() => {
     const mobile = isMobile();
@@ -64,15 +64,11 @@ const Recognition = () => {
       );
 
       // ---------- Scrubbed Bento Gallery: parallax-depth reveal ----------
-      // Each tile enters from a different "depth" (staggered y-offset + scrub
-      // start), so the gallery assembles in layers as you scroll, not all at
-      // once. Tiles deeper in the z-stack start lower and later.
-      const tiles = gsap.utils.toArray('.rec-bento-item');
+      const tiles = gsap.utils.toArray<HTMLElement>('.rec-bento-item');
       tiles.forEach((tile, i) => {
-        // Alternate depth: odd tiles come from further "back".
         const depth = i % 3;
-        const startY = 80 + depth * 60; // 80 / 140 / 200
-        const scale = 0.92 - depth * 0.04; // 0.92 / 0.88 / 0.84
+        const startY = 80 + depth * 60;
+        const scale = 0.92 - depth * 0.04;
 
         gsap.fromTo(tile,
           {
@@ -138,7 +134,6 @@ const Recognition = () => {
           }
         );
 
-        // Gentle parallax drift on the decorative shapes, scrubbed.
         gsap.to('.rec-deco-1', {
           y: -60,
           ease: 'none',
@@ -157,7 +152,6 @@ const Recognition = () => {
 
   return (
     <section className="rec" id="recognition" data-section="recognition" ref={sectionRef}>
-      {/* Background decorative elements */}
       <svg className="rec-deco rec-deco-1" viewBox="0 0 400 400" fill="none">
         <circle cx="200" cy="200" r="180" stroke="var(--accent)" strokeWidth="0.5" />
         <circle cx="200" cy="200" r="120" stroke="var(--accent)" strokeWidth="0.5" />
@@ -175,7 +169,6 @@ const Recognition = () => {
           </h2>
         </div>
 
-        {/* Bento grid */}
         <div className="rec-bento">
           <div className="rec-bento-item rec-bento-stat rec-bento-stat--large">
             <span className="rec-stat-num" ref={(el) => (countersRef.current[0] = el)}>0{stats[0].suffix}</span>
