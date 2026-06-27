@@ -7,7 +7,6 @@ import Header from './components/Header';
 import AnimationCanvas from './components/AnimationCanvas';
 import SmoothCursor from './components/SmoothCursor';
 import Hero from './components/Hero';
-import FrameSequence from './components/FrameSequence';
 import About from './components/About';
 import CreativeManifesto from './components/CreativeManifesto';
 import SelectedWork from './components/SelectedWork';
@@ -62,7 +61,6 @@ function App() {
       <Header />
       <main>
         <Hero />
-        <FrameSequence />
         <About />
         <CreativeManifesto />
         <SelectedWork />

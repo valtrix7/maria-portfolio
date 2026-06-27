@@ -139,9 +139,9 @@ const SelectedWork = () => {
   }, []);
 
   return (
-    <section className="selected-work" id="work" data-section="selected-work" ref={sectionRef}>
+    <section className="selected-work" id="my-project" data-section="my-project" ref={sectionRef}>
       <div className="container work-header">
-        <div className="label">Selected Work</div>
+        <div className="label">My Project</div>
         <h2 className="display-lg" style={{ marginTop: '16px', marginBottom: '20px' }}>
           Featured<br />Project
         </h2>

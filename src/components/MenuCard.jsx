@@ -4,7 +4,7 @@ import AnimatedThemeToggler from './AnimatedThemeToggler';
 
 const NAV_LINKS = [
   { label: 'Home', href: '#hero' },
-  { label: 'Selected Work', href: '#selected-work' },
+  { label: 'My Project', href: '#my-project' },
   { label: 'Services', href: '#toolbox' },
   { label: 'Contact', href: '#contact' },
 ];
