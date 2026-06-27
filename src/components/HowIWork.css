@@ -1,102 +1,240 @@
+/* ==========================================================================
+   How I Work — horizontal snake with speed trail
+   ========================================================================== */
+
 .how-i-work {
-  background: var(--bg-elevated);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  background: var(--bg, #0a0a0a);
+  overflow: hidden;
+  padding-top: clamp(60px, 10vh, 120px);
+  padding-bottom: clamp(60px, 10vh, 120px);
 }
 
 .process-header {
-  margin-bottom: 80px;
+  margin-bottom: clamp(40px, 6vh, 80px);
 }
 
-.process-steps {
+/* ==========================================================================
+   Snake viewport & track
+   ========================================================================== */
+
+.snake-viewport {
+  width: 100%;
+  overflow: hidden;
   position: relative;
+}
+
+.snake-track {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  width: max-content;
   gap: 0;
+  position: relative;
+  padding: clamp(100px, 18vh, 200px) clamp(40px, 8vw, 120px);
+  will-change: transform;
 }
 
-.process-line {
+/* ==========================================================================
+   Speed trail — the glowing line connecting all steps
+   ========================================================================== */
+
+.snake-trail {
   position: absolute;
-  left: 31px;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--border);
+  top: 50%;
+  left: clamp(40px, 8vw, 120px);
+  right: clamp(40px, 8vw, 120px);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-50%);
+  z-index: 1;
 }
 
-.process-line-fill {
+.snake-trail-fill {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--accent);
-  transform-origin: top center;
+  background: linear-gradient(90deg, #FF6A00, #FF3B1F, #C53B0C);
+  transform-origin: left center;
+  box-shadow:
+    0 0 12px rgba(255, 106, 0, 0.5),
+    0 0 40px rgba(255, 106, 0, 0.2),
+    0 0 80px rgba(255, 59, 31, 0.1);
 }
 
-.process-step {
-  display: flex;
-  gap: 40px;
-  padding: 48px 0;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-}
-
-.process-step:last-child {
-  border-bottom: none;
-}
-
-.process-step-num {
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--accent);
-  width: 64px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--accent);
+/* Dots at each step junction */
+.snake-dot {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  flex-shrink: 0;
+  background: var(--accent, #E8611A);
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  box-shadow:
+    0 0 16px rgba(255, 106, 0, 0.6),
+    0 0 40px rgba(255, 106, 0, 0.25);
+}
+
+.snake-dot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 106, 0, 0.3);
+}
+
+/* ==========================================================================
+   Snake steps — alternating top / bottom
+   ========================================================================== */
+
+.snake-step {
+  flex: 0 0 clamp(280px, 28vw, 380px);
   position: relative;
   z-index: 2;
-  background: var(--bg-elevated);
 }
 
-.process-step-content {
+.snake-step--top {
+  align-self: flex-start;
+  padding-bottom: clamp(80px, 14vh, 160px);
+}
+
+.snake-step--bottom {
+  align-self: flex-end;
+  padding-top: clamp(80px, 14vh, 160px);
+}
+
+/* Connector lines from card to trail */
+.snake-step--top .snake-step-card::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 1px;
+  height: clamp(40px, 8vh, 80px);
+  background: linear-gradient(to bottom, rgba(255, 106, 0, 0.4), transparent);
+}
+
+.snake-step--bottom .snake-step-card::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  width: 1px;
+  height: clamp(40px, 8vh, 80px);
+  background: linear-gradient(to top, rgba(255, 106, 0, 0.4), transparent);
+}
+
+/* ==========================================================================
+   Step card
+   ========================================================================== */
+
+.snake-step-card {
+  position: relative;
+  padding: clamp(24px, 3vw, 36px);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-top: 12px;
 }
 
-.process-step-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(24px, 3vw, 36px);
+.snake-step-card:hover {
+  background: rgba(255, 106, 0, 0.06);
+  border-color: rgba(255, 106, 0, 0.2);
+  box-shadow: 0 0 40px rgba(255, 106, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+.snake-step-num {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 11px;
   font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.01em;
+  color: var(--accent, #E8611A);
+  letter-spacing: 0.12em;
 }
 
-.process-step-desc {
-  font-size: clamp(15px, 1.2vw, 17px);
-  color: var(--text-secondary);
-  line-height: 1.7;
-  max-width: 500px;
+.snake-step-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(22px, 2.5vw, 30px);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
+
+.snake-step-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(12px, 1.1vw, 14px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Mobile — vertical stack
+   ========================================================================== */
 
 @media (max-width: 768px) {
-  .process-step {
-    gap: 24px;
-    padding: 32px 0;
+  .snake-viewport {
+    overflow: visible;
   }
-  .process-step-num {
-    width: 48px;
-    height: 48px;
-    font-size: 12px;
+
+  .snake-track {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 clamp(20px, 5vw, 40px);
+    gap: 0;
   }
-  .process-line {
-    left: 23px;
+
+  .snake-trail {
+    top: 0;
+    bottom: 0;
+    left: 28px;
+    right: auto;
+    width: 2px;
+    height: 100%;
+    transform: none;
+  }
+
+  .snake-trail-fill {
+    width: 100%;
+    height: 100%;
+    transform-origin: top center;
+    background: linear-gradient(180deg, #FF6A00, #FF3B1F, #C53B0C);
+  }
+
+  .snake-dot {
+    top: auto;
+    left: 28px;
+    transform: translate(-50%, 0);
+  }
+
+  .snake-step {
+    flex: none;
+    width: 100%;
+    padding-left: 52px;
+  }
+
+  .snake-step--top,
+  .snake-step--bottom {
+    padding-top: 0;
+    padding-bottom: 0;
+    align-self: stretch;
+  }
+
+  .snake-step--top .snake-step-card::after,
+  .snake-step--bottom .snake-step-card::after {
+    display: none;
+  }
+
+  .snake-step-card {
+    margin-bottom: 32px;
   }
 }
