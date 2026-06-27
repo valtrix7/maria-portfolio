@@ -6,6 +6,8 @@
   position: relative;
   background: var(--bg, #0a0a0a);
   overflow: hidden;
+  /* Extra height gives GSAP ScrollTrigger room to pin and scrub */
+  min-height: 400vh;
 }
 
 .pin-wrap {
