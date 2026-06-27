@@ -138,10 +138,13 @@ const Hero = () => {
 
           {/* Center: Portrait */}
           <div className="hero-center">
-            <div className="hero-portrait">
-              <div className="hero-portrait-inner" />
-              <div className="hero-portrait-glow" />
-            </div>
+            <div className="hero-portrait-glow" />
+            <img
+              src="/519d6047-eb12-4f96-8ea2-6b0d99e6b816.jpg"
+              alt="Maria Islam — motion graphics designer"
+              className="hero-portrait"
+              loading="eager"
+            />
           </div>
 
           {/* Right: Headline + Desc */}
