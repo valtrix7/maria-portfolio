@@ -10,17 +10,20 @@ const prefersReducedMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const steps = [
-  { num: '01', title: 'Discovery', desc: 'Understanding your vision, goals, and audience.', side: 'top' },
-  { num: '02', title: 'Concept', desc: 'Developing the creative direction and narrative.', side: 'bottom' },
-  { num: '03', title: 'Design', desc: 'Crafting each frame with intention and harmony.', side: 'top' },
-  { num: '04', title: 'Motion', desc: 'Breathing life into static designs with rhythm.', side: 'bottom' },
+  { num: '01', title: 'Discovery', desc: 'Understanding your vision, goals, and audience.', offset: 0.15 },
+  { num: '02', title: 'Concept', desc: 'Developing the creative direction and narrative.', offset: 0.4 },
+  { num: '03', title: 'Design', desc: 'Crafting each frame with intention and harmony.', offset: 0.65 },
+  { num: '04', title: 'Motion', desc: 'Breathing life into static designs with rhythm.', offset: 0.9 },
 ];
+
+const PATH_D = 'M 50,250 C 200,80 350,420 500,250 C 650,80 800,420 950,250 C 1050,150 1100,300 1150,250';
 
 const HowIWork = () => {
   const sectionRef = useRef(null);
   const pathRef = useRef(null);
   const pinRef = useRef(null);
   const progressRef = useRef(null);
+  const cardsRef = useRef([]);
 
   useEffect(() => {
     const reduce = prefersReducedMotion();
@@ -29,6 +32,19 @@ const HowIWork = () => {
     const ctx = gsap.context(() => {
       const path = pathRef.current;
       const pathLength = path.getTotalLength();
+
+      // Position cards at the dot coordinates along the path
+      cardsRef.current.forEach((card, i) => {
+        if (!card) return;
+        const point = path.getPointAtLength(pathLength * steps[i].offset);
+        // Convert SVG coords to percentage of the container
+        const svgWidth = 1200;
+        const svgHeight = 500;
+        const xPct = (point.x / svgWidth) * 100;
+        const yPct = (point.y / svgHeight) * 100;
+        card.style.left = `${xPct}%`;
+        card.style.top = `${yPct}%`;
+      });
 
       // Set initial state — path fully hidden
       gsap.set(path, {
@@ -72,28 +88,28 @@ const HowIWork = () => {
         0
       );
 
-      // 3) Step cards — bento flip-in staggered
-      tl.fromTo('.bento-card',
-        { y: 80, opacity: 0, rotateX: 25, scale: 0.9 },
+      // 3) Step cards — appear as path reaches them
+      tl.fromTo('.path-card',
+        { opacity: 0, scale: 0.6, y: 30 },
         {
-          y: 0, opacity: 1, rotateX: 0, scale: 1,
-          duration: 0.4,
-          stagger: 0.3,
-          ease: 'power3.out',
+          opacity: 1, scale: 1, y: 0,
+          duration: 0.3,
+          stagger: 0.5,
+          ease: 'back.out(1.4)',
         },
-        0.3
+        0.15
       );
 
-      // 4) Step numbers — counter pop
-      tl.fromTo('.bento-num',
-        { scale: 0, opacity: 0 },
+      // 4) Dot pulses
+      tl.fromTo('.path-dot',
+        { scale: 0 },
         {
-          scale: 1, opacity: 1,
-          duration: 0.3,
-          stagger: 0.3,
+          scale: 1,
+          duration: 0.2,
+          stagger: 0.5,
           ease: 'back.out(2)',
         },
-        0.5
+        0.2
       );
     }, sectionRef);
 
@@ -115,64 +131,62 @@ const HowIWork = () => {
           </div>
         </div>
 
-        {/* SVG path overlay — the snake trail that draws on scroll */}
-        <svg className="snake-svg" viewBox="0 0 1200 500" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#FF6A00" />
-              <stop offset="50%" stopColor="#FF3B1F" />
-              <stop offset="100%" stopColor="#C53B0C" />
-            </linearGradient>
-            <filter id="snakeGlow">
-              <feGaussianBlur stdDeviation="6" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          {/* Background path (faint) */}
-          <path
-            d="M 50,250 C 200,80 350,420 500,250 C 650,80 800,420 950,250 C 1050,150 1100,300 1150,250"
-            fill="none"
-            stroke="rgba(255,255,255,0.04)"
-            strokeWidth="2"
-          />
-          {/* Animated path */}
-          <path
-            ref={pathRef}
-            d="M 50,250 C 200,80 350,420 500,250 C 650,80 800,420 950,250 C 1050,150 1100,300 1150,250"
-            fill="none"
-            stroke="url(#snakeGrad)"
-            strokeWidth="3"
-            strokeLinecap="round"
-            filter="url(#snakeGlow)"
-          />
-          {/* Step dots along path */}
-          {[0.15, 0.4, 0.65, 0.9].map((offset, i) => {
-            const x = 50 + offset * 1100;
-            const y = 250 + Math.sin(offset * Math.PI * 2) * 120;
-            return (
-              <circle
-                key={i}
-                cx={x}
-                cy={y}
-                r="8"
-                fill="var(--accent, #E8611A)"
-                className="snake-dot-svg"
-                style={{ animationDelay: `${i * 0.15}s` }}
-              />
-            );
-          })}
-        </svg>
+        {/* SVG path + cards container */}
+        <div className="path-container">
+          <svg className="snake-svg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#FF6A00" />
+                <stop offset="50%" stopColor="#FF3B1F" />
+                <stop offset="100%" stopColor="#C53B0C" />
+              </linearGradient>
+              <filter id="snakeGlow">
+                <feGaussianBlur stdDeviation="5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            {/* Background path */}
+            <path d={PATH_D} fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="2" />
+            {/* Animated path */}
+            <path
+              ref={pathRef}
+              d={PATH_D}
+              fill="none"
+              stroke="url(#snakeGrad)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              filter="url(#snakeGlow)"
+            />
+            {/* Dots */}
+            {steps.map((step, i) => {
+              const x = 50 + step.offset * 1100;
+              const y = 250 + Math.sin(step.offset * Math.PI * 2) * 120;
+              return (
+                <circle
+                  key={i}
+                  cx={x}
+                  cy={y}
+                  r="7"
+                  fill="var(--accent, #E8611A)"
+                  className="path-dot"
+                />
+              );
+            })}
+          </svg>
 
-        {/* Bento grid of step cards */}
-        <div className="bento-grid">
-          {steps.map((step) => (
-            <div key={step.num} className={`bento-card bento-card--${step.side}`}>
-              <span className="bento-num">{step.num}</span>
-              <h3 className="bento-title">{step.title}</h3>
-              <p className="bento-desc">{step.desc}</p>
+          {/* Cards positioned at dot coordinates */}
+          {steps.map((step, i) => (
+            <div
+              key={step.num}
+              className="path-card"
+              ref={(el) => (cardsRef.current[i] = el)}
+            >
+              <span className="path-card-num">{step.num}</span>
+              <h3 className="path-card-title">{step.title}</h3>
+              <p className="path-card-desc">{step.desc}</p>
             </div>
           ))}
         </div>

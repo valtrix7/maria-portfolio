@@ -1,5 +1,5 @@
 /* ==========================================================================
-   How I Work — SVG path draw + scrubbed bento cards
+   How I Work — SVG path draw + cards at dot positions
    ========================================================================== */
 
 .how-i-work {
@@ -15,16 +15,25 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(60px, 8vh, 100px) 0;
+  padding: clamp(40px, 6vh, 80px) 0;
 }
 
 .process-header {
-  margin-bottom: clamp(40px, 6vh, 80px);
+  margin-bottom: clamp(20px, 4vh, 60px);
 }
 
 /* ==========================================================================
-   SVG snake path — overlays the entire section
+   Path container — holds SVG + absolutely positioned cards
    ========================================================================== */
+
+.path-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  aspect-ratio: 12 / 5;
+  padding: 0 clamp(20px, 4vw, 60px);
+}
 
 .snake-svg {
   position: absolute;
@@ -35,100 +44,69 @@
   pointer-events: none;
 }
 
-.snake-dot-svg {
-  opacity: 0;
-  animation: dotAppear 0.5s ease-out forwards;
-}
-
-@keyframes dotAppear {
-  from { opacity: 0; r: 0; }
-  to { opacity: 1; r: 8; }
-}
-
 /* ==========================================================================
-   Bento grid — 2×2 cards staggered
+   Path cards — absolutely positioned at SVG dot coordinates
    ========================================================================== */
 
-.bento-grid {
-  position: relative;
+.path-card {
+  position: absolute;
+  transform: translate(-50%, -50%);
   z-index: 5;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(16px, 2vw, 28px);
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 clamp(20px, 4vw, 60px);
-  perspective: 800px;
-}
-
-.bento-card {
-  position: relative;
-  padding: clamp(28px, 3vw, 44px);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  width: clamp(160px, 16vw, 220px);
+  padding: clamp(16px, 2vw, 24px);
+  border-radius: 14px;
+  background: rgba(10, 10, 10, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  transform-origin: center center;
+  gap: 6px;
+  opacity: 0;
   will-change: transform, opacity;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.bento-card:hover {
-  background: rgba(255, 106, 0, 0.06);
-  border-color: rgba(255, 106, 0, 0.25);
-  box-shadow: 0 0 50px rgba(255, 106, 0, 0.08);
-  transform: translateY(-6px) scale(1.02);
+.path-card:hover {
+  background: rgba(255, 106, 0, 0.08);
+  border-color: rgba(255, 106, 0, 0.3);
+  box-shadow: 0 0 40px rgba(255, 106, 0, 0.12);
+  transform: translate(-50%, -50%) scale(1.06);
 }
 
-/* Alternate card sizes for bento feel */
-.bento-card--top:first-child {
-  grid-column: 1;
-}
-
-.bento-card--bottom:nth-child(2) {
-  grid-column: 2;
-  margin-top: clamp(40px, 6vh, 80px);
-}
-
-.bento-card--top:nth-child(3) {
-  grid-column: 1;
-}
-
-.bento-card--bottom:nth-child(4) {
-  grid-column: 2;
-  margin-top: clamp(40px, 6vh, 80px);
-}
-
-.bento-num {
+.path-card-num {
   font-family: 'Space Grotesk', monospace;
-  font-size: clamp(36px, 4vw, 56px);
+  font-size: 10px;
   font-weight: 700;
   color: var(--accent, #E8611A);
-  opacity: 0.2;
-  line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.12em;
 }
 
-.bento-title {
+.path-card-title {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(20px, 2.5vw, 28px);
+  font-size: clamp(16px, 1.8vw, 22px);
   font-weight: 700;
   color: #fff;
   letter-spacing: -0.02em;
   margin: 0;
+  line-height: 1.15;
 }
 
-.bento-desc {
+.path-card-desc {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(12px, 1.1vw, 14px);
+  font-size: clamp(10px, 1vw, 12px);
   font-weight: 400;
   color: rgba(255, 255, 255, 0.4);
-  line-height: 1.6;
+  line-height: 1.5;
   margin: 0;
+}
+
+/* ==========================================================================
+   SVG dot pulses
+   ========================================================================== */
+
+.path-dot {
+  opacity: 0;
 }
 
 /* ==========================================================================
@@ -154,21 +132,31 @@
 }
 
 /* ==========================================================================
-   Mobile
+   Mobile — vertical layout
    ========================================================================== */
 
 @media (max-width: 768px) {
-  .bento-grid {
-    grid-template-columns: 1fr;
-    max-width: 400px;
-  }
-
-  .bento-card--bottom:nth-child(2),
-  .bento-card--bottom:nth-child(4) {
-    margin-top: 0;
+  .path-container {
+    aspect-ratio: auto;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 20px;
   }
 
   .snake-svg {
     display: none;
+  }
+
+  .path-card {
+    position: static;
+    transform: none;
+    width: 100%;
+    opacity: 1;
+  }
+
+  .path-card:hover {
+    transform: scale(1.02);
   }
 }
