@@ -18,7 +18,7 @@ const FRAMES = [
 ];
 
 const TOTAL_FRAMES = 180;
-const SCROLL_PER_FRAME = 280;
+const SCROLL_PER_FRAME = 300;
 
 const FrameSequence = () => {
   const sectionRef = useRef(null);
@@ -27,32 +27,25 @@ const FrameSequence = () => {
   const railRef = useRef(null);
   const stageRef = useRef(null);
   const headlineRef = useRef(null);
-  const scanRef = useRef(null);
   const accentBarRef = useRef(null);
-  const flickerRef = useRef(null);
 
   useEffect(() => {
     const reduce = prefersReducedMotion();
+    const el = headlineRef.current;
+    if (!el) return;
+
+    // Clear any existing content
+    el.innerHTML = '';
 
     const ctx = gsap.context(() => {
       if (reduce) {
         if (counterRef.current) counterRef.current.textContent = String(TOTAL_FRAMES).padStart(3, '0');
         if (railRef.current) railRef.current.style.transform = 'scaleX(1)';
         if (stageRef.current) stageRef.current.textContent = FRAMES[FRAMES.length - 1].kicker;
+        el.innerHTML = FRAMES[FRAMES.length - 1].headline.map((w) => `<span class="fs-word"><span class="fs-word-text">${w}</span></span>`).join('<span class="fs-word-sp"> </span>');
         return;
       }
 
-      // Scan line animation
-      if (scanRef.current) {
-        gsap.to(scanRef.current, {
-          y: '100%',
-          duration: 3,
-          ease: 'none',
-          repeat: -1,
-        });
-      }
-
-      // Accent bar pulse
       if (accentBarRef.current) {
         gsap.to(accentBarRef.current, {
           opacity: 0.3,
@@ -63,29 +56,25 @@ const FrameSequence = () => {
         });
       }
 
-      // Build sentence layers
-      const el = headlineRef.current;
+      // Build all layers via DOM — React won't touch headlineRef children
       const layers = FRAMES.map((frame) => {
         const span = document.createElement('span');
-        span.className = 'fs-headline-inner';
-        span.dataset.color = frame.color;
+        span.className = 'fs-headline-layer';
         span.innerHTML = frame.headline
-          .map((w, wi) => `<span class="fs-word" data-idx="${wi}"><span class="fs-word-text">${w}</span></span>`)
+          .map((w) => `<span class="fs-word"><span class="fs-word-text">${w}</span></span>`)
           .join('<span class="fs-word-sp"> </span>');
         el.appendChild(span);
         return span;
       });
 
-      gsap.set(layers[0], { opacity: 1, y: '0em' });
+      // Position all layers absolutely, first one visible
+      gsap.set(layers[0], { opacity: 1, y: 0 });
       for (let i = 1; i < layers.length; i++) {
-        gsap.set(layers[i], { opacity: 0, y: '0.6em' });
+        gsap.set(layers[i], { opacity: 0, y: 50 });
       }
 
       const totalScroll = SCROLL_PER_FRAME * (FRAMES.length - 1);
-      let current = 0;
-
-      const OUT_END = 0.38;
-      const GAP_END = 0.52;
+      let currentIdx = 0;
 
       ScrollTrigger.create({
         trigger: pinRef.current,
@@ -93,85 +82,95 @@ const FrameSequence = () => {
         end: () => `+=${totalScroll}`,
         pin: true,
         pinSpacing: true,
-        scrub: 1.2,
+        scrub: 0.8,
         invalidateOnRefresh: true,
-        onUpdate: (self) => {
+        onUpdate(self) {
           const p = self.progress;
 
-          // Frame counter with flicker
+          // Counter
           if (counterRef.current) {
             const frame = Math.min(Math.round(p * TOTAL_FRAMES), TOTAL_FRAMES);
-            const txt = String(frame).padStart(3, '0');
-            counterRef.current.textContent = txt;
-          }
-
-          // Counter flicker effect on fast scroll
-          if (flickerRef.current && p > 0 && p < 1) {
-            flickerRef.current.style.opacity = Math.random() > 0.92 ? '0.4' : '1';
-          } else if (flickerRef.current) {
-            flickerRef.current.style.opacity = '1';
+            counterRef.current.textContent = String(frame).padStart(3, '0');
           }
 
           // Rail
           if (railRef.current) railRef.current.style.transform = `scaleX(${p})`;
 
-          // Accent bar color
+          // Which frame pair are we between?
           const raw = p * (FRAMES.length - 1);
+          const idx = Math.min(Math.floor(raw), FRAMES.length - 2);
+          const localP = raw - idx;
+
+          // Update stage label & accent color
           const displayIdx = Math.min(Math.round(raw), FRAMES.length - 1);
           if (stageRef.current) stageRef.current.textContent = FRAMES[displayIdx].kicker;
           if (accentBarRef.current) accentBarRef.current.style.background = FRAMES[displayIdx].color;
 
-          // Word animations
-          const idx = Math.min(Math.floor(raw), FRAMES.length - 2);
-          if (idx === current && p < 1) return;
-
-          if (idx > current + 1) {
-            for (let i = 0; i < FRAMES.length; i++) {
-              gsap.set(layers[i], { opacity: i === idx ? 1 : 0, y: i === idx ? '0em' : '0.6em' });
-              const words = layers[i].querySelectorAll('.fs-word-text');
-              words.forEach((w) => gsap.set(w, { opacity: 1, y: '0em', filter: 'blur(0px)', scale: 1 }));
+          // If we jumped ahead (fast scroll), snap all layers
+          if (idx > currentIdx + 1) {
+            for (let i = 0; i < layers.length; i++) {
+              if (i === idx) {
+                gsap.set(layers[i], { opacity: 1, y: 0 });
+                layers[i].querySelectorAll('.fs-word-text').forEach((w) => {
+                  gsap.set(w, { opacity: 1, y: 0, filter: 'blur(0px)', scale: 1 });
+                });
+              } else if (i === idx + 1) {
+                gsap.set(layers[i], { opacity: 0, y: 50 });
+              } else {
+                gsap.set(layers[i], { opacity: 0, y: 50 });
+              }
             }
-            current = idx;
+            currentIdx = idx;
             return;
           }
 
-          const localP = raw - idx;
-          const nextIdx = idx + 1;
-
-          if (localP < OUT_END) {
-            const t = localP / OUT_END;
+          // Phase 1: old text exits (0 -> 0.45)
+          if (localP < 0.45) {
+            const t = localP / 0.45;
             const oldWords = layers[idx].querySelectorAll('.fs-word-text');
-            oldWords.forEach((w, i) => {
-              const stagger = Math.max(0, Math.min(1, (t * 2) - (i * 0.1)));
+            oldWords.forEach((w, wi) => {
+              const stagger = Math.max(0, Math.min(1, t * 2 - wi * 0.12));
               gsap.set(w, {
                 opacity: 1 - stagger,
-                y: `${-0.4 * stagger}em`,
-                filter: `blur(${stagger * 3}px)`,
-                scale: 1 - stagger * 0.05,
+                y: -40 * stagger,
+                filter: `blur(${stagger * 4}px)`,
+                scale: 1 - stagger * 0.06,
               });
             });
-          } else if (localP < GAP_END) {
+            // Keep next layer hidden
+            gsap.set(layers[idx + 1], { opacity: 0, y: 50 });
+
+          // Phase 2: gap (0.45 -> 0.55)
+          } else if (localP < 0.55) {
             gsap.set(layers[idx], { opacity: 0 });
-            gsap.set(layers[nextIdx], { opacity: 0, y: '0.6em' });
+            gsap.set(layers[idx + 1], { opacity: 0, y: 50 });
+
+          // Phase 3: new text enters (0.55 -> 1)
           } else {
-            const t = (localP - GAP_END) / (1 - GAP_END);
-            const newWords = layers[nextIdx].querySelectorAll('.fs-word-text');
-            newWords.forEach((w, i) => {
-              const stagger = Math.max(0, Math.min(1, (t * 2.2) - (i * 0.1)));
+            const t = (localP - 0.55) / 0.45;
+            const newWords = layers[idx + 1].querySelectorAll('.fs-word-text');
+            newWords.forEach((w, wi) => {
+              const stagger = Math.max(0, Math.min(1, t * 2.2 - wi * 0.12));
               gsap.set(w, {
                 opacity: stagger,
-                y: `${0.5 * (1 - stagger)}em`,
-                filter: `blur(${(1 - stagger) * 4}px)`,
-                scale: 0.95 + stagger * 0.05,
+                y: 50 * (1 - stagger),
+                filter: `blur(${(1 - stagger) * 5}px)`,
+                scale: 0.92 + stagger * 0.08,
               });
             });
-            if (t >= 0.98) current = nextIdx;
+            // Show the container
+            gsap.set(layers[idx + 1], {
+              opacity: Math.min(1, t * 3),
+              y: 50 * (1 - Math.min(1, t * 2)),
+            });
+
+            if (t >= 0.98) currentIdx = idx + 1;
           }
         },
       });
 
       // Entrance
-      gsap.from(['.fs-hud', '.fs-rail-row', '.fs-bracket', '.fs-scanlines'], {
+      gsap.from(['.fs-hud', '.fs-rail-row', '.fs-bracket', '.fs-accent-bar'], {
         y: 30,
         opacity: 0,
         duration: 1.2,
@@ -192,21 +191,6 @@ const FrameSequence = () => {
       ref={sectionRef}
     >
       <div className="fs-pin" ref={pinRef}>
-        {/* Scan lines overlay */}
-        <div className="fs-scanlines" ref={scanRef} />
-
-        {/* Film strip edges */}
-        <div className="fs-filmstrip fs-filmstrip--left">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div key={i} className="fs-filmstrip-hole" />
-          ))}
-        </div>
-        <div className="fs-filmstrip fs-filmstrip--right">
-          {Array.from({ length: 20 }).map((_, i) => (
-            <div key={i} className="fs-filmstrip-hole" />
-          ))}
-        </div>
-
         {/* Corner brackets */}
         <div className="fs-bracket fs-bracket--tl" />
         <div className="fs-bracket fs-bracket--tr" />
@@ -218,7 +202,7 @@ const FrameSequence = () => {
 
         {/* Top HUD */}
         <div className="fs-hud">
-          <div className="fs-counter" ref={flickerRef}>
+          <div className="fs-counter">
             <span className="fs-counter-current" ref={counterRef}>000</span>
             <span className="fs-counter-sep">/</span>
             <span className="fs-counter-total">{String(TOTAL_FRAMES).padStart(3, '0')}</span>
@@ -226,22 +210,13 @@ const FrameSequence = () => {
           <div className="fs-stage" ref={stageRef}>{FRAMES[0].kicker}</div>
         </div>
 
-        {/* Headline stage */}
+        {/* Headline stage — GSAP builds all layers here */}
         <div className="fs-stage-area">
           <h2
             className="fs-headline"
             ref={headlineRef}
             aria-label={FRAMES.map((f) => f.headline.join(' ')).join('. ')}
-          >
-            <span className="fs-headline-inner">
-              {FRAMES[0].headline.map((w, i) => (
-                <React.Fragment key={i}>
-                  <span className="fs-word"><span className="fs-word-text">{w}</span></span>
-                  {i < FRAMES[0].headline.length - 1 && <span className="fs-word-sp"> </span>}
-                </React.Fragment>
-              ))}
-            </span>
-          </h2>
+          />
         </div>
 
         {/* Bottom HUD */}
