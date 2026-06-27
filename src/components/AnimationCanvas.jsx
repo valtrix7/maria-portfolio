@@ -11,6 +11,7 @@ const SECTION_COLORS = {
   about: { r: 177, g: 108, b: 234 },
   'creative-manifesto': { r: 255, g: 94, b: 105 },
   'selected-work': { r: 232, g: 97, b: 26 },
+  gallery: { r: 177, g: 108, b: 234 },
   'how-i-work': { r: 255, g: 168, b: 75 },
   toolbox: { r: 177, g: 108, b: 234 },
   recognition: { r: 255, g: 94, b: 105 },

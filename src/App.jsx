@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -6,14 +6,12 @@ import Lenis from 'lenis';
 import Header from './components/Header';
 import AnimationCanvas from './components/AnimationCanvas';
 import SmoothCursor from './components/SmoothCursor';
-import CinematicIntro from './components/CinematicIntro';
-import Letterbox from './components/Letterbox';
-import ViewfinderHUD from './components/ViewfinderHUD';
 import Hero from './components/Hero';
 import FrameSequence from './components/FrameSequence';
 import About from './components/About';
 import CreativeManifesto from './components/CreativeManifesto';
 import SelectedWork from './components/SelectedWork';
+import ShaderGallery from './components/ShaderGallery';
 import HowIWork from './components/HowIWork';
 import Toolbox from './components/Toolbox';
 import Recognition from './components/Recognition';
@@ -23,19 +21,6 @@ import Footer from './components/Footer';
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
-  // Play the film-leader intro once per session; returning views skip the gate.
-  const [introDone, setIntroDone] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return window.sessionStorage.getItem('mi_intro_seen') === '1';
-  });
-
-  const handleIntroComplete = () => {
-    window.sessionStorage.setItem('mi_intro_seen', '1');
-    setIntroDone(true);
-    // Pinned/scrubbed triggers were measured behind the scroll lock — re-measure.
-    requestAnimationFrame(() => ScrollTrigger.refresh());
-  };
-
   useEffect(() => {
     // lerp-based smoothing gives consistent inertia across wheel + touch,
     // syncTouch mirrors native touch scroll while staying in sync with Lenis.
@@ -72,10 +57,7 @@ function App() {
 
   return (
     <>
-      {!introDone && <CinematicIntro onComplete={handleIntroComplete} />}
       <AnimationCanvas />
-      <Letterbox active={introDone} />
-      <ViewfinderHUD active={introDone} />
       <SmoothCursor />
       <Header />
       <main>
@@ -84,6 +66,7 @@ function App() {
         <About />
         <CreativeManifesto />
         <SelectedWork />
+        <ShaderGallery />
         <HowIWork />
         <Toolbox />
         <Recognition />

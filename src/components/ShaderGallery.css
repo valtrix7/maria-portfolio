@@ -1,0 +1,166 @@
+.gallery {
+  position: relative;
+  background: var(--bg);
+}
+
+.gallery-pin {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Heading ---------- */
+.gallery-head {
+  position: absolute;
+  top: clamp(48px, 10vh, 110px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.gallery-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(36px, 6vw, 84px);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+/* ---------- WebGL canvas ---------- */
+.gallery-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- HUD ---------- */
+.gallery-hud {
+  position: absolute;
+  bottom: clamp(28px, 6vh, 56px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  pointer-events: none;
+}
+
+.gallery-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  letter-spacing: 0.08em;
+}
+.gallery-counter-sep {
+  color: var(--text-muted);
+}
+
+.gallery-progress {
+  width: clamp(120px, 22vw, 260px);
+  height: 2px;
+  background: var(--border-light);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.gallery-progress-fill {
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.gallery-hint {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* ---------- DOM fallback (hidden unless reduced motion / no WebGL) ---------- */
+.gallery-fallback {
+  display: none;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: 140px var(--container-px) 80px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.gallery-fb-item {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.gallery-fb-item img {
+  width: 100%;
+  aspect-ratio: 1.6;
+  object-fit: cover;
+}
+.gallery-fb-item figcaption {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.gallery-fb-tag {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+}
+.gallery-fb-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* When fallback is active, let the section flow normally instead of pinning. */
+.gallery--fallback .gallery-pin {
+  height: auto;
+  overflow: visible;
+  display: block;
+}
+.gallery--fallback .gallery-head {
+  position: static;
+  transform: none;
+  padding-top: var(--section-py);
+}
+.gallery--fallback .gallery-hud {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .gallery-hud {
+    gap: 12px;
+  }
+  .gallery-hint {
+    display: none;
+  }
+}
