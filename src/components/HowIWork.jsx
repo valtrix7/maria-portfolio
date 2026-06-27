@@ -16,7 +16,7 @@ const steps = [
   { num: '04', title: 'Motion', desc: 'Breathing life into static designs with rhythm.', offset: 0.9 },
 ];
 
-const PATH_D = 'M 50,250 C 200,80 350,420 500,250 C 650,80 800,420 950,250 C 1050,150 1100,300 1150,250';
+const PATH_D = 'M 80,350 C 280,100 480,600 700,350 C 920,100 1120,600 1350,350 C 1500,180 1550,450 1580,350';
 
 const HowIWork = () => {
   const sectionRef = useRef(null);
@@ -34,12 +34,11 @@ const HowIWork = () => {
       const pathLength = path.getTotalLength();
 
       // Position cards at the dot coordinates along the path
+      const svgWidth = 1600;
+      const svgHeight = 700;
       cardsRef.current.forEach((card, i) => {
         if (!card) return;
         const point = path.getPointAtLength(pathLength * steps[i].offset);
-        // Convert SVG coords to percentage of the container
-        const svgWidth = 1200;
-        const svgHeight = 500;
         const xPct = (point.x / svgWidth) * 100;
         const yPct = (point.y / svgHeight) * 100;
         card.style.left = `${xPct}%`;
@@ -133,7 +132,7 @@ const HowIWork = () => {
 
         {/* SVG path + cards container */}
         <div className="path-container">
-          <svg className="snake-svg" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid meet">
+          <svg className="snake-svg" viewBox="0 0 1600 700" preserveAspectRatio="xMidYMid meet">
             <defs>
               <linearGradient id="snakeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#FF6A00" />
@@ -162,8 +161,8 @@ const HowIWork = () => {
             />
             {/* Dots */}
             {steps.map((step, i) => {
-              const x = 50 + step.offset * 1100;
-              const y = 250 + Math.sin(step.offset * Math.PI * 2) * 120;
+              const x = 80 + step.offset * 1500;
+              const y = 350 + Math.sin(step.offset * Math.PI * 2) * 200;
               return (
                 <circle
                   key={i}
