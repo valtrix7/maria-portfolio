@@ -275,45 +275,6 @@ section {
   background-size: 256px 256px;
 }
 
-/* ---------- Custom Cursor ---------- */
-.cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 8px;
-  height: 8px;
-  background: var(--accent);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  mix-blend-mode: difference;
-  transition: transform 0.15s var(--ease);
-}
-
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(232, 97, 26, 0.4);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  mix-blend-mode: difference;
-  transition: transform 0.3s var(--ease), width 0.3s var(--ease), height 0.3s var(--ease);
-}
-
-.cursor-ring.hovering {
-  width: 64px;
-  height: 64px;
-  border-color: var(--accent);
-}
-
-@media (max-width: 768px) {
-  .cursor-dot, .cursor-ring { display: none; }
-}
-
 /* ---------- Selection ---------- */
 ::selection {
   background: var(--accent);
