@@ -10,7 +10,6 @@ import Hero from './components/Hero';
 import About from './components/About';
 import CreativeManifesto from './components/CreativeManifesto';
 import SelectedWork from './components/SelectedWork';
-import ShaderGallery from './components/ShaderGallery';
 import HowIWork from './components/HowIWork';
 import Toolbox from './components/Toolbox';
 import Recognition from './components/Recognition';
@@ -64,7 +63,6 @@ function App() {
         <About />
         <CreativeManifesto />
         <SelectedWork />
-        <ShaderGallery />
         <HowIWork />
         <Toolbox />
         <Recognition />
