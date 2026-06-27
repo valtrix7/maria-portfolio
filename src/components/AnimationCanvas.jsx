@@ -7,6 +7,7 @@ const ORB_COUNT = 3;
 
 const SECTION_COLORS = {
   hero: { r: 232, g: 97, b: 26 },
+  'frame-sequence': { r: 232, g: 97, b: 26 },
   about: { r: 177, g: 108, b: 234 },
   'creative-manifesto': { r: 255, g: 94, b: 105 },
   'selected-work': { r: 232, g: 97, b: 26 },

@@ -1,0 +1,314 @@
+.frame-sequence {
+  position: relative;
+  background: var(--bg);
+}
+
+.fs-pin {
+  position: relative;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(96px, 12vh, 140px) clamp(60px, 8vw, 120px) clamp(40px, 6vh, 72px);
+  overflow: hidden;
+}
+
+/* ---------- Scan Lines ---------- */
+.fs-scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.008) 2px,
+    rgba(255, 255, 255, 0.008) 4px
+  );
+  opacity: 0.6;
+}
+
+/* ---------- Film Strip Edges ---------- */
+.fs-filmstrip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  pointer-events: none;
+}
+.fs-filmstrip--left {
+  left: 8px;
+}
+.fs-filmstrip--right {
+  right: 8px;
+}
+.fs-filmstrip-hole {
+  width: 10px;
+  height: 14px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+/* ---------- Corner Brackets ---------- */
+.fs-bracket {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  z-index: 2;
+  pointer-events: none;
+}
+.fs-bracket::before,
+.fs-bracket::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.08);
+}
+.fs-bracket--tl { top: 24px; left: 48px; }
+.fs-bracket--tl::before { top: 0; left: 0; width: 20px; height: 1px; }
+.fs-bracket--tl::after { top: 0; left: 0; width: 1px; height: 20px; }
+
+.fs-bracket--tr { top: 24px; right: 48px; }
+.fs-bracket--tr::before { top: 0; right: 0; width: 20px; height: 1px; }
+.fs-bracket--tr::after { top: 0; right: 0; width: 1px; height: 20px; }
+
+.fs-bracket--bl { bottom: 24px; left: 48px; }
+.fs-bracket--bl::before { bottom: 0; left: 0; width: 20px; height: 1px; }
+.fs-bracket--bl::after { bottom: 0; left: 0; width: 1px; height: 20px; }
+
+.fs-bracket--br { bottom: 24px; right: 48px; }
+.fs-bracket--br::before { bottom: 0; right: 0; width: 20px; height: 1px; }
+.fs-bracket--br::after { bottom: 0; right: 0; width: 1px; height: 20px; }
+
+/* ---------- Accent Bar ---------- */
+.fs-accent-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 3;
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+/* ---------- Top HUD ---------- */
+.fs-hud {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 5;
+}
+
+.fs-counter {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(48px, 8vw, 110px);
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 0.05s;
+}
+
+.fs-counter-current {
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.fs-counter-sep {
+  color: rgba(255, 255, 255, 0.15);
+  font-weight: 300;
+  margin: 0 2px;
+}
+
+.fs-counter-total {
+  color: rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+}
+
+.fs-stage {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  padding: 6px 14px;
+  border: 1px solid rgba(232, 97, 26, 0.2);
+  border-radius: 4px;
+  background: rgba(232, 97, 26, 0.04);
+}
+
+/* ---------- Kinetic Stage ---------- */
+.fs-stage-area {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block: 24px;
+  z-index: 5;
+}
+
+.fs-headline {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  min-height: 1.4em;
+  text-align: center;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: clamp(44px, 8.5vw, 130px);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.fs-headline-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0 0.25em;
+  will-change: transform, opacity;
+}
+
+.fs-word {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.fs-word-text {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+  /* Outline style for cinematic look */
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+}
+
+.fs-word-sp {
+  width: 0.25em;
+  display: inline-block;
+}
+
+/* ---------- Bottom HUD ---------- */
+.fs-rail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
+  z-index: 5;
+}
+
+.fs-rail-label {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.fs-rail-track {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: visible;
+}
+
+.fs-rail-ticks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.fs-rail-tick {
+  position: absolute;
+  top: -3px;
+  width: 1px;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.fs-rail-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+  box-shadow: 0 0 8px rgba(232, 97, 26, 0.4);
+}
+
+/* ---------- Reduced Motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .fs-pin {
+    height: auto;
+    min-height: auto;
+    justify-content: flex-start;
+    gap: 56px;
+    padding-block: clamp(80px, 10vh, 120px) clamp(48px, 6vh, 80px);
+  }
+  .fs-stage-area {
+    flex: 0 0 auto;
+  }
+  .fs-headline-inner {
+    position: static;
+  }
+  .fs-scanlines,
+  .fs-filmstrip {
+    display: none;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 768px) {
+  .fs-pin {
+    padding-top: 110px;
+    padding-left: var(--container-px);
+    padding-right: var(--container-px);
+  }
+  .fs-filmstrip { display: none; }
+  .fs-bracket { display: none; }
+  .fs-counter {
+    font-size: clamp(40px, 14vw, 64px);
+  }
+  .fs-headline {
+    font-size: clamp(32px, 11vw, 64px);
+    line-height: 1.1;
+  }
+  .fs-headline-inner {
+    gap: 0 0.18em;
+  }
+  .fs-word-sp {
+    width: 0.18em;
+  }
+  .fs-rail-label:last-child {
+    display: none;
+  }
+}

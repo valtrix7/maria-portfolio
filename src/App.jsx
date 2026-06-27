@@ -7,6 +7,7 @@ import Header from './components/Header';
 import AnimationCanvas from './components/AnimationCanvas';
 import SmoothCursor from './components/SmoothCursor';
 import Hero from './components/Hero';
+import FrameSequence from './components/FrameSequence';
 import About from './components/About';
 import CreativeManifesto from './components/CreativeManifesto';
 import SelectedWork from './components/SelectedWork';
@@ -20,28 +21,36 @@ gsap.registerPlugin(ScrollTrigger);
 
 function App() {
   useEffect(() => {
+    // lerp-based smoothing gives consistent inertia across wheel + touch,
+    // syncTouch mirrors native touch scroll while staying in sync with Lenis.
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 2,
+      lerp: 0.09,
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      syncTouch: true,
+      syncTouchLerp: 0.075,
+      touchMultiplier: 1.5,
     });
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
 
     lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
+    // Drive Lenis off GSAP's ticker (single RAF source, no double-stepping).
+    const tickerCb = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(tickerCb);
     gsap.ticker.lagSmoothing(0);
 
+    // Re-measure all pinned / scrubbed triggers once fonts + images settle,
+    // so the FrameSequence pin length and scrub offsets are correct.
+    const refresh = () => ScrollTrigger.refresh();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(refresh);
+    }
+    window.addEventListener('load', refresh);
+
     return () => {
+      window.removeEventListener('load', refresh);
+      gsap.ticker.remove(tickerCb);
       lenis.destroy();
-      gsap.ticker.remove(lenis.raf);
     };
   }, []);
 
@@ -52,6 +61,7 @@ function App() {
       <Header />
       <main>
         <Hero />
+        <FrameSequence />
         <About />
         <CreativeManifesto />
         <SelectedWork />

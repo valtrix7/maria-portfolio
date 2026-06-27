@@ -4,21 +4,20 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding-block: 0;
 }
 
-/* Giant watermark background text */
+/* ---------- Giant watermark background ---------- */
 .hero-bg-text {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(120px, 22vw, 400px);
+  font-size: clamp(120px, 26vw, 460px);
   font-weight: 900;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.045);
   letter-spacing: -0.05em;
   white-space: nowrap;
   pointer-events: none;
@@ -27,7 +26,7 @@
   will-change: transform;
 }
 
-/* Content */
+/* ---------- Content ---------- */
 .hero-content {
   position: relative;
   z-index: 10;
@@ -41,7 +40,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: clamp(32px, 6vh, 64px);
 }
 
 .hero-year {
@@ -51,38 +50,46 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Name */
+/* ---------- Name ---------- */
 .hero-name {
   display: flex;
   flex-direction: column;
-  margin-bottom: 48px;
+  margin-bottom: clamp(40px, 7vh, 72px);
   perspective: 800px;
 }
 
 .hero-name-line {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(64px, 11vw, 180px);
+  font-size: clamp(64px, 13vw, 200px);
   font-weight: 900;
   color: var(--text);
-  line-height: 0.92;
-  letter-spacing: -0.04em;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
   text-transform: uppercase;
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.hero-letter-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  line-height: 0.9;
 }
 
 .hero-letter {
+  display: inline-block;
   transform-origin: bottom center;
-  will-change: transform, opacity;
+  will-change: transform;
 }
 
 /* Outline version */
 .hero-name-outline {
   color: transparent;
   -webkit-text-stroke: 2px var(--accent);
-  display: block;
 }
 
-/* Bottom row */
+/* ---------- Bottom row ---------- */
 .hero-bottom {
   display: flex;
   justify-content: space-between;
@@ -91,7 +98,7 @@
 }
 
 .hero-subtitle {
-  max-width: 420px;
+  max-width: 440px;
   margin-bottom: 0;
 }
 
@@ -101,80 +108,20 @@
   flex-shrink: 0;
 }
 
-/* Floating thumbnails */
-.hero-floats {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.hero-float {
-  position: absolute;
-  border-radius: 12px;
-  overflow: hidden;
-  opacity: 0;
-  will-change: transform;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-}
-
-.hero-float img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: grayscale(40%);
-  transition: filter 0.6s var(--ease);
-}
-
-.hero-float:hover img {
-  filter: grayscale(0%);
-}
-
-.hero-float-1 {
-  top: 8%;
-  right: 6%;
-  width: 220px;
-  height: 320px;
-}
-
-.hero-float-2 {
-  top: 50%;
-  right: 28%;
-  width: 180px;
-  height: 120px;
-}
-
-.hero-float-3 {
-  top: 15%;
-  right: 38%;
-  width: 140px;
-  height: 190px;
-}
-
-.hero-float-4 {
-  bottom: 10%;
-  right: 10%;
-  width: 160px;
-  height: 220px;
-}
-
-/* Orbit badge */
+/* ---------- Orbit badge ---------- */
 .hero-orbit-wrap {
   position: absolute;
-  bottom: 15%;
-  left: 8%;
+  bottom: 14%;
+  left: clamp(20px, 6vw, 88px);
   z-index: 5;
+  will-change: transform, opacity;
 }
 
 .hero-orbit {
   position: relative;
-  width: 100px;
-  height: 100px;
-  animation: spin 20s linear infinite;
+  width: 110px;
+  height: 110px;
+  will-change: transform;
 }
 
 .hero-orbit svg {
@@ -193,73 +140,84 @@
   transform: translate(-50%, -50%);
 }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Marquee */
-.hero-marquee {
+.hero-orbit-core {
   position: absolute;
-  bottom: 72px;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  z-index: 5;
-  opacity: 0.12;
-}
-
-.hero-marquee-track {
-  display: flex;
-  gap: 48px;
-  align-items: center;
-  white-space: nowrap;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(11px, 1vw, 14px);
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 800;
   color: var(--text);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  width: max-content;
+  letter-spacing: 0.02em;
 }
 
-.md {
-  width: 5px;
-  height: 5px;
-  background: var(--accent);
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-/* Scroll indicator */
+/* ---------- Scroll cue ---------- */
 .hero-scroll {
   position: absolute;
   bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .hero-scroll-line {
+  display: block;
   width: 1px;
-  height: 40px;
+  height: 42px;
   background: linear-gradient(to bottom, var(--accent), transparent);
-  animation: scrollPulse 2s ease-in-out infinite;
+  transform-origin: top center;
+  animation: scrollPulse 2.2s ease-in-out infinite;
 }
 
 @keyframes scrollPulse {
-  0%, 100% { opacity: 0.2; transform: scaleY(0.5); }
-  50% { opacity: 1; transform: scaleY(1); }
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scaleY(0.4);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-line {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* ---------- Mobile ---------- */
 @media (max-width: 768px) {
-  .hero { padding-top: 100px; }
-  .hero-floats { display: none; }
-  .hero-orbit-wrap { display: none; }
-  .hero-bg-text { font-size: 80px; }
-  .hero-bottom { flex-direction: column; align-items: flex-start; gap: 32px; }
-  .hero-cta { width: 100%; flex-direction: column; gap: 12px; }
-  .hero-cta .btn { width: 100%; }
-  .hero-marquee { bottom: 36px; }
-  .hero-top-row { margin-bottom: 24px; }
+  .hero {
+    padding-top: 110px;
+  }
+  .hero-orbit-wrap {
+    display: none;
+  }
+  .hero-bg-text {
+    font-size: 80px;
+  }
+  .hero-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+  }
+  .hero-cta {
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .hero-cta .btn {
+    width: 100%;
+  }
+  .hero-top-row {
+    margin-bottom: 28px;
+  }
 }
