@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Hero.css';
@@ -9,88 +9,74 @@ const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const SERVICES = [
+const EXPERTISE = [
   { num: '01', label: 'Motion Design' },
-  { num: '02', label: 'Brand Identity' },
+  { num: '02', label: 'UI/UX Design' },
   { num: '03', label: 'Visual Direction' },
   { num: '04', label: 'Creative Strategy' },
 ];
 
+const NAV_LINKS = ['Home', 'About', 'Projects'];
+
+const ArrowIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="7" y1="17" x2="17" y2="7" />
+    <polyline points="7 7 17 7 17 17" />
+  </svg>
+);
+
 const Hero = () => {
   const heroRef = useRef(null);
-  const headlineRef = useRef(null);
-  const contentRef = useRef(null);
+  const glowRef = useRef(null);
+  const mouse = useRef({ x: 0, y: 0 });
+
+  const handleMouseMove = useCallback((e) => {
+    const rect = heroRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    mouse.current = { x, y };
+    if (glowRef.current) {
+      glowRef.current.style.background = `radial-gradient(600px circle at ${x}% ${y}%, rgba(255, 106, 0, 0.08) 0%, transparent 60%)`;
+    }
+  }, []);
 
   useEffect(() => {
     const reduce = prefersReducedMotion();
 
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set(['.hero-kicker', '.hero-headline-word', '.hero-subtext', '.hero-service', '.hero-visual'], {
+        gsap.set(['.hero-nav', '.hero-kicker', '.hero-name-word', '.hero-portrait', '.hero-headline-right', '.hero-desc-right', '.hero-cta-btn', '.hero-expertise-item'], {
           opacity: 1, y: 0, x: 0, scale: 1,
         });
         return;
       }
 
-      const tl = gsap.timeline({ delay: 0.2 });
+      const tl = gsap.timeline({ delay: 0.3 });
+
+      // Nav
+      tl.fromTo('.hero-nav', { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0);
 
       // Kicker
-      tl.fromTo('.hero-kicker',
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
-        0
-      );
+      tl.fromTo('.hero-kicker', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0.2);
 
-      // Headline words stagger
-      tl.fromTo('.hero-headline-word',
-        { y: 80, opacity: 0, rotateX: 40 },
-        { y: 0, opacity: 1, rotateX: 0, duration: 1.2, stagger: 0.12, ease: 'power4.out' },
-        0.15
-      );
+      // Name words stagger
+      tl.fromTo('.hero-name-word', { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, stagger: 0.12, ease: 'power4.out' }, 0.3);
 
-      // Subtext
-      tl.fromTo('.hero-subtext',
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
-        0.6
-      );
+      // Portrait
+      tl.fromTo('.hero-portrait', { scale: 1.08, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.4, ease: 'power3.out' }, 0.4);
 
-      // Description
-      tl.fromTo('.hero-desc',
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
-        0.8
-      );
+      // Right column
+      tl.fromTo('.hero-headline-right', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' }, 0.7);
+      tl.fromTo('.hero-desc-right', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0.85);
+      tl.fromTo('.hero-cta-btn', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0.95);
 
-      // Services stagger
-      tl.fromTo('.hero-service',
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'power3.out' },
-        0.9
-      );
+      // Expertise stagger
+      tl.fromTo('.hero-expertise-item', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, stagger: 0.07, ease: 'power3.out' }, 1.0);
 
-      // Visual image
-      tl.fromTo('.hero-visual',
-        { scale: 1.1, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1.4, ease: 'power3.out' },
-        0.3
-      );
-
-      // Parallax on scroll
-      gsap.to(contentRef.current, {
-        y: -60,
-        opacity: 0.3,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
-
-      gsap.to('.hero-visual', {
-        y: -40,
+      // Portrait parallax
+      gsap.to('.hero-portrait', {
+        y: -30,
         ease: 'none',
         scrollTrigger: {
           trigger: heroRef.current,
@@ -105,49 +91,83 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="hero" id="hero" data-section="hero" ref={heroRef}>
-      {/* Warm gradient overlay */}
-      <div className="hero-gradient" />
+    <section className="hero-wrapper" ref={heroRef} onMouseMove={handleMouseMove}>
+      <div className="hero-container">
+        {/* Cursor-reactive glow */}
+        <div className="hero-glow" ref={glowRef} />
 
-      <div className="container hero-layout" ref={contentRef}>
-        {/* Left column: text */}
-        <div className="hero-text-col">
-          <span className="hero-kicker">Hey, I'm a</span>
+        {/* Ambient glow spots */}
+        <div className="hero-glow-spot hero-glow-spot--1" />
+        <div className="hero-glow-spot hero-glow-spot--2" />
+        <div className="hero-glow-spot hero-glow-spot--3" />
 
-          <h1 className="hero-headline" ref={headlineRef}>
-            <span className="hero-headline-word">Motion</span>
-            <span className="hero-headline-word">Designer</span>
-          </h1>
+        {/* Navigation */}
+        <nav className="hero-nav">
+          <a href="#" className="hero-logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M3 20V4h3.5l4.5 7.5L15.5 4H19v16h-3v-9.5L12 18l-4-7.5V20H3z" fill="url(#hlogo)" />
+              <defs>
+                <linearGradient id="hlogo" x1="3" y1="4" x2="19" y2="20" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#FF6A00" />
+                  <stop offset="1" stopColor="#FF3B1F" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </a>
+          <div className="hero-nav-links">
+            {NAV_LINKS.map((link) => (
+              <a key={link} href={`#${link.toLowerCase()}`} className="hero-nav-link">{link}</a>
+            ))}
+          </div>
+          <a href="#contact" className="hero-cta-pill">
+            <span>Get in Touch</span>
+            <span className="hero-cta-arrow"><ArrowIcon /></span>
+          </a>
+        </nav>
 
-          <div className="hero-right-text">
-            <p className="hero-subtext">
+        {/* Main content */}
+        <div className="hero-content">
+          {/* Left: Name */}
+          <div className="hero-left">
+            <span className="hero-kicker">Hey, I'm a</span>
+            <h1 className="hero-name">
+              <span className="hero-name-word">Creative</span>
+              <span className="hero-name-word">Director</span>
+            </h1>
+          </div>
+
+          {/* Center: Portrait */}
+          <div className="hero-center">
+            <div className="hero-portrait">
+              <div className="hero-portrait-inner" />
+              <div className="hero-portrait-glow" />
+            </div>
+          </div>
+
+          {/* Right: Headline + Desc */}
+          <div className="hero-right">
+            <p className="hero-headline-right">
               Great design should feel invisible.
             </p>
-            <p className="hero-desc">
-              From concept to screen, I craft visual stories through motion, design, and strategic thinking.
+            <p className="hero-desc-right">
+              From concept to screen, I craft visual stories through motion, design, and strategic thinking. Bringing brands to life with purposeful animation.
             </p>
+            <a href="#work" className="hero-cta-btn">
+              <span>View Work</span>
+              <ArrowIcon />
+            </a>
           </div>
         </div>
 
-        {/* Services row */}
-        <div className="hero-services">
-          {SERVICES.map((s) => (
-            <div key={s.num} className="hero-service">
-              <span className="hero-service-num">{s.num}</span>
-              <span className="hero-service-label">{s.label}</span>
+        {/* Bottom expertise */}
+        <div className="hero-expertise">
+          {EXPERTISE.map((item) => (
+            <div key={item.num} className="hero-expertise-item">
+              <span className="hero-expertise-num">{item.num}</span>
+              <span className="hero-expertise-label">{item.label}</span>
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Visual: warm gradient portrait placeholder */}
-      <div className="hero-visual">
-        <div className="hero-visual-inner" />
-      </div>
-
-      {/* Scroll cue */}
-      <div className="hero-scroll">
-        <span className="hero-scroll-line" />
       </div>
     </section>
   );
