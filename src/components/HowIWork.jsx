@@ -10,30 +10,10 @@ const prefersReducedMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const steps = [
-  {
-    num: '01',
-    title: 'Discovery',
-    desc: 'Understanding your vision, goals, and audience. Every great motion piece starts with deep listening.',
-    side: 'top',
-  },
-  {
-    num: '02',
-    title: 'Concept',
-    desc: 'Developing the creative direction and narrative structure. Sketching the movement before it moves.',
-    side: 'bottom',
-  },
-  {
-    num: '03',
-    title: 'Design',
-    desc: 'Crafting each frame with intention. Typography, color, and composition working in harmony.',
-    side: 'top',
-  },
-  {
-    num: '04',
-    title: 'Motion',
-    desc: 'Breathing life into static designs. Timing, easing, and rhythm creating emotional resonance.',
-    side: 'bottom',
-  },
+  { num: '01', title: 'Discovery', desc: 'Understanding your vision, goals, and audience. Every great motion piece starts with deep listening.', side: 'top' },
+  { num: '02', title: 'Concept', desc: 'Developing the creative direction and narrative structure. Sketching the movement before it moves.', side: 'bottom' },
+  { num: '03', title: 'Design', desc: 'Crafting each frame with intention. Typography, color, and composition working in harmony.', side: 'top' },
+  { num: '04', title: 'Motion', desc: 'Breathing life into static designs. Timing, easing, and rhythm creating emotional resonance.', side: 'bottom' },
 ];
 
 const HowIWork = () => {
@@ -45,10 +25,7 @@ const HowIWork = () => {
     const reduce = prefersReducedMotion();
 
     const ctx = gsap.context(() => {
-      if (reduce) {
-        gsap.set('.snake-step', { opacity: 1, x: 0, y: 0 });
-        return;
-      }
+      if (reduce) return;
 
       // Header entrance
       gsap.fromTo('.process-header > *',
@@ -60,18 +37,18 @@ const HowIWork = () => {
         }
       );
 
-      // Horizontal scroll pin
+      // Horizontal scroll pin — the core mechanic
       const track = trackRef.current;
-      const totalScroll = track.scrollWidth - window.innerWidth;
+      const getScrollWidth = () => track.scrollWidth - window.innerWidth;
 
-      gsap.to(track, {
-        x: () => -totalScroll,
+      const scrollTween = gsap.to(track, {
+        x: () => -getScrollWidth(),
         ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
           pin: true,
           scrub: 1,
-          end: () => `+=${totalScroll}`,
+          end: () => `+=${getScrollWidth()}`,
           invalidateOnRefresh: true,
         },
       });
@@ -85,34 +62,32 @@ const HowIWork = () => {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top top',
-            end: () => `+=${totalScroll}`,
+            end: () => `+=${getScrollWidth()}`,
             scrub: 0.3,
           },
         }
       );
 
-      // Step reveals — staggered per snake position
-      gsap.utils.toArray('.snake-step').forEach((step, i) => {
-        const isTop = steps[i].side === 'top';
+      // Step reveals — tied to the main scroll tween via containerAnimation
+      gsap.utils.toArray('.snake-step').forEach((step) => {
         gsap.fromTo(step,
-          { x: 120, opacity: 0, rotateZ: isTop ? -3 : 3 },
+          { x: 100, opacity: 0 },
           {
             x: 0,
             opacity: 1,
-            rotateZ: 0,
             duration: 1,
             ease: 'power4.out',
             scrollTrigger: {
               trigger: step,
-              containerAnimation: gsap.getById?.('snakeScroll'),
-              start: 'left 85%',
+              containerAnimation: scrollTween,
+              start: 'left 90%',
               toggleActions: 'play none none reverse',
             },
           }
         );
       });
 
-      // Dot pulse on each step
+      // Dot pulses — tied to main scroll tween
       gsap.utils.toArray('.snake-dot').forEach((dot) => {
         gsap.fromTo(dot,
           { scale: 0 },
@@ -122,7 +97,8 @@ const HowIWork = () => {
             ease: 'back.out(2)',
             scrollTrigger: {
               trigger: dot,
-              start: 'left 80%',
+              containerAnimation: scrollTween,
+              start: 'left 90%',
               toggleActions: 'play none none reverse',
             },
           }
@@ -147,14 +123,12 @@ const HowIWork = () => {
         </div>
       </div>
 
-      {/* Horizontal snake track */}
       <div className="snake-viewport">
         <div className="snake-track" ref={trackRef}>
           {/* Speed trail */}
           <div className="snake-trail">
             <div className="snake-trail-fill" ref={trailRef} />
-            {/* Dots at each step */}
-          {steps.map((step) => (
+            {steps.map((step, i) => (
               <div
                 key={step.num}
                 className={`snake-dot snake-dot--${step.side}`}
@@ -163,7 +137,7 @@ const HowIWork = () => {
             ))}
           </div>
 
-          {/* Steps */}
+          {/* Step cards */}
           {steps.map((step) => (
             <div key={step.num} className={`snake-step snake-step--${step.side}`}>
               <div className="snake-step-card">
