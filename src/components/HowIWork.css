@@ -14,34 +14,30 @@
 }
 
 /* ==========================================================================
-   Snake viewport & track
+   Viewport & track
    ========================================================================== */
 
 .snake-viewport {
   width: 100%;
   overflow: hidden;
-  position: relative;
 }
 
 .snake-track {
-  display: flex;
-  align-items: center;
-  width: max-content;
-  gap: 0;
   position: relative;
-  padding: clamp(100px, 18vh, 200px) clamp(40px, 8vw, 120px);
-  will-change: transform;
+  width: max-content;
+  min-height: 500px;
+  padding: 0 clamp(60px, 10vw, 160px);
 }
 
 /* ==========================================================================
-   Speed trail — the glowing line connecting all steps
+   Speed trail — horizontal glowing line at vertical center
    ========================================================================== */
 
 .snake-trail {
   position: absolute;
   top: 50%;
-  left: clamp(40px, 8vw, 120px);
-  right: clamp(40px, 8vw, 120px);
+  left: clamp(60px, 10vw, 160px);
+  right: clamp(60px, 10vw, 160px);
   height: 2px;
   background: rgba(255, 255, 255, 0.06);
   transform: translateY(-50%);
@@ -62,7 +58,7 @@
     0 0 80px rgba(255, 59, 31, 0.1);
 }
 
-/* Dots at each step junction */
+/* Dots */
 .snake-dot {
   position: absolute;
   top: 50%;
@@ -86,49 +82,54 @@
 }
 
 /* ==========================================================================
-   Snake steps — alternating top / bottom
+   Snake rows — full-width rows alternating top/bottom
    ========================================================================== */
 
-.snake-step {
-  flex: 0 0 clamp(280px, 28vw, 380px);
+.snake-row {
+  display: flex;
+  width: calc(100vw - clamp(120px, 20vw, 320px));
   position: relative;
-  z-index: 2;
 }
 
-.snake-step--top {
-  align-self: flex-start;
-  padding-bottom: clamp(80px, 14vh, 160px);
+.snake-row--top {
+  justify-content: flex-start;
+  padding-bottom: 100px;
 }
 
-.snake-step--bottom {
-  align-self: flex-end;
-  padding-top: clamp(80px, 14vh, 160px);
+.snake-row--bottom {
+  justify-content: flex-end;
+  padding-top: 100px;
 }
 
-/* Connector lines from card to trail */
-.snake-step--top .snake-step-card::after {
+/* Connector line from card to trail */
+.snake-row--top .snake-step::before {
   content: '';
   position: absolute;
-  bottom: -1px;
+  bottom: -50px;
   left: 50%;
   width: 1px;
-  height: clamp(40px, 8vh, 80px);
+  height: 50px;
   background: linear-gradient(to bottom, rgba(255, 106, 0, 0.4), transparent);
 }
 
-.snake-step--bottom .snake-step-card::after {
+.snake-row--bottom .snake-step::before {
   content: '';
   position: absolute;
-  top: -1px;
+  top: -50px;
   left: 50%;
   width: 1px;
-  height: clamp(40px, 8vh, 80px);
+  height: 50px;
   background: linear-gradient(to top, rgba(255, 106, 0, 0.4), transparent);
 }
 
 /* ==========================================================================
    Step card
    ========================================================================== */
+
+.snake-step {
+  position: relative;
+  flex: 0 0 clamp(260px, 24vw, 340px);
+}
 
 .snake-step-card {
   position: relative;
@@ -187,10 +188,9 @@
   }
 
   .snake-track {
-    flex-direction: column;
     width: 100%;
+    min-height: auto;
     padding: 0 clamp(20px, 5vw, 40px);
-    gap: 0;
   }
 
   .snake-trail {
@@ -216,25 +216,26 @@
     transform: translate(-50%, 0);
   }
 
-  .snake-step {
-    flex: none;
+  .snake-row {
     width: 100%;
     padding-left: 52px;
+    padding-right: 0;
+    justify-content: flex-start !important;
   }
 
-  .snake-step--top,
-  .snake-step--bottom {
+  .snake-row--top,
+  .snake-row--bottom {
     padding-top: 0;
-    padding-bottom: 0;
-    align-self: stretch;
+    padding-bottom: 32px;
   }
 
-  .snake-step--top .snake-step-card::after,
-  .snake-step--bottom .snake-step-card::after {
+  .snake-row--top .snake-step::before,
+  .snake-row--bottom .snake-step::before {
     display: none;
   }
 
-  .snake-step-card {
-    margin-bottom: 32px;
+  .snake-step {
+    flex: none;
+    width: 100%;
   }
 }

@@ -37,7 +37,7 @@ const HowIWork = () => {
         }
       );
 
-      // Horizontal scroll pin — the core mechanic
+      // Horizontal scroll pin
       const track = trackRef.current;
       const getScrollWidth = () => track.scrollWidth - window.innerWidth;
 
@@ -53,7 +53,7 @@ const HowIWork = () => {
         },
       });
 
-      // Trail fill synced to scroll
+      // Trail fill
       gsap.fromTo(trailRef.current,
         { scaleX: 0 },
         {
@@ -68,10 +68,10 @@ const HowIWork = () => {
         }
       );
 
-      // Step reveals — tied to the main scroll tween via containerAnimation
+      // Step reveals
       gsap.utils.toArray('.snake-step').forEach((step) => {
         gsap.fromTo(step,
-          { x: 100, opacity: 0 },
+          { x: 80, opacity: 0 },
           {
             x: 0,
             opacity: 1,
@@ -80,14 +80,14 @@ const HowIWork = () => {
             scrollTrigger: {
               trigger: step,
               containerAnimation: scrollTween,
-              start: 'left 90%',
+              start: 'left 85%',
               toggleActions: 'play none none reverse',
             },
           }
         );
       });
 
-      // Dot pulses — tied to main scroll tween
+      // Dot pulses
       gsap.utils.toArray('.snake-dot').forEach((dot) => {
         gsap.fromTo(dot,
           { scale: 0 },
@@ -125,7 +125,7 @@ const HowIWork = () => {
 
       <div className="snake-viewport">
         <div className="snake-track" ref={trackRef}>
-          {/* Speed trail */}
+          {/* Speed trail line */}
           <div className="snake-trail">
             <div className="snake-trail-fill" ref={trailRef} />
             {steps.map((step, i) => (
@@ -137,13 +137,18 @@ const HowIWork = () => {
             ))}
           </div>
 
-          {/* Step cards */}
+          {/* Step rows — each row is a full-width flex row with one card */}
           {steps.map((step) => (
-            <div key={step.num} className={`snake-step snake-step--${step.side}`}>
-              <div className="snake-step-card">
-                <span className="snake-step-num">{step.num}</span>
-                <h3 className="snake-step-title">{step.title}</h3>
-                <p className="snake-step-desc">{step.desc}</p>
+            <div
+              key={step.num}
+              className={`snake-row snake-row--${step.side}`}
+            >
+              <div className="snake-step">
+                <div className="snake-step-card">
+                  <span className="snake-step-num">{step.num}</span>
+                  <h3 className="snake-step-title">{step.title}</h3>
+                  <p className="snake-step-desc">{step.desc}</p>
+                </div>
               </div>
             </div>
           ))}
