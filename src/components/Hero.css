@@ -90,108 +90,6 @@
 }
 
 /* ==========================================================================
-   Navigation
-   ========================================================================== */
-
-.hero-nav {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: clamp(16px, 2vw, 28px) clamp(20px, 3vw, 40px);
-}
-
-.hero-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: #fff;
-}
-
-.hero-nav-links {
-  display: flex;
-  align-items: center;
-  gap: clamp(20px, 3vw, 40px);
-}
-
-.hero-nav-link {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.5);
-  text-decoration: none;
-  letter-spacing: 0.03em;
-  transition: color 0.3s ease;
-  position: relative;
-}
-
-.hero-nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 1.5px;
-  background: var(--accent, #E8611A);
-  border-radius: 1px;
-  transition: width 0.3s ease;
-}
-
-.hero-nav-link:hover {
-  color: #fff;
-}
-
-.hero-nav-link:hover::after {
-  width: 100%;
-}
-
-/* CTA pill */
-.hero-cta-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px 10px 22px;
-  border-radius: 100px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: #fff;
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-  cursor: pointer;
-}
-
-.hero-cta-pill:hover {
-  background: rgba(255, 106, 0, 0.15);
-  border-color: rgba(255, 106, 0, 0.3);
-  box-shadow: 0 0 24px rgba(255, 106, 0, 0.15), 0 0 60px rgba(255, 106, 0, 0.06);
-  transform: translateY(-1px);
-}
-
-.hero-cta-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.hero-cta-pill:hover .hero-cta-arrow {
-  background: var(--accent, #E8611A);
-  transform: translate(2px, -2px);
-}
-
-/* ==========================================================================
    Main content — 3-column layout
    ========================================================================== */
 
@@ -430,10 +328,6 @@
   .hero-expertise-item {
     border-right: none;
     justify-content: center;
-  }
-
-  .hero-nav-links {
-    display: none;
   }
 }
 

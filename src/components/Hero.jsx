@@ -16,8 +16,6 @@ const EXPERTISE = [
   { num: '04', label: 'Creative Strategy' },
 ];
 
-const NAV_LINKS = ['Home', 'About', 'Projects'];
-
 const ArrowIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <line x1="7" y1="17" x2="17" y2="7" />
@@ -100,30 +98,6 @@ const Hero = () => {
         <div className="hero-glow-spot hero-glow-spot--1" />
         <div className="hero-glow-spot hero-glow-spot--2" />
         <div className="hero-glow-spot hero-glow-spot--3" />
-
-        {/* Navigation */}
-        <nav className="hero-nav">
-          <a href="#" className="hero-logo">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M3 20V4h3.5l4.5 7.5L15.5 4H19v16h-3v-9.5L12 18l-4-7.5V20H3z" fill="url(#hlogo)" />
-              <defs>
-                <linearGradient id="hlogo" x1="3" y1="4" x2="19" y2="20" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#FF6A00" />
-                  <stop offset="1" stopColor="#FF3B1F" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </a>
-          <div className="hero-nav-links">
-            {NAV_LINKS.map((link) => (
-              <a key={link} href={`#${link.toLowerCase()}`} className="hero-nav-link">{link}</a>
-            ))}
-          </div>
-          <a href="#contact" className="hero-cta-pill">
-            <span>Get in Touch</span>
-            <span className="hero-cta-arrow"><ArrowIcon /></span>
-          </a>
-        </nav>
 
         {/* Main content */}
         <div className="hero-content">
