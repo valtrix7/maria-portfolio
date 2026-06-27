@@ -189,13 +189,10 @@ section {
 }
 
 .menu-trigger {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 10px;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
