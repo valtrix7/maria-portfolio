@@ -1,166 +1,270 @@
 /* ==========================================================================
-   How I Work — SVG path draw + cards at dot positions
+   How I Work — Scrubbed bento timeline
    ========================================================================== */
 
-.how-i-work {
+.hw {
   position: relative;
   background: var(--bg, #0a0a0a);
   overflow: hidden;
-  /* Extra height gives GSAP ScrollTrigger room to pin and scrub */
-  min-height: 400vh;
+  padding-block: var(--section-py);
 }
 
-.pin-wrap {
+.hw-header {
+  margin-bottom: clamp(60px, 8vw, 120px);
   position: relative;
-  width: 100%;
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: clamp(20px, 3vh, 40px) 0;
-  overflow: hidden;
-}
-
-.process-header {
-  margin-bottom: 0;
+  z-index: 2;
 }
 
 /* ==========================================================================
-   Path container — holds SVG + absolutely positioned cards
+   Timeline container
    ========================================================================== */
 
-.path-container {
+.hw-timeline {
   position: relative;
-  width: 100%;
-  max-width: 1400px;
+  max-width: 1000px;
   margin: 0 auto;
-  flex: 1;
-  min-height: 0;
+  min-height: 800px;
   padding: 0 clamp(20px, 4vw, 60px);
 }
 
-.snake-svg {
+/* Central SVG line */
+.hw-line-svg {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
   width: 100%;
+  max-width: 1000px;
   height: 100%;
   z-index: 1;
   pointer-events: none;
+  overflow: visible;
+}
+
+/* Timeline dots */
+.hw-dot {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent, #E8611A);
+  box-shadow: 0 0 20px rgba(232, 97, 26, 0.5), 0 0 40px rgba(232, 97, 26, 0.2);
+  z-index: 3;
+  will-change: transform;
+}
+
+.hw-dot::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 97, 26, 0.3);
 }
 
 /* ==========================================================================
-   Path cards — absolutely positioned at SVG dot coordinates
+   Bento cards
    ========================================================================== */
 
-.path-card {
+.hw-card {
   position: absolute;
-  transform: translate(-50%, -50%);
-  z-index: 5;
-  width: clamp(160px, 16vw, 220px);
-  padding: clamp(16px, 2vw, 24px);
-  border-radius: 14px;
-  background: rgba(10, 10, 10, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  width: 42%;
+  z-index: 2;
+  will-change: transform, opacity, clip-path;
+  perspective: 800px;
+}
+
+.hw-card--left {
+  left: 0;
+  transform-origin: left center;
+}
+
+.hw-card--right {
+  right: 0;
+  transform-origin: right center;
+}
+
+.hw-card-inner {
+  position: relative;
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 16px;
+  transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  overflow: hidden;
+}
+
+.hw-card-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 20% 50%, rgba(232, 97, 26, 0.04) 0%, transparent 70%);
   opacity: 0;
-  will-change: transform, opacity;
-  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: opacity 0.5s var(--ease);
 }
 
-.path-card:hover {
-  background: rgba(255, 106, 0, 0.08);
-  border-color: rgba(255, 106, 0, 0.3);
-  box-shadow: 0 0 40px rgba(255, 106, 0, 0.12);
-  transform: translate(-50%, -50%) scale(1.06);
+.hw-card:hover .hw-card-inner {
+  border-color: rgba(232, 97, 26, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(232, 97, 26, 0.05);
 }
 
-.path-card-num {
+.hw-card:hover .hw-card-inner::before {
+  opacity: 1;
+}
+
+/* Accent line inside card */
+.hw-card-line {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent, #E8611A), transparent);
+  border-radius: 2px;
+  margin-top: 8px;
+  transition: width 0.5s var(--ease);
+}
+
+.hw-card:hover .hw-card-line {
+  width: 80px;
+}
+
+.hw-card-num {
   font-family: 'Space Grotesk', monospace;
-  font-size: 10px;
+  font-size: clamp(48px, 5vw, 72px);
   font-weight: 700;
   color: var(--accent, #E8611A);
-  letter-spacing: 0.12em;
-}
-
-.path-card-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(16px, 1.8vw, 22px);
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: -0.02em;
-  margin: 0;
-  line-height: 1.15;
-}
-
-.path-card-desc {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(10px, 1vw, 12px);
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.4);
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* ==========================================================================
-   SVG dot pulses
-   ========================================================================== */
-
-.path-dot {
-  opacity: 0;
-}
-
-/* ==========================================================================
-   Progress rail
-   ========================================================================== */
-
-.process-progress {
+  opacity: 0.12;
+  line-height: 1;
+  letter-spacing: -0.03em;
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.04);
-  z-index: 10;
+  top: 16px;
+  right: 20px;
 }
 
-.process-progress-fill {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, #FF6A00, #FF3B1F, #C53B0C);
-  transform-origin: left center;
-  box-shadow: 0 0 16px rgba(255, 106, 0, 0.5);
+.hw-card--right .hw-card-num {
+  right: auto;
+  left: 20px;
+}
+
+.hw-card-detail {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent, #E8611A);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hw-card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(24px, 2.5vw, 36px);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.hw-card-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(13px, 1vw, 15px);
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* ==========================================================================
-   Mobile — vertical layout
+   Decorative SVG shapes
+   ========================================================================== */
+
+.hw-deco-circle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hw-deco-1 {
+  width: clamp(120px, 15vw, 200px);
+  height: clamp(120px, 15vw, 200px);
+  top: 5%;
+  right: -5%;
+}
+
+.hw-deco-2 {
+  width: clamp(80px, 10vw, 150px);
+  height: clamp(80px, 10vw, 150px);
+  bottom: 10%;
+  left: -3%;
+}
+
+/* ==========================================================================
+   Mobile — stacked layout
    ========================================================================== */
 
 @media (max-width: 768px) {
-  .path-container {
-    aspect-ratio: auto;
+  .hw-timeline {
     min-height: auto;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
     padding: 0 20px;
   }
 
-  .snake-svg {
+  .hw-line-svg {
     display: none;
   }
 
-  .path-card {
-    position: static;
-    transform: none;
-    width: 100%;
-    opacity: 1;
+  .hw-dot {
+    display: none;
   }
 
-  .path-card:hover {
-    transform: scale(1.02);
+  .hw-card {
+    position: static;
+    width: 100%;
+    will-change: transform, clip-path;
+  }
+
+  .hw-card-inner {
+    padding: clamp(20px, 4vw, 28px);
+    border-radius: 16px;
+    gap: 12px;
+  }
+
+  .hw-card-num {
+    position: static;
+    font-size: 32px;
+    margin-bottom: -4px;
+  }
+
+  .hw-card--right .hw-card-num {
+    left: auto;
+  }
+
+  .hw-card-title {
+    font-size: clamp(20px, 5vw, 28px);
+  }
+
+  .hw-card-desc {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .hw-card-line {
+    width: 32px;
+    margin-top: 4px;
+  }
+
+  .hw-card:hover .hw-card-line {
+    width: 60px;
+  }
+
+  .hw-deco-circle {
+    display: none;
   }
 }

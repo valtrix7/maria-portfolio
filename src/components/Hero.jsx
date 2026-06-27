@@ -23,12 +23,16 @@ const ArrowIcon = () => (
   </svg>
 );
 
+const isMobile = () =>
+  typeof window !== 'undefined' && window.innerWidth <= 768;
+
 const Hero = () => {
   const heroRef = useRef(null);
   const glowRef = useRef(null);
   const mouse = useRef({ x: 0, y: 0 });
 
   const handleMouseMove = useCallback((e) => {
+    if (isMobile()) return;
     const rect = heroRef.current?.getBoundingClientRect();
     if (!rect) return;
     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -41,6 +45,7 @@ const Hero = () => {
 
   useEffect(() => {
     const reduce = prefersReducedMotion();
+    const mobile = isMobile();
 
     const ctx = gsap.context(() => {
       if (reduce) {
@@ -50,39 +55,70 @@ const Hero = () => {
         return;
       }
 
-      const tl = gsap.timeline({ delay: 0.3 });
+      const tl = gsap.timeline({ delay: mobile ? 0.1 : 0.3 });
 
       // Nav
-      tl.fromTo('.hero-nav', { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0);
+      tl.fromTo('.hero-nav', { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, 0);
 
       // Kicker
-      tl.fromTo('.hero-kicker', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0.2);
+      tl.fromTo('.hero-kicker', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, 0.15);
 
-      // Name words stagger
-      tl.fromTo('.hero-name-word', { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, stagger: 0.12, ease: 'power4.out' }, 0.3);
+      // Name words — faster on mobile
+      tl.fromTo('.hero-name-word',
+        { y: mobile ? 50 : 90, opacity: 0 },
+        { y: 0, opacity: 1, duration: mobile ? 0.8 : 1.2, stagger: mobile ? 0.08 : 0.12, ease: 'power4.out' },
+        0.2
+      );
 
-      // Portrait
-      tl.fromTo('.hero-portrait', { scale: 1.08, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.4, ease: 'power3.out' }, 0.4);
+      // Portrait — scale up with spring feel
+      tl.fromTo('.hero-portrait',
+        { scale: 1.12, opacity: 0 },
+        { scale: 1, opacity: 1, duration: mobile ? 1 : 1.4, ease: 'power3.out' },
+        0.3
+      );
 
       // Right column
-      tl.fromTo('.hero-headline-right', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' }, 0.7);
-      tl.fromTo('.hero-desc-right', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0.85);
-      tl.fromTo('.hero-cta-btn', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0.95);
+      tl.fromTo('.hero-headline-right', { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, mobile ? 0.5 : 0.7);
+      tl.fromTo('.hero-desc-right', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, mobile ? 0.6 : 0.85);
+      tl.fromTo('.hero-cta-btn', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, mobile ? 0.7 : 0.95);
 
-      // Expertise stagger
-      tl.fromTo('.hero-expertise-item', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, stagger: 0.07, ease: 'power3.out' }, 1.0);
+      // Expertise — stagger faster on mobile
+      tl.fromTo('.hero-expertise-item',
+        { y: mobile ? 15 : 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, stagger: mobile ? 0.05 : 0.07, ease: 'power3.out' },
+        mobile ? 0.8 : 1.0
+      );
 
-      // Portrait parallax
-      gsap.to('.hero-portrait', {
-        y: -30,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1.5,
-        },
-      });
+      // Portrait parallax — lighter on mobile
+      if (!mobile) {
+        gsap.to('.hero-portrait', {
+          y: -30,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+      }
+
+      // Mobile: subtle gyroscope-inspired tilt on scroll
+      if (mobile) {
+        gsap.to('.hero-portrait', {
+          y: -15,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 2,
+          },
+        });
+
+        // Fade glow spots on mobile for performance
+        gsap.set('.hero-glow-spot', { opacity: 0.4 });
+      }
     }, heroRef);
 
     return () => ctx.revert();

@@ -6,42 +6,48 @@ import './About.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const isMobile = () =>
+  typeof window !== 'undefined' && window.innerWidth <= 768;
+
 const About = () => {
   const sectionRef = useRef(null);
 
   useEffect(() => {
+    const mobile = isMobile();
     const ctx = gsap.context(() => {
       gsap.fromTo('.about-text-block > *',
-        { y: 50, opacity: 0 },
+        { y: mobile ? 30 : 50, opacity: 0 },
         {
           y: 0, opacity: 1,
-          duration: 1, stagger: 0.12,
+          duration: mobile ? 0.7 : 1, stagger: mobile ? 0.08 : 0.12,
           ease: 'power3.out',
-          scrollTrigger: { trigger: '.about-text-block', start: 'top 75%' }
+          scrollTrigger: { trigger: '.about-text-block', start: 'top 80%' }
         }
       );
 
       gsap.fromTo('.about-stat',
-        { y: 30, opacity: 0 },
+        { y: mobile ? 20 : 30, opacity: 0 },
         {
           y: 0, opacity: 1,
-          duration: 0.8, stagger: 0.15,
+          duration: mobile ? 0.6 : 0.8, stagger: 0.1,
           ease: 'power3.out',
-          scrollTrigger: { trigger: '.about-stats', start: 'top 85%' }
+          scrollTrigger: { trigger: '.about-stats', start: 'top 88%' }
         }
       );
 
-      // Parallax on portrait
-      gsap.to('.about-portrait img', {
-        y: -40,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.about-portrait',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1.5,
-        }
-      });
+      // Parallax on portrait — lighter on mobile
+      if (!mobile) {
+        gsap.to('.about-portrait img', {
+          y: -40,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.about-portrait',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.5,
+          }
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();

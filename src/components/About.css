@@ -83,16 +83,32 @@
 @media (max-width: 768px) {
   .about-grid {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 40px;
   }
   .about-stats {
-    gap: 32px;
+    gap: 24px;
+  }
+  .about-stat-num {
+    font-size: clamp(28px, 8vw, 40px);
+  }
+  .about-stat-label {
+    font-size: 11px;
   }
   .about-visual {
     order: -1;
   }
   .about-portrait {
     aspect-ratio: 4/3;
-    max-height: 400px;
+    max-height: 350px;
+    border-radius: 12px;
+  }
+  .about-accent-block {
+    width: 80px;
+    height: 80px;
+    bottom: -16px;
+    left: -16px;
+  }
+  .about .body-lg {
+    font-size: clamp(14px, 3.5vw, 16px);
   }
 }

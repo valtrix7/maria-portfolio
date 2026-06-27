@@ -5,11 +5,18 @@ import './Recognition.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const isMobile = () =>
+  typeof window !== 'undefined' && window.innerWidth <= 768;
+
 const stats = [
-  { num: '50+', label: 'Projects Delivered' },
-  { num: '30+', label: 'Happy Clients' },
-  { num: '3+', label: 'Years Experience' },
-  { num: '100%', label: 'On-Time Delivery' },
+  { num: 50, suffix: '+', label: 'Projects Delivered' },
+  { num: 30, suffix: '+', label: 'Happy Clients' },
+  { num: 3, suffix: '+', label: 'Years Experience' },
+  { num: 100, suffix: '%', label: 'On-Time Delivery' },
 ];
 
 const testimonials = [
@@ -32,97 +39,203 @@ const testimonials = [
 
 const Recognition = () => {
   const sectionRef = useRef(null);
+  const countersRef = useRef([]);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Header
-      gsap.fromTo('.recognition-header > *',
-        { y: 50, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: 1, stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.recognition-header', start: 'top 75%' }
-        }
-      );
+    const mobile = isMobile();
+    const reduce = prefersReducedMotion();
 
-      // Stats
-      gsap.fromTo('.stat-item',
+    const ctx = gsap.context(() => {
+      if (reduce) {
+        gsap.set('.rec-bento-item', { opacity: 1, y: 0, clipPath: 'none' });
+        gsap.set('.rec-display', { opacity: 1, y: 0 });
+        return;
+      }
+
+      // ---------- Header ----------
+      gsap.fromTo('.rec-header > *',
         { y: 40, opacity: 0 },
         {
           y: 0, opacity: 1,
-          duration: 0.8, stagger: 0.1,
+          duration: 1, stagger: 0.1,
           ease: 'power3.out',
-          scrollTrigger: { trigger: '.stats-grid', start: 'top 80%' }
+          scrollTrigger: { trigger: '.rec-header', start: 'top 80%' },
         }
       );
 
-      // Testimonials
-      gsap.fromTo('.testimonial-card',
-        { y: 60, opacity: 0 },
+      // ---------- Scrubbed Bento Gallery: parallax-depth reveal ----------
+      // Each tile enters from a different "depth" (staggered y-offset + scrub
+      // start), so the gallery assembles in layers as you scroll, not all at
+      // once. Tiles deeper in the z-stack start lower and later.
+      const tiles = gsap.utils.toArray('.rec-bento-item');
+      tiles.forEach((tile, i) => {
+        // Alternate depth: odd tiles come from further "back".
+        const depth = i % 3;
+        const startY = 80 + depth * 60; // 80 / 140 / 200
+        const scale = 0.92 - depth * 0.04; // 0.92 / 0.88 / 0.84
+
+        gsap.fromTo(tile,
+          {
+            clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)',
+            y: startY,
+            opacity: 0,
+            scale,
+          },
+          {
+            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: tile,
+              start: 'top 90%',
+              end: 'top 55%',
+              scrub: 1,
+            },
+          }
+        );
+      });
+
+      // ---------- Counter animations ----------
+      countersRef.current.forEach((el, i) => {
+        if (!el) return;
+        const target = stats[i].num;
+        const obj = { val: 0 };
+        gsap.to(obj, {
+          val: target,
+          duration: mobile ? 1.5 : 2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+          onUpdate: () => {
+            el.textContent = Math.round(obj.val) + stats[i].suffix;
+          },
+        });
+      });
+
+      // ---------- Big display text ----------
+      gsap.fromTo('.rec-display',
+        { y: 80, opacity: 0, scale: 0.97 },
         {
-          y: 0, opacity: 1,
-          duration: 1, stagger: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.testimonials-grid', start: 'top 80%' }
+          y: 0, opacity: 1, scale: 1,
+          duration: 1.2, ease: 'power3.out',
+          scrollTrigger: { trigger: '.rec-display', start: 'top 88%' },
         }
       );
 
-      // Big display text
-      gsap.fromTo('.recognition-display',
-        { y: 80, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: 1.2,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.recognition-display', start: 'top 80%' }
-        }
-      );
+      // ---------- Background SVG decorative drift ----------
+      if (!mobile) {
+        gsap.fromTo('.rec-deco',
+          { scale: 0.5, opacity: 0 },
+          {
+            scale: 1, opacity: 0.05,
+            duration: 1.5, ease: 'power2.out', stagger: 0.2,
+            scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' },
+          }
+        );
+
+        // Gentle parallax drift on the decorative shapes, scrubbed.
+        gsap.to('.rec-deco-1', {
+          y: -60,
+          ease: 'none',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2 },
+        });
+        gsap.to('.rec-deco-2', {
+          y: 50,
+          ease: 'none',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2.5 },
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section className="recognition" id="recognition" data-section="recognition" ref={sectionRef}>
+    <section className="rec" id="recognition" data-section="recognition" ref={sectionRef}>
+      {/* Background decorative elements */}
+      <svg className="rec-deco rec-deco-1" viewBox="0 0 400 400" fill="none">
+        <circle cx="200" cy="200" r="180" stroke="var(--accent)" strokeWidth="0.5" />
+        <circle cx="200" cy="200" r="120" stroke="var(--accent)" strokeWidth="0.5" />
+        <circle cx="200" cy="200" r="60" stroke="var(--accent)" strokeWidth="0.5" />
+      </svg>
+      <svg className="rec-deco rec-deco-2" viewBox="0 0 300 300" fill="none">
+        <path d="M150,10 L280,100 L280,200 L150,290 L20,200 L20,100 Z" stroke="var(--accent)" strokeWidth="0.5" />
+      </svg>
+
       <div className="container">
-        <div className="recognition-header">
+        <div className="rec-header">
           <div className="label">Recognition</div>
           <h2 className="display-lg" style={{ marginTop: '16px', marginBottom: '20px' }}>
             Numbers that<br />speak
           </h2>
         </div>
 
-        <div className="stats-grid">
-          {stats.map((stat) => (
-            <div className="stat-item" key={stat.label}>
-              <span className="stat-num">{stat.num}</span>
-              <span className="stat-label">{stat.label}</span>
-            </div>
-          ))}
-        </div>
+        {/* Bento grid */}
+        <div className="rec-bento">
+          <div className="rec-bento-item rec-bento-stat rec-bento-stat--large">
+            <span className="rec-stat-num" ref={(el) => (countersRef.current[0] = el)}>0{stats[0].suffix}</span>
+            <span className="rec-stat-label">{stats[0].label}</span>
+            <div className="rec-stat-glow" />
+          </div>
 
-        <div className="recognition-divider"></div>
-
-        <div className="testimonials-grid">
-          {testimonials.map((t, i) => (
-            <div className="testimonial-card" key={i}>
-              <div className="testimonial-quote-mark">"</div>
-              <p className="testimonial-quote">{t.quote}</p>
-              <div className="testimonial-author">
-                <div className="testimonial-avatar">
-                  <span>{t.name.charAt(0)}</span>
-                </div>
-                <div className="testimonial-info">
-                  <span className="testimonial-name">{t.name}</span>
-                  <span className="testimonial-role">{t.role}</span>
-                </div>
+          <div className="rec-bento-item rec-bento-testimonial">
+            <div className="rec-quote-mark">"</div>
+            <p className="rec-quote">{testimonials[0].quote}</p>
+            <div className="rec-author">
+              <div className="rec-avatar"><span>{testimonials[0].name.charAt(0)}</span></div>
+              <div className="rec-author-info">
+                <span className="rec-author-name">{testimonials[0].name}</span>
+                <span className="rec-author-role">{testimonials[0].role}</span>
               </div>
             </div>
-          ))}
+          </div>
+
+          <div className="rec-bento-item rec-bento-stat rec-bento-stat--med">
+            <span className="rec-stat-num" ref={(el) => (countersRef.current[1] = el)}>0{stats[1].suffix}</span>
+            <span className="rec-stat-label">{stats[1].label}</span>
+          </div>
+
+          <div className="rec-bento-item rec-bento-stat rec-bento-stat--med">
+            <span className="rec-stat-num" ref={(el) => (countersRef.current[2] = el)}>0{stats[2].suffix}</span>
+            <span className="rec-stat-label">{stats[2].label}</span>
+          </div>
+
+          <div className="rec-bento-item rec-bento-testimonial">
+            <div className="rec-quote-mark">"</div>
+            <p className="rec-quote">{testimonials[1].quote}</p>
+            <div className="rec-author">
+              <div className="rec-avatar"><span>{testimonials[1].name.charAt(0)}</span></div>
+              <div className="rec-author-info">
+                <span className="rec-author-name">{testimonials[1].name}</span>
+                <span className="rec-author-role">{testimonials[1].role}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="rec-bento-item rec-bento-stat rec-bento-stat--full">
+            <span className="rec-stat-num" ref={(el) => (countersRef.current[3] = el)}>0{stats[3].suffix}</span>
+            <span className="rec-stat-label">{stats[3].label}</span>
+          </div>
+
+          <div className="rec-bento-item rec-bento-testimonial">
+            <div className="rec-quote-mark">"</div>
+            <p className="rec-quote">{testimonials[2].quote}</p>
+            <div className="rec-author">
+              <div className="rec-avatar"><span>{testimonials[2].name.charAt(0)}</span></div>
+              <div className="rec-author-info">
+                <span className="rec-author-name">{testimonials[2].name}</span>
+                <span className="rec-author-role">{testimonials[2].role}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="recognition-display">
+        <div className="rec-display">
           <span>Every project is a </span>
           <span className="accent">new story.</span>
         </div>

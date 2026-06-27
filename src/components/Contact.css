@@ -1,22 +1,75 @@
-.contact {
+/* ==========================================================================
+   Contact — Dynamic morphing SVG backgrounds
+   ========================================================================== */
+
+.ct {
+  position: relative;
   background: var(--bg);
   padding-top: clamp(120px, 16vw, 240px);
   padding-bottom: clamp(80px, 10vw, 160px);
+  overflow: hidden;
 }
 
-.contact-display-text {
+/* ==========================================================================
+   Dynamic morphing SVG blobs
+   ========================================================================== */
+
+.ct-blobs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ct-morph {
+  position: absolute;
+  width: clamp(300px, 42vw, 640px);
+  height: clamp(300px, 42vw, 640px);
+  top: -8%;
+  right: -10%;
+  will-change: transform;
+}
+
+.ct-morph-2 {
+  width: clamp(220px, 28vw, 420px);
+  height: clamp(220px, 28vw, 420px);
+  bottom: 8%;
+  left: -8%;
+}
+
+.ct-radial {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 80vw;
+  max-width: 800px;
+  max-height: 800px;
+  background: radial-gradient(circle, rgba(232, 97, 26, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Display text
+   ========================================================================== */
+
+.ct-display {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   margin-bottom: 64px;
+  position: relative;
+  z-index: 2;
 }
 
-.c-word-wrap {
+.ct-word-wrap {
   display: inline-block;
   overflow: hidden;
 }
 
-.c-word {
+.ct-word {
   display: inline-block;
   font-family: 'Outfit', sans-serif;
   font-size: clamp(48px, 8vw, 120px);
@@ -27,36 +80,42 @@
   text-transform: uppercase;
 }
 
-.c-word.accent {
+.ct-accent {
   color: var(--accent);
   font-style: italic;
 }
 
-.contact-sub {
+/* ==========================================================================
+   Sub content
+   ========================================================================== */
+
+.ct-sub {
   display: flex;
   flex-direction: column;
   gap: 48px;
   max-width: 600px;
+  position: relative;
+  z-index: 2;
 }
 
-.contact-links {
+.ct-links {
   display: flex;
   flex-direction: column;
   gap: 32px;
 }
 
-.contact-email-btn {
+.ct-email-btn {
   width: fit-content;
   font-size: 16px;
   padding: 20px 48px;
 }
 
-.contact-socials {
+.ct-socials {
   display: flex;
   gap: 32px;
 }
 
-.contact-social {
+.ct-social {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -64,28 +123,72 @@
   font-weight: 500;
   color: var(--text-secondary);
   transition: color 0.3s var(--ease);
-  position: relative;
 }
 
-.contact-social svg {
+.ct-social svg {
   transition: transform 0.3s var(--ease);
 }
 
-.contact-social:hover {
+.ct-social:hover {
   color: var(--text);
 }
 
-.contact-social:hover svg {
+.ct-social:hover svg {
   transform: translate(2px, -2px);
 }
 
+/* ==========================================================================
+   Mobile
+   ========================================================================== */
+
 @media (max-width: 768px) {
-  .contact-display-text {
+  .ct-display {
     flex-direction: column;
     gap: 8px;
   }
-  .contact-email-btn {
+
+  .ct-word {
+    font-size: clamp(36px, 12vw, 64px);
+  }
+
+  .ct-sub {
+    gap: 32px;
+  }
+
+  .ct-email-btn {
     width: 100%;
     text-align: center;
+    padding: 16px 32px;
+    min-height: 48px;
+  }
+
+  .ct-socials {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .ct-social {
+    font-size: 13px;
+    padding: 8px 0;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ct-morph {
+    opacity: 0.3;
+    width: 250px;
+    height: 250px;
+  }
+
+  .ct-morph-2 {
+    opacity: 0.25;
+    width: 180px;
+    height: 180px;
+  }
+
+  .ct-radial {
+    width: 100vw;
+    height: 100vw;
   }
 }

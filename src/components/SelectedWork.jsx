@@ -43,6 +43,9 @@ const slides = [
   },
 ];
 
+const isMobile = () =>
+  typeof window !== 'undefined' && window.innerWidth <= 768;
+
 const SelectedWork = () => {
   const sectionRef = useRef(null);
   const wrapperRef = useRef(null);
@@ -52,15 +55,16 @@ const SelectedWork = () => {
   const dotsRef = useRef([]);
 
   useEffect(() => {
+    const mobile = isMobile();
     const ctx = gsap.context(() => {
       gsap.fromTo('.work-header > *',
-        { y: 50, opacity: 0 },
+        { y: mobile ? 30 : 50, opacity: 0 },
         {
           y: 0, opacity: 1,
-          duration: 1,
-          stagger: 0.12,
+          duration: mobile ? 0.7 : 1,
+          stagger: 0.1,
           ease: 'power3.out',
-          scrollTrigger: { trigger: '.work-header', start: 'top 75%' }
+          scrollTrigger: { trigger: '.work-header', start: 'top 80%' }
         }
       );
 

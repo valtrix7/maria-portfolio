@@ -98,6 +98,39 @@
 }
 
 @media (max-width: 768px) {
-  .manifesto-main { gap: 12px; }
-  .manifesto-spin-wrap { display: none; }
+  .manifesto {
+    padding: clamp(50px, 8vw, 80px) 0;
+  }
+
+  .manifesto-content {
+    padding: clamp(40px, 6vw, 60px) 0;
+    gap: 32px;
+  }
+
+  .manifesto-main {
+    gap: 10px;
+  }
+
+  .manifesto-word {
+    font-size: clamp(36px, 12vw, 64px);
+  }
+
+  .manifesto-sub {
+    font-size: clamp(16px, 4vw, 20px);
+    line-height: 1.6;
+  }
+
+  .manifesto-spin-wrap {
+    display: none;
+  }
+
+  .manifesto-marquee-track {
+    font-size: clamp(11px, 3vw, 14px);
+    gap: 32px;
+  }
+
+  .mm-dot {
+    width: 4px;
+    height: 4px;
+  }
 }

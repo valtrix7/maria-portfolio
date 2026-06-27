@@ -5,63 +5,69 @@ import './CreativeManifesto.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const isMobile = () =>
+  typeof window !== 'undefined' && window.innerWidth <= 768;
+
 const CreativeManifesto = () => {
   const sectionRef = useRef(null);
   const marquee1 = useRef(null);
   const marquee2 = useRef(null);
 
   useEffect(() => {
+    const mobile = isMobile();
     const ctx = gsap.context(() => {
-      // Big text word reveal
+      // Big text word reveal — faster on mobile
       gsap.fromTo('.manifesto-word',
-        { y: 120, opacity: 0, rotateX: -60 },
+        { y: mobile ? 60 : 120, opacity: 0, rotateX: mobile ? -30 : -60 },
         {
           y: 0, opacity: 1, rotateX: 0,
-          duration: 1.2,
-          stagger: 0.08,
+          duration: mobile ? 0.8 : 1.2,
+          stagger: mobile ? 0.05 : 0.08,
           ease: 'power4.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 60%',
+            start: mobile ? 'top 70%' : 'top 60%',
           }
         }
       );
 
       // Sub text
       gsap.fromTo('.manifesto-sub',
-        { y: 30, opacity: 0 },
+        { y: mobile ? 20 : 30, opacity: 0 },
         {
           y: 0, opacity: 1,
-          duration: 1,
+          duration: mobile ? 0.7 : 1,
           ease: 'power3.out',
           scrollTrigger: {
             trigger: '.manifesto-sub',
-            start: 'top 80%',
+            start: 'top 85%',
           }
         }
       );
 
-      // Counter spin
-      gsap.fromTo('.manifesto-spin',
-        { rotation: 0 },
-        {
-          rotation: 360,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 2,
+      // Counter spin — skip on mobile
+      if (!mobile) {
+        gsap.fromTo('.manifesto-spin',
+          { rotation: 0 },
+          {
+            rotation: 360,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 2,
+            }
           }
-        }
-      );
+        );
+      }
 
-      // Marquees
+      // Marquees — slower on mobile
       if (marquee1.current) {
-        gsap.to(marquee1.current, { x: '-50%', duration: 20, repeat: -1, ease: 'none' });
+        gsap.to(marquee1.current, { x: '-50%', duration: mobile ? 15 : 20, repeat: -1, ease: 'none' });
       }
       if (marquee2.current) {
-        gsap.to(marquee2.current, { x: '0%', duration: 25, repeat: -1, ease: 'none' });
+        gsap.to(marquee2.current, { x: '0%', duration: mobile ? 18 : 25, repeat: -1, ease: 'none' });
       }
     }, sectionRef);
 

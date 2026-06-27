@@ -591,3 +591,79 @@ section {
   color: #E8611A;
   transform: translateY(-2px);
 }
+
+/* ==========================================================================
+   Mobile Overrides
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Header — full-width pill on mobile */
+  .header {
+    width: calc(100% - 32px);
+    max-width: none;
+    top: 16px;
+    padding: 10px 16px;
+  }
+
+  /* Buttons — bigger touch targets */
+  .btn {
+    padding: 14px 28px;
+    font-size: 13px;
+    min-height: 44px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Typography — tighter mobile spacing */
+  .display-xl {
+    font-size: clamp(40px, 12vw, 80px);
+  }
+
+  .display-lg {
+    font-size: clamp(32px, 10vw, 56px);
+  }
+
+  .heading-lg {
+    font-size: clamp(26px, 7vw, 40px);
+  }
+
+  /* Menu card — full-width on mobile */
+  .menu-card {
+    width: 92vw;
+    max-height: 90vh;
+    border-radius: 16px;
+  }
+
+  .menu-nav-label {
+    font-size: 22px;
+  }
+
+  /* Reduce section padding on mobile */
+  section {
+    padding-block: clamp(60px, 10vw, 100px);
+  }
+
+  /* Horizontal scroll sections */
+  .horizontal-scroll-track {
+    gap: 20px;
+  }
+
+  /* Touch-friendly hover states — disable hover effects on touch */
+  .hover-target:hover,
+  .glow-hover:hover,
+  .border-glow:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .glow-hover::before {
+    display: none;
+  }
+
+  .border-glow::after {
+    display: none;
+  }
+}
