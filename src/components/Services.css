@@ -29,6 +29,11 @@
 }
 
 /* ── CardSwap wrapper ── */
+.svc-cardswap-pinwrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
 .svc-content .svc-cardswap {
   position: relative;
   flex-shrink: 0;
