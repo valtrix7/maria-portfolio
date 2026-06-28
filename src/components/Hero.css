@@ -201,19 +201,6 @@
   max-width: 280px;
 }
 
-.hero-cta-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.hero-cta-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 28px;
-}
-
 .hero-fiverr-btn {
   display: inline-flex;
   align-items: center;
@@ -229,6 +216,7 @@
   text-decoration: none;
   backdrop-filter: blur(8px);
   transition: all 0.3s ease;
+  margin-top: 28px;
 }
 
 .hero-fiverr-btn:hover {

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { LiquidButton } from './ui/liquid-button';
 import './Hero.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -295,22 +294,17 @@ const Hero = () => {
             <p className="hero-desc-right">
               From concept to screen, I craft visual stories through motion, design, and strategic thinking. Bringing brands to life with purposeful animation.
             </p>
-            <div className="hero-cta-row">
-              <LiquidButton variant="default" size="lg" className="hero-cta-btn">
-                Let's Talk
-              </LiquidButton>
-              <a
-                href="https://www.fiverr.com/mariaislam"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hero-fiverr-btn"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.568 8.16c-.169 1.758-.958 3.984-2.376 6.672-1.476 2.796-2.868 4.188-4.176 4.188-.888 0-1.62-.828-2.196-2.484L7.32 10.2c-.384-1.104-.792-1.656-1.224-1.656-.096 0-.432.204-1.008.612l-.648-.828c.864-.756 1.716-1.308 2.556-1.656 1.248-.516 2.184-.264 2.808.756.672 1.08 1.368 2.628 2.088 4.644.768-3.144 1.572-5.592 2.412-7.344.72-1.488 1.524-2.244 2.412-2.244.696 0 1.428.588 2.196 1.764l.864 1.356z"/>
-                </svg>
-                Fiverr
-              </a>
-            </div>
+            <a
+              href="https://www.fiverr.com/mariaislam"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-fiverr-btn"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.568 8.16c-.169 1.758-.958 3.984-2.376 6.672-1.476 2.796-2.868 4.188-4.176 4.188-.888 0-1.62-.828-2.196-2.484L7.32 10.2c-.384-1.104-.792-1.656-1.224-1.656-.096 0-.432.204-1.008.612l-.648-.828c.864-.756 1.716-1.308 2.556-1.656 1.248-.516 2.184-.264 2.808.756.672 1.08 1.368 2.628 2.088 4.644.768-3.144 1.572-5.592 2.412-7.344.72-1.488 1.524-2.244 2.412-2.244.696 0 1.428.588 2.196 1.764l.864 1.356z"/>
+              </svg>
+              Fiverr
+            </a>
           </div>
         </div>
 
