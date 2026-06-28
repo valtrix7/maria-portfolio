@@ -39,12 +39,12 @@ const Toolbox: React.FC = () => {
     const ctx = gsap.context(() => {
       // ---------- Header ----------
       gsap.fromTo('.tb-header > *',
-        { y: 40, opacity: 0 },
+        { y: 50, opacity: 0 },
         {
           y: 0, opacity: 1,
-          duration: mobile ? 0.7 : 1, stagger: 0.1,
+          stagger: 0.1,
           ease: 'power3.out',
-          scrollTrigger: { trigger: '.tb-header', start: 'top 80%' },
+          scrollTrigger: { trigger: '.tb-header', start: 'top 80%', end: 'top 40%', scrub: 1 },
         }
       );
 

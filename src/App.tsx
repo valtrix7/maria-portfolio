@@ -10,7 +10,6 @@ import SmoothCursor from './components/SmoothCursor';
 import Hero from './components/Hero';
 import About from './components/About';
 import CreativeManifesto from './components/CreativeManifesto';
-import ServicePanels from './components/ServicePanels';
 import SelectedWork from './components/SelectedWork';
 import HowIWork from './components/HowIWork';
 import Toolbox from './components/Toolbox';
@@ -63,7 +62,6 @@ function App() {
         <Hero />
         <About />
         <CreativeManifesto />
-        <ServicePanels />
         <SelectedWork />
         <HowIWork />
         <Toolbox />

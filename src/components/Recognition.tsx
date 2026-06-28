@@ -63,12 +63,12 @@ const Recognition: React.FC = () => {
       }
 
       gsap.fromTo('.rec-header > *',
-        { y: 40, opacity: 0 },
+        { y: 50, opacity: 0 },
         {
           y: 0, opacity: 1,
-          duration: 1, stagger: 0.1,
+          stagger: 0.1,
           ease: 'power3.out',
-          scrollTrigger: { trigger: '.rec-header', start: 'top 80%' },
+          scrollTrigger: { trigger: '.rec-header', start: 'top 80%', end: 'top 40%', scrub: 1 },
         }
       );
 
@@ -196,26 +196,26 @@ const Recognition: React.FC = () => {
         </div>
 
         <div className="rec-bento">
-          <div className="rec-bento-item rec-bento-stat rec-bento-stat--wide">
+          <div className="rec-bento-item rec-bento-stat rec-bento-stat--wide glass-pill">
             <span className="rec-stat-icon">{stats[0].icon}</span>
             <span className="rec-stat-num" ref={(el) => (countersRef.current[0] = el)}>0{stats[0].suffix}</span>
             <span className="rec-stat-label">{stats[0].label}</span>
             <div className="rec-stat-glow" />
           </div>
 
-          <div className="rec-bento-item rec-bento-stat">
+          <div className="rec-bento-item rec-bento-stat glass-pill">
             <span className="rec-stat-icon">{stats[1].icon}</span>
             <span className="rec-stat-num" ref={(el) => (countersRef.current[1] = el)}>0{stats[1].suffix}</span>
             <span className="rec-stat-label">{stats[1].label}</span>
           </div>
 
-          <div className="rec-bento-item rec-bento-stat">
+          <div className="rec-bento-item rec-bento-stat glass-pill">
             <span className="rec-stat-icon">{stats[2].icon}</span>
             <span className="rec-stat-num" ref={(el) => (countersRef.current[2] = el)}>0{stats[2].suffix}</span>
             <span className="rec-stat-label">{stats[2].label}</span>
           </div>
 
-          <div className="rec-bento-item rec-bento-stat rec-bento-stat--wide">
+          <div className="rec-bento-item rec-bento-stat rec-bento-stat--wide glass-pill">
             <span className="rec-stat-icon">{stats[3].icon}</span>
             <span className="rec-stat-num" ref={(el) => (countersRef.current[3] = el)}>0{stats[3].suffix}</span>
             <span className="rec-stat-label">{stats[3].label}</span>
