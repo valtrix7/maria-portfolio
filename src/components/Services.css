@@ -1,7 +1,8 @@
 /* ── Services Section ── */
 .services {
-  padding: 120px 0;
+  padding: 120px 0 0;
   position: relative;
+  overflow: hidden;
 }
 
 .svc-header {
@@ -16,19 +17,19 @@
   margin-right: auto;
 }
 
+/* ── Card grid ── */
 .svc-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px;
-  max-width: 800px;
-  margin: 0 auto;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 960px;
+  margin: 0 auto 80px;
   perspective: 1200px;
 }
 
 /* Card container */
 .svc-card {
-  cursor: pointer;
-  height: 360px;
+  height: 340px;
 }
 
 .svc-card-inner {
@@ -45,7 +46,7 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   border-radius: 16px;
-  padding: 40px 32px;
+  padding: 36px 28px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -68,8 +69,8 @@
 
 /* Icon */
 .svc-icon {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.06);
   display: flex;
@@ -86,46 +87,58 @@
 /* Text */
 .svc-title {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: var(--text);
   margin-bottom: 12px;
 }
 
 .svc-desc {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
   line-height: 1.6;
-  margin-bottom: 20px;
 }
 
 .svc-back-text {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-muted);
   line-height: 1.65;
-  margin-bottom: 20px;
 }
 
-/* Hint */
-.svc-hint {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.25);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: auto;
+/* ── Tool marquee ── */
+.svc-marquee {
+  overflow: hidden;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-.svc-hint--back {
-  color: rgba(232, 97, 26, 0.4);
+.svc-mq-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  will-change: transform;
+}
+
+.svc-mq-chip {
+  flex-shrink: 0;
+  padding: 8px 20px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
 }
 
 /* Mobile */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .svc-grid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 20px;
   }
   .svc-card {
-    height: 320px;
+    height: 300px;
   }
 }
