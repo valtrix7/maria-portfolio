@@ -96,23 +96,23 @@ const Services = () => {
   return (
     <section className="services" id="services" data-section="services" ref={sectionRef}>
       <div className="container">
-        <div className="svc-header">
-          <div className="label">Services</div>
-          <h2 className="display-lg">What I Do</h2>
-          <p className="body-lg svc-sub">
-            Three core disciplines, one unified approach — turning complex ideas into visual clarity.
-          </p>
-        </div>
+        <div className="svc-content">
+          <div className="svc-text">
+            <div className="label">Services</div>
+            <h2 className="display-lg">What I Do</h2>
+            <p className="body-lg svc-sub">
+              Three core disciplines, one unified approach — turning complex ideas into visual clarity.
+            </p>
+          </div>
 
-        <div className="svc-swap-wrap">
           <CardSwap
-            width={340}
-            height={420}
-            cardDistance={50}
-            verticalDistance={60}
+            width={420}
+            height={480}
+            cardDistance={60}
+            verticalDistance={70}
             delay={4000}
             pauseOnHover
-            skewAmount={4}
+            skewAmount={6}
             easing="elastic"
           >
             {SERVICES.map((svc) => (
