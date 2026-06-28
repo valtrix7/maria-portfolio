@@ -14,6 +14,7 @@ const SECTION_COLORS: Record<string, { r: number; g: number; b: number }> = {
   gallery: { r: 177, g: 108, b: 234 },
   'how-i-work': { r: 255, g: 168, b: 75 },
   toolbox: { r: 177, g: 108, b: 234 },
+  services: { r: 177, g: 108, b: 234 },
   testimonials: { r: 232, g: 97, b: 26 },
   recognition: { r: 255, g: 94, b: 105 },
   contact: { r: 232, g: 97, b: 26 },

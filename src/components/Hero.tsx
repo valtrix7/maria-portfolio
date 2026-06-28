@@ -13,10 +13,9 @@ const isMobile = () =>
   typeof window !== 'undefined' && window.innerWidth <= 768;
 
 const Hero = () => {
-  const heroRef    = useRef<HTMLElement>(null);
-  const glowRef    = useRef<HTMLDivElement>(null);
-  const marqueeRef = useRef<HTMLDivElement>(null);
-  const mouse      = useRef({ x: 0, y: 0 });
+  const heroRef = useRef<HTMLElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
+  const mouse   = useRef({ x: 0, y: 0 });
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
     if (isMobile()) return;
@@ -36,7 +35,7 @@ const Hero = () => {
 
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set(['.hero-nav', '.hero-kicker', '.hero-name-word', '.hero-portrait', '.hero-headline-right', '.hero-desc-right', '.hero-marquee-rail'], {
+        gsap.set(['.hero-nav', '.hero-kicker', '.hero-name-word', '.hero-portrait', '.hero-headline-right', '.hero-desc-right'], {
           opacity: 1, y: 0, x: 0, scale: 1,
         });
         return;
@@ -61,12 +60,6 @@ const Hero = () => {
 
       tl.fromTo('.hero-headline-right', { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, mobile ? 0.5 : 0.7);
       tl.fromTo('.hero-desc-right', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, mobile ? 0.6 : 0.85);
-
-      tl.fromTo('.hero-marquee-rail',
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' },
-        mobile ? 0.95 : 1.15
-      );
 
 
       if (!mobile) {
@@ -98,29 +91,6 @@ const Hero = () => {
     }, heroRef);
 
     return () => ctx.revert();
-  }, []);
-
-  // Separate effect — marquee scroll. Isolated so ctx.revert() never kills it.
-  useEffect(() => {
-    const track = marqueeRef.current;
-    if (!track || prefersReducedMotion()) return;
-
-    // Use pixel distance (half of total track width) for reliable looping
-    let anim: gsap.core.Tween;
-    const raf = requestAnimationFrame(() => {
-      const halfWidth = track.scrollWidth / 2;
-      anim = gsap.to(track, {
-        x: -halfWidth,
-        duration: 35,
-        repeat: -1,
-        ease: 'none',
-      });
-    });
-
-    return () => {
-      cancelAnimationFrame(raf);
-      anim?.kill();
-    };
   }, []);
 
   return (
@@ -157,16 +127,6 @@ const Hero = () => {
             <p className="hero-desc-right">
               From concept to screen, I craft visual stories through motion, design, and strategic thinking. Bringing brands to life with purposeful animation.
             </p>
-          </div>
-        </div>
-
-        {/* ── Card marquee strip ── */}
-        <div className="hero-marquee-rail" aria-hidden="true">
-          <div className="hero-mq-track" ref={marqueeRef}>
-            <MqChips />
-            <MqSet />
-            <MqSet />
-            <MqChips />
           </div>
         </div>
 
