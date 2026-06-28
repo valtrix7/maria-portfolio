@@ -3,6 +3,8 @@
 /* The section is purely a scroll container — no block padding needed. */
 .testimonials {
   padding-block: 0;
+  position: relative;
+  z-index: 2;
 }
 
 /* The ContainerScroll div that provides 300vh of scroll distance. */
@@ -22,6 +24,7 @@
   gap: clamp(32px, 5vw, 56px);
   padding: clamp(24px, 4vw, 48px) var(--container-px);
   overflow: hidden;
+  background: var(--bg);
 }
 
 /* Canvas morphing background -------------------------------------------- */

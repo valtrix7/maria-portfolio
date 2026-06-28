@@ -4,7 +4,7 @@
 
 .tb {
   position: relative;
-  background: var(--bg-elevated);
+  background: var(--bg);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   overflow: hidden;

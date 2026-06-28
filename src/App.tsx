@@ -14,7 +14,6 @@ import SelectedWork from './components/SelectedWork';
 import HowIWork from './components/HowIWork';
 import Toolbox from './components/Toolbox';
 import Testimonials from './components/Testimonials';
-import Recognition from './components/Recognition';
 import Contact from './components/Contact';
 import { CinematicFooter } from './components/ui/motion-footer';
 
@@ -65,7 +64,6 @@ function App() {
         <SelectedWork />
         <HowIWork />
         <Toolbox />
-        <Recognition />
         <Testimonials />
         <Contact />
       </main>

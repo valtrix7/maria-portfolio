@@ -3,10 +3,27 @@
    ========================================================================== */
 
 .rec {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1;
   background: var(--bg);
   overflow: hidden;
-  padding-block: var(--section-py);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(40px, 5vh, 70px) var(--container-px);
+}
+
+.rec .container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 3vh, 40px);
+  flex: 1;
+  justify-content: center;
 }
 
 .rec-header {
@@ -40,7 +57,7 @@
 
 /* Stat cards */
 .rec-bento-stat {
-  background: var(--bg-elevated);
+  background: var(--bg);
   border: 1px solid var(--border);
   position: relative;
   overflow: hidden;
