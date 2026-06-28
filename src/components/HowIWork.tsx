@@ -161,18 +161,41 @@ const HowIWork: React.FC = () => {
         );
       });
 
-      // ---------- Decorative shapes drift in ----------
+      // ---------- Decorative shapes drift in with parallax ----------
       if (!mobile) {
         gsap.fromTo('.hw-deco-circle',
-          { scale: 0, opacity: 0 },
+          { scale: 0.8 },
           {
-            scale: 1, opacity: 0.08,
+            scale: 1,
+            opacity: 0.12,
             duration: 1.5,
             ease: 'power2.out',
             stagger: 0.2,
             scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' },
           }
         );
+
+        // Parallax layers: each decorative element moves at different speed
+        gsap.to('.hw-deco-1', {
+          y: -60,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+        gsap.to('.hw-deco-2', {
+          y: 50,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 2.5,
+          },
+        });
       }
     }, sectionRef);
 

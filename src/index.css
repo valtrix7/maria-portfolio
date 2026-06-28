@@ -247,7 +247,6 @@ section {
   height: 1.5px;
   background: var(--text-secondary);
   border-radius: 2px;
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), width 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
   transform-origin: center;
 }
 
@@ -256,12 +255,39 @@ section {
   margin-left: auto;
 }
 
+.menu-burger-line-mid {
+  width: 75%;
+  margin-left: auto;
+}
+
+.header--open .menu-burger-line--2 {
+  width: 100%;
+  margin-left: 0;
+}
+
 .menu-trigger:hover .menu-burger-line {
   background: var(--text);
 }
 .menu-trigger:hover .menu-burger-line--2 {
   width: 100%;
   margin-left: 0;
+}
+
+/* ── Menu Backdrop ── */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.menu-backdrop--visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* ── Horizontal Scroll Section ── */

@@ -168,21 +168,21 @@
   width: clamp(150px, 18vw, 300px);
   height: clamp(150px, 18vw, 300px);
   top: 10%;
-  right: -5%;
+  right: 3%;
 }
 
 .tb-deco-2 {
   width: clamp(100px, 12vw, 200px);
   height: clamp(100px, 12vw, 200px);
   bottom: 15%;
-  left: -3%;
+  left: 3%;
 }
 
 .tb-deco-3 {
   width: clamp(80px, 10vw, 150px);
   height: clamp(80px, 10vw, 150px);
   top: 50%;
-  right: 10%;
+  right: 8%;
 }
 
 /* ==========================================================================

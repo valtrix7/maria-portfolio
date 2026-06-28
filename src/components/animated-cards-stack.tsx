@@ -48,18 +48,21 @@ function useContainerScrollContext() {
 
 // ── ContainerScroll ───────────────────────────────────────────────────────────
 
-export const ContainerScroll: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
-  children,
-  className,
-  style,
-  ...props
-}) => {
+export const ContainerScroll = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ children, className, style, ...props }, forwardedRef) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
 
   return (
     <ContainerScrollContext.Provider value={{ containerRef }}>
       <div
-        ref={containerRef}
+        ref={(node) => {
+          (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+          if (typeof forwardedRef === "function") forwardedRef(node);
+          else if (forwardedRef)
+            (forwardedRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }}
         className={cn("relative min-h-svh w-full", className)}
         style={{ perspective: "1000px", ...style }}
         {...props}
@@ -68,7 +71,7 @@ export const ContainerScroll: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
       </div>
     </ContainerScrollContext.Provider>
   );
-};
+});
 ContainerScroll.displayName = "ContainerScroll";
 
 // ── CardsContainer ────────────────────────────────────────────────────────────

@@ -132,14 +132,14 @@
   width: clamp(200px, 25vw, 400px);
   height: clamp(200px, 25vw, 400px);
   top: 5%;
-  right: -8%;
+  right: 3%;
 }
 
 .rec-deco-2 {
   width: clamp(150px, 18vw, 300px);
   height: clamp(150px, 18vw, 300px);
   bottom: 10%;
-  left: -5%;
+  left: 3%;
 }
 
 /* ==========================================================================

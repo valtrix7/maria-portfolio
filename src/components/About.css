@@ -80,6 +80,20 @@
   opacity: 0.4;
 }
 
+/* Scrub text highlight paragraph */
+.about-scrub-paragraph {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1.8;
+  margin-bottom: 48px;
+  max-width: 520px;
+}
+
+.about-scrub-word {
+  display: inline-block;
+  transition: color 0.1s;
+}
+
 @media (max-width: 768px) {
   .about-grid {
     grid-template-columns: 1fr;

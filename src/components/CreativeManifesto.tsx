@@ -57,6 +57,43 @@ const CreativeManifesto = () => {
             }
           }
         );
+
+        // ---------- Parallax depth layers ----------
+        gsap.to('.manifesto-marquee-top', {
+          y: -30,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+
+        gsap.to('.manifesto-marquee-bottom', {
+          y: 25,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 2,
+          },
+        });
+
+        gsap.fromTo('.manifesto-content',
+          { y: 40 },
+          {
+            y: -20,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1,
+            },
+          }
+        );
       }
 
       if (marquee1.current) {

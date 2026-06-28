@@ -187,6 +187,52 @@ const Toolbox: React.FC = () => {
       if (marquee && !reduce) {
         gsap.to(marquee, { x: '-50%', duration: mobile ? 20 : 30, repeat: -1, ease: 'none' });
       }
+
+      // ---------- Parallax layers for decorative SVGs ----------
+      if (!mobile && !reduce) {
+        gsap.fromTo('.tb-deco',
+          { scale: 0.8 },
+          {
+            scale: 1, opacity: 0.1,
+            duration: 1.5, ease: 'power2.out', stagger: 0.2,
+            scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' },
+          }
+        );
+
+        gsap.to('.tb-deco-1', {
+          y: -60,
+          rotation: 15,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+        gsap.to('.tb-deco-2', {
+          y: 50,
+          rotation: -10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 2,
+          },
+        });
+        gsap.to('.tb-deco-3', {
+          y: -40,
+          rotation: 20,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 2.5,
+          },
+        });
+      }
     }, sectionRef);
 
     return () => {

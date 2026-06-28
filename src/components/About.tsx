@@ -6,14 +6,20 @@ import './About.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const isMobile = () =>
   typeof window !== 'undefined' && window.innerWidth <= 768;
 
 const About = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const scrubTextRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mobile = isMobile();
+    const reduce = prefersReducedMotion();
     const ctx = gsap.context(() => {
       gsap.fromTo('.about-text-block > *',
         { y: mobile ? 30 : 50, opacity: 0 },
@@ -47,10 +53,34 @@ const About = () => {
           }
         });
       }
+
+      // ---------- Scrub text highlight: words light up as user scrolls ----------
+      if (!reduce && scrubTextRef.current) {
+        const words = scrubTextRef.current.querySelectorAll('.about-scrub-word');
+        if (words.length > 0) {
+          gsap.fromTo(words,
+            { color: 'var(--text-muted)', opacity: 0.3 },
+            {
+              color: 'var(--text)',
+              opacity: 1,
+              stagger: 0.02,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: scrubTextRef.current,
+                start: 'top 70%',
+                end: 'bottom 40%',
+                scrub: 1,
+              },
+            }
+          );
+        }
+      }
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
+
+  const scrubText = "I craft motion that resonates — from concept to final frame, every animation is designed to connect, inform, and inspire.";
 
   return (
     <section className="about" id="about" data-section="about" ref={sectionRef}>
@@ -77,6 +107,14 @@ const About = () => {
               and visual precision to every frame. My work lives at the intersection of
               design clarity and emotional impact.
             </p>
+
+            {/* Scrub text highlight paragraph */}
+            <div className="about-scrub-paragraph" ref={scrubTextRef}>
+              {scrubText.split(' ').map((word, i) => (
+                <span key={i} className="about-scrub-word">{word} </span>
+              ))}
+            </div>
+
             <div className="about-stats">
               <div className="about-stat">
                 <span className="about-stat-num">3+</span>

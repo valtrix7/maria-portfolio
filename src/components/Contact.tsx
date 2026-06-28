@@ -60,15 +60,19 @@ const Contact: React.FC = () => {
       gsap.to('.ct-morph', { rotation: 360, duration: 60, repeat: -1, ease: 'none', transformOrigin: '50% 50%' });
       gsap.to('.ct-morph-2', { rotation: -360, duration: 80, repeat: -1, ease: 'none', transformOrigin: '50% 50%' });
 
-      // ---------- Word reveal ----------
+      // ---------- Word reveal (scrub-driven) ----------
       gsap.fromTo('.ct-word',
         { y: '110%', opacity: 0 },
         {
           y: '0%', opacity: 1,
-          duration: mobile ? 0.8 : 1.2,
-          stagger: mobile ? 0.06 : 0.08,
-          ease: 'power4.out',
-          scrollTrigger: { trigger: sectionRef.current, start: mobile ? 'top 65%' : 'top 55%' },
+          stagger: 0.06,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: mobile ? 'top 70%' : 'top 60%',
+            end: 'top 20%',
+            scrub: 1,
+          },
         }
       );
 
@@ -129,6 +133,34 @@ const Contact: React.FC = () => {
     }, sectionRef);
 
     return () => ctx.revert();
+  }, []);
+
+  // ── Magnetic email button (desktop only) ──────────────────────────────────
+  useEffect(() => {
+    if (isMobile() || prefersReducedMotion()) return;
+
+    const btn = sectionRef.current?.querySelector<HTMLElement>('.ct-email-btn');
+    if (!btn) return;
+
+    const onMove = (e: MouseEvent) => {
+      const r = btn.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) * 0.32;
+      const dy = (e.clientY - (r.top + r.height / 2)) * 0.32;
+      gsap.to(btn, { x: dx, y: dy, duration: 0.45, ease: 'power2.out', overwrite: 'auto' });
+    };
+
+    const onLeave = () => {
+      gsap.to(btn, { x: 0, y: 0, duration: 0.9, ease: 'elastic.out(1.1, 0.5)' });
+    };
+
+    btn.addEventListener('mousemove', onMove);
+    btn.addEventListener('mouseleave', onLeave);
+
+    return () => {
+      btn.removeEventListener('mousemove', onMove);
+      btn.removeEventListener('mouseleave', onLeave);
+      gsap.set(btn, { x: 0, y: 0 });
+    };
   }, []);
 
   return (

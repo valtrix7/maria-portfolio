@@ -19,9 +19,37 @@ const stats = [
   { num: 100, suffix: '%', label: 'On-Time Delivery', icon: '■' },
 ];
 
+const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#&';
+
+function scrambleEl(el: HTMLElement, text: string, delay = 0) {
+  const obj = { p: 0 };
+  gsap.to(obj, {
+    p: 1,
+    duration: text.replace(/ /g, '').length * 0.05 + 0.5,
+    delay,
+    ease: 'power1.out',
+    onUpdate() {
+      const settled = Math.floor(obj.p * text.length);
+      el.textContent = text
+        .split('')
+        .map((c, i) => {
+          if (c === ' ') return ' ';
+          if (i < settled) return c;
+          return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+        })
+        .join('');
+    },
+    onComplete() {
+      el.textContent = text;
+    },
+  });
+}
+
 const Recognition: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const countersRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const displayPart1Ref = useRef<HTMLSpanElement>(null);
+  const displayPart2Ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const mobile = isMobile();
@@ -77,6 +105,22 @@ const Recognition: React.FC = () => {
         if (!el) return;
         const target = stats[i].num;
         const obj = { val: 0 };
+
+        // Scale bounce when number comes into view
+        gsap.fromTo(el,
+          { scale: 0.6, opacity: 0 },
+          {
+            scale: 1, opacity: 1,
+            duration: 0.6,
+            ease: 'back.out(1.7)',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+          }
+        );
+
         gsap.to(obj, {
           val: target,
           duration: mobile ? 1.5 : 2,
@@ -92,20 +136,25 @@ const Recognition: React.FC = () => {
         });
       });
 
-      gsap.fromTo('.rec-display',
-        { y: 80, opacity: 0, scale: 0.97 },
-        {
-          y: 0, opacity: 1, scale: 1,
-          duration: 1.2, ease: 'power3.out',
-          scrollTrigger: { trigger: '.rec-display', start: 'top 88%' },
-        }
-      );
+      // Slide-up reveal then character scramble on each text span.
+      gsap.set('.rec-display', { y: 60, opacity: 0 });
+      ScrollTrigger.create({
+        trigger: '.rec-display',
+        start: 'top 88%',
+        once: true,
+        onEnter() {
+          gsap.to('.rec-display', { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' });
+          if (reduce) return;
+          scrambleEl(displayPart1Ref.current!, 'Every project is a ');
+          scrambleEl(displayPart2Ref.current!, 'new story.', 0.45);
+        },
+      });
 
       if (!mobile) {
         gsap.fromTo('.rec-deco',
-          { scale: 0.5, opacity: 0 },
+          { scale: 0.8 },
           {
-            scale: 1, opacity: 0.05,
+            scale: 1, opacity: 0.1,
             duration: 1.5, ease: 'power2.out', stagger: 0.2,
             scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' },
           }
@@ -175,8 +224,8 @@ const Recognition: React.FC = () => {
         </div>
 
         <div className="rec-display">
-          <span>Every project is a </span>
-          <span className="accent">new story.</span>
+          <span ref={displayPart1Ref}>Every project is a </span>
+          <span className="accent" ref={displayPart2Ref}>new story.</span>
         </div>
       </div>
     </section>

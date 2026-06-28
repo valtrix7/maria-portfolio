@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
+import LoadingScreen from './components/LoadingScreen';
 import Header from './components/Header';
 import AnimationCanvas from './components/AnimationCanvas';
 import SmoothCursor from './components/SmoothCursor';
@@ -20,6 +21,8 @@ import { CinematicFooter } from './components/ui/motion-footer';
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const lenis = new Lenis({
       lerp: 0.09,
@@ -51,6 +54,7 @@ function App() {
 
   return (
     <>
+      {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
       <AnimationCanvas />
       <SmoothCursor />
       <Header />
