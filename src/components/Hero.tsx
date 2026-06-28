@@ -9,27 +9,112 @@ const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const EXPERTISE = [
-  { num: '01', label: 'Motion Design' },
-  { num: '02', label: 'UI/UX Design' },
-  { num: '03', label: 'Visual Direction' },
-  { num: '04', label: 'Creative Strategy' },
-];
-
-const ArrowIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="7" y1="17" x2="17" y2="7" />
-    <polyline points="7 7 17 7 17 17" />
-  </svg>
-);
-
 const isMobile = () =>
   typeof window !== 'undefined' && window.innerWidth <= 768;
 
+// ── Marquee building blocks ───────────────────────────────────────────────────
+
+const MqChip = ({ children, href }: { children: React.ReactNode; href?: string }) =>
+  href ? (
+    <a href={href} className="hero-mq-chip hero-mq-chip--link">
+      {children}
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+        <path d="M5 12h14M12 5l7 7-7 7" />
+      </svg>
+    </a>
+  ) : (
+    <span className="hero-mq-chip">{children}</span>
+  );
+
+const MqSet = () => (
+  <>
+    <div className="hero-mq-loose">
+      <MqChip>Animation</MqChip>
+      <MqChip href="#work">More</MqChip>
+    </div>
+
+    <div className="hero-mq-card hero-mq-card--t">
+      <div className="hero-mq-t-head">
+        <img
+          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=44&h=44&fit=crop&crop=face"
+          alt="Sarah Chen"
+          className="hero-mq-t-avatar"
+          loading="lazy"
+        />
+        <div>
+          <span className="hero-mq-t-name">Sarah Chen</span>
+          <span className="hero-mq-t-role">CEO, Urban Explorer</span>
+        </div>
+      </div>
+      <p className="hero-mq-t-quote">
+        &ldquo;Maria transformed our pitch deck into a visual masterpiece. She is great at motion design and de...&rdquo;
+      </p>
+      <span className="hero-mq-t-more">Learn more</span>
+    </div>
+
+    <div className="hero-mq-card hero-mq-card--proj">
+      <img
+        src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=320&h=200&fit=crop"
+        alt="Project preview"
+        className="hero-mq-proj-img"
+        loading="lazy"
+      />
+    </div>
+
+    <div className="hero-mq-card hero-mq-card--work">
+      <div>
+        <p className="hero-mq-work-title">Selected Work</p>
+        <p className="hero-mq-work-desc">Recent projects showcasing creativity, quality, and innovation.</p>
+      </div>
+      <a href="#work" className="hero-mq-work-cta">
+        <span className="hero-mq-work-orb" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </span>
+        <span>See more</span>
+      </a>
+    </div>
+
+    <a href="#contact" className="hero-mq-badge-wrap">
+      <div className="hero-mq-badge">
+        <svg className="hero-mq-badge-svg" viewBox="0 0 130 130" width="130" height="130" aria-hidden="true">
+          <defs>
+            <path id="mq-ring-path" d="M65,65 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" />
+          </defs>
+          <text fill="currentColor" fontSize="10" fontWeight="600" letterSpacing="2.8" fontFamily="Space Grotesk, sans-serif">
+            <textPath href="#mq-ring-path">GET IN TOUCH · GET IN TOUCH · </textPath>
+          </text>
+        </svg>
+        <div className="hero-mq-badge-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M22 7l-10 7L2 7" />
+          </svg>
+        </div>
+      </div>
+    </a>
+
+    <div className="hero-mq-skills">
+      <div className="hero-mq-skills-row">
+        <MqChip>Design</MqChip>
+        <MqChip>Development</MqChip>
+        <MqChip>Animation</MqChip>
+      </div>
+      <div className="hero-mq-skills-row">
+        <MqChip>User Interface</MqChip>
+        <MqChip>GSAP</MqChip>
+        <MqChip href="#contact">More</MqChip>
+      </div>
+    </div>
+  </>
+);
+
 const Hero = () => {
-  const heroRef = useRef<HTMLElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
-  const mouse = useRef({ x: 0, y: 0 });
+  const heroRef    = useRef<HTMLElement>(null);
+  const glowRef    = useRef<HTMLDivElement>(null);
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const mouse      = useRef({ x: 0, y: 0 });
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
     if (isMobile()) return;
@@ -49,7 +134,7 @@ const Hero = () => {
 
     const ctx = gsap.context(() => {
       if (reduce) {
-        gsap.set(['.hero-nav', '.hero-kicker', '.hero-name-word', '.hero-portrait', '.hero-headline-right', '.hero-desc-right', '.hero-cta-btn', '.hero-expertise-item'], {
+        gsap.set(['.hero-nav', '.hero-kicker', '.hero-name-word', '.hero-portrait', '.hero-headline-right', '.hero-desc-right', '.hero-marquee-rail'], {
           opacity: 1, y: 0, x: 0, scale: 1,
         });
         return;
@@ -74,13 +159,13 @@ const Hero = () => {
 
       tl.fromTo('.hero-headline-right', { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, mobile ? 0.5 : 0.7);
       tl.fromTo('.hero-desc-right', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, mobile ? 0.6 : 0.85);
-      tl.fromTo('.hero-cta-btn', { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, mobile ? 0.7 : 0.95);
 
-      tl.fromTo('.hero-expertise-item',
-        { y: mobile ? 15 : 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.4, stagger: mobile ? 0.05 : 0.07, ease: 'power3.out' },
-        mobile ? 0.8 : 1.0
+      tl.fromTo('.hero-marquee-rail',
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' },
+        mobile ? 0.95 : 1.15
       );
+
 
       if (!mobile) {
         gsap.to('.hero-portrait', {
@@ -111,6 +196,29 @@ const Hero = () => {
     }, heroRef);
 
     return () => ctx.revert();
+  }, []);
+
+  // Separate effect — marquee scroll. Isolated so ctx.revert() never kills it.
+  useEffect(() => {
+    const track = marqueeRef.current;
+    if (!track || prefersReducedMotion()) return;
+
+    // Use pixel distance (half of total track width) for reliable looping
+    let anim: gsap.core.Tween;
+    const raf = requestAnimationFrame(() => {
+      const halfWidth = track.scrollWidth / 2;
+      anim = gsap.to(track, {
+        x: -halfWidth,
+        duration: 35,
+        repeat: -1,
+        ease: 'none',
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      anim?.kill();
+    };
   }, []);
 
   return (
@@ -147,20 +255,15 @@ const Hero = () => {
             <p className="hero-desc-right">
               From concept to screen, I craft visual stories through motion, design, and strategic thinking. Bringing brands to life with purposeful animation.
             </p>
-            <a href="#work" className="hero-cta-btn">
-              <span>View Work</span>
-              <ArrowIcon />
-            </a>
           </div>
         </div>
 
-        <div className="hero-expertise">
-          {EXPERTISE.map((item) => (
-            <div key={item.num} className="hero-expertise-item">
-              <span className="hero-expertise-num">{item.num}</span>
-              <span className="hero-expertise-label">{item.label}</span>
-            </div>
-          ))}
+        {/* ── Card marquee strip ── */}
+        <div className="hero-marquee-rail" aria-hidden="true">
+          <div className="hero-mq-track" ref={marqueeRef}>
+            <MqSet />
+            <MqSet />
+          </div>
         </div>
 
         <div className="hero-signature">
