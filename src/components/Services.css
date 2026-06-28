@@ -1,0 +1,261 @@
+/* ==========================================================================
+   Services — Pinned, scrubbed focus-list accordion
+   ========================================================================== */
+
+.services {
+  position: relative;
+  background: var(--bg, #0a0a0a);
+  overflow: hidden;
+  padding-top: var(--section-py);
+}
+
+.services-header {
+  margin-bottom: clamp(48px, 7vw, 96px);
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Pinned stage ─────────────────────────────────────────────────────── */
+.services-stage {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.services-stage-inner {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(32px, 6vw, 96px);
+  align-items: center;
+  width: 100%;
+}
+
+/* ── Aside HUD: big index + progress rail + dots ──────────────────────── */
+.services-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.services-counter {
+  font-family: 'Space Grotesk', monospace;
+  font-size: clamp(56px, 9vw, 120px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--accent, #E8611A);
+  font-variant-numeric: tabular-nums;
+}
+
+.services-rail {
+  position: relative;
+  width: 2px;
+  height: clamp(120px, 22vh, 240px);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.services-rail-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--accent, #E8611A), var(--accent-light, #FF7A33));
+  transform-origin: top center;
+  transform: scaleY(0);
+  will-change: transform;
+}
+
+.services-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.services-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  transition: background 0.4s var(--ease);
+  will-change: transform;
+}
+
+.services-total {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--text-muted, rgba(255, 255, 255, 0.4));
+}
+
+/* ── The focus list ───────────────────────────────────────────────────── */
+.services-list {
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.services-row {
+  position: relative;
+  padding: clamp(18px, 2.4vw, 30px) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.services-row-head {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(16px, 2.5vw, 36px);
+  position: relative;
+}
+
+.services-row-num {
+  font-family: 'Space Grotesk', monospace;
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 600;
+  color: var(--text-muted, rgba(255, 255, 255, 0.4));
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+  transition: color 0.4s var(--ease);
+}
+
+.services-row-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(28px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  margin: 0;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.55));
+  opacity: 0.55;
+  transition: color 0.4s var(--ease), opacity 0.4s var(--ease),
+    transform 0.5s var(--ease);
+}
+
+.services-row.is-active .services-row-title {
+  color: var(--text);
+  opacity: 1;
+  transform: translateX(clamp(8px, 1.2vw, 20px));
+}
+
+.services-row.is-active .services-row-num {
+  color: var(--accent);
+}
+
+/* Accent underline that wipes in for the active row */
+.services-row-mark {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--accent, #E8611A), transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+/* ── Collapsible detail ───────────────────────────────────────────────── */
+.services-detail {
+  overflow: hidden;
+}
+
+.services-detail-inner {
+  padding-top: 18px;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.services-detail-desc {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(14px, 1.2vw, 18px);
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.services-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.services-tag {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.4s var(--ease), color 0.4s var(--ease);
+}
+
+.services-row.is-active .services-tag {
+  border-color: rgba(232, 97, 26, 0.3);
+  color: var(--text);
+}
+
+/* ── Decorative background ring ────────────────────────────────────────── */
+.services-deco-ring {
+  position: absolute;
+  width: clamp(360px, 50vw, 720px);
+  height: clamp(360px, 50vw, 720px);
+  right: -8%;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Mobile — static stacked list, no pin ─────────────────────────────── */
+@media (max-width: 768px) {
+  .services {
+    padding-bottom: var(--section-py);
+  }
+
+  .services-stage {
+    min-height: auto;
+    display: block;
+  }
+
+  .services-stage-inner {
+    display: block;
+  }
+
+  .services-aside {
+    display: none;
+  }
+
+  .services-row-title {
+    opacity: 1;
+    color: var(--text);
+  }
+
+  .services-row-mark {
+    transform: scaleX(0.4);
+  }
+
+  .services-detail-inner {
+    padding-top: 14px;
+  }
+
+  .services-deco-ring {
+    width: 320px;
+    height: 320px;
+    right: -30%;
+    opacity: 0.6;
+  }
+}

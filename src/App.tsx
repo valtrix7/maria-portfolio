@@ -12,6 +12,7 @@ import About from './components/About';
 import CreativeManifesto from './components/CreativeManifesto';
 import SelectedWork from './components/SelectedWork';
 import HowIWork from './components/HowIWork';
+import Services from './components/Services';
 import SectionDivider from './components/SectionDivider';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
@@ -63,6 +64,7 @@ function App() {
         <CreativeManifesto />
         <SelectedWork />
         <HowIWork />
+        <Services />
         <SectionDivider />
         <Testimonials />
         <Contact />
