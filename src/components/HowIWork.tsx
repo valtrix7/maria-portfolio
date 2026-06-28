@@ -58,17 +58,6 @@ const HowIWork: React.FC = () => {
         return;
       }
 
-      // Header entrance (both desktop + mobile)
-      gsap.fromTo('.hw-header > *',
-        { y: 50, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: mobile ? 0.7 : 1, stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.hw-header', start: 'top 82%' },
-        }
-      );
-
       // ---------- DrawSVG: the connector path draws itself as you scroll ----------
       // Desktop uses the SVG curve; mobile uses a vertical line fallback.
       if (path && !mobile) {

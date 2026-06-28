@@ -62,16 +62,6 @@ const Recognition: React.FC = () => {
         return;
       }
 
-      gsap.fromTo('.rec-header > *',
-        { y: 50, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: 1, stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.rec-header', start: 'top 82%' },
-        }
-      );
-
       const tiles = gsap.utils.toArray<HTMLElement>('.rec-bento-item');
       tiles.forEach((tile, i) => {
         const depth = i % 3;

@@ -21,16 +21,6 @@ const About = () => {
     const mobile = isMobile();
     const reduce = prefersReducedMotion();
     const ctx = gsap.context(() => {
-      gsap.fromTo('.about-text-block > *',
-        { y: mobile ? 30 : 50, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: mobile ? 0.7 : 1, stagger: mobile ? 0.08 : 0.12,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.about-text-block', start: 'top 82%' }
-        }
-      );
-
       gsap.fromTo('.about-stat',
         { y: mobile ? 20 : 30, opacity: 0 },
         {

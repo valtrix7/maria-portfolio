@@ -76,17 +76,6 @@ const Contact: React.FC = () => {
         }
       );
 
-      // ---------- Sub content ----------
-      gsap.fromTo('.ct-sub > *',
-        { y: 50, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: mobile ? 0.7 : 1, stagger: 0.08,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.ct-sub', start: 'top 85%' },
-        }
-      );
-
       // ---------- Email button ----------
       gsap.fromTo('.ct-email-btn',
         { scale: 0.9, opacity: 0 },
