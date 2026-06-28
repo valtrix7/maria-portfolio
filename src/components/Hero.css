@@ -517,10 +517,35 @@
 /* ── Testimonial card ── */
 .hero-mq-card--t {
   width: 300px;
+  min-height: 180px;
   padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Stacking slides ── */
+.hero-mq-t-slide {
+  position: absolute;
+  inset: 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.hero-mq-t-slide--active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Stack depth effect: behind cards sit lower */
+.hero-mq-t-slide:not(.hero-mq-t-slide--active) {
+  opacity: 0;
+  transform: translateY(20px) scale(0.92);
 }
 
 .hero-mq-t-head {
@@ -574,6 +599,29 @@
 }
 .hero-mq-t-more:hover {
   color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Dots indicator ── */
+.hero-mq-t-dots {
+  position: absolute;
+  bottom: 14px;
+  left: 20px;
+  display: flex;
+  gap: 5px;
+}
+
+.hero-mq-t-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.hero-mq-t-dot--active {
+  width: 16px;
+  border-radius: 3px;
+  background: #E8611A;
 }
 
 /* ── Project preview card ── */

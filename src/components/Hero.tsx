@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Hero.css';
@@ -14,6 +14,27 @@ const isMobile = () =>
 
 // ── Marquee building blocks ───────────────────────────────────────────────────
 
+const TESTIMONIALS = [
+  {
+    name: 'Sarah Chen',
+    role: 'CEO, Urban Explorer',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=44&h=44&fit=crop&crop=face',
+    quote: '"Maria transformed our pitch deck into a visual masterpiece. Her motion design brought our story to life."',
+  },
+  {
+    name: 'Alex Rivera',
+    role: 'Founder, Lumina Studio',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=44&h=44&fit=crop&crop=face',
+    quote: '"Incredible attention to detail. The animations she created perfectly captured our brand\'s energy."',
+  },
+  {
+    name: 'Priya Sharma',
+    role: 'Marketing Director, NexGen',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=44&h=44&fit=crop&crop=face',
+    quote: '"Working with Maria was seamless. She delivered stunning motion graphics on time and beyond expectations."',
+  },
+];
+
 const MqChip = ({ children, href }: { children: React.ReactNode; href?: string }) =>
   href ? (
     <a href={href} className="hero-mq-chip hero-mq-chip--link">
@@ -26,6 +47,44 @@ const MqChip = ({ children, href }: { children: React.ReactNode; href?: string }
     <span className="hero-mq-chip">{children}</span>
   );
 
+const MqTestimonialStack = () => {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActive((prev) => (prev + 1) % TESTIMONIALS.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="hero-mq-card hero-mq-card--t">
+      {TESTIMONIALS.map((t, i) => (
+        <div
+          key={t.name}
+          className={`hero-mq-t-slide ${i === active ? 'hero-mq-t-slide--active' : ''}`}
+          style={{ '--i': i } as React.CSSProperties}
+        >
+          <div className="hero-mq-t-head">
+            <img src={t.avatar} alt={t.name} className="hero-mq-t-avatar" loading="lazy" />
+            <div>
+              <span className="hero-mq-t-name">{t.name}</span>
+              <span className="hero-mq-t-role">{t.role}</span>
+            </div>
+          </div>
+          <p className="hero-mq-t-quote">{t.quote}</p>
+          <span className="hero-mq-t-more">Learn more</span>
+        </div>
+      ))}
+      <div className="hero-mq-t-dots">
+        {TESTIMONIALS.map((_, i) => (
+          <span key={i} className={`hero-mq-t-dot ${i === active ? 'hero-mq-t-dot--active' : ''}`} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const MqSet = () => (
   <>
     <div className="hero-mq-loose">
@@ -33,24 +92,7 @@ const MqSet = () => (
       <MqChip href="#work">More</MqChip>
     </div>
 
-    <div className="hero-mq-card hero-mq-card--t">
-      <div className="hero-mq-t-head">
-        <img
-          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=44&h=44&fit=crop&crop=face"
-          alt="Sarah Chen"
-          className="hero-mq-t-avatar"
-          loading="lazy"
-        />
-        <div>
-          <span className="hero-mq-t-name">Sarah Chen</span>
-          <span className="hero-mq-t-role">CEO, Urban Explorer</span>
-        </div>
-      </div>
-      <p className="hero-mq-t-quote">
-        &ldquo;Maria transformed our pitch deck into a visual masterpiece. She is great at motion design and de...&rdquo;
-      </p>
-      <span className="hero-mq-t-more">Learn more</span>
-    </div>
+    <MqTestimonialStack />
 
     <div className="hero-mq-card hero-mq-card--proj">
       <img
