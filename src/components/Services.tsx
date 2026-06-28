@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import CardSwap, { Card } from './ui/card-swap';
 import './Services.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,6 +14,7 @@ const SERVICES = [
   {
     title: 'Motion Design',
     description: 'Bringing brands to life with purposeful animation — from logo reveals to full campaign narratives.',
+    backText: 'After Effects, Cinema 4D, Blender, Lottie, Rive — real-time and pre-rendered motion for web, social, and broadcast.',
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2L2 7l10 5 10-5-10-5z"/>
@@ -20,11 +22,12 @@ const SERVICES = [
         <path d="M2 12l10 5 10-5"/>
       </svg>
     ),
-    backText: 'After Effects, Cinema 4D, Blender, Lottie, Rive — real-time and pre-rendered motion for web, social, and broadcast.',
+    gradient: 'linear-gradient(135deg, rgba(232, 97, 26, 0.12), rgba(255, 106, 0, 0.04))',
   },
   {
     title: 'Brand Identity',
     description: 'Crafting cohesive visual systems — logos, typography, color, and guidelines that tell a complete story.',
+    backText: 'Full brand packages including pitch decks, style guides, social templates, and animated brand assets.',
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10"/>
@@ -32,11 +35,12 @@ const SERVICES = [
         <path d="M2 12h20"/>
       </svg>
     ),
-    backText: 'Full brand packages including pitch decks, style guides, social templates, and animated brand assets.',
+    gradient: 'linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.04))',
   },
   {
     title: 'Visual Design',
     description: 'Static and interactive design for web, apps, and print — pixel-perfect layouts with strategic intent.',
+    backText: 'Landing pages, dashboards, pitch decks, social media kits, and print collateral — designed in Figma and delivered pixel-perfect.',
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -44,7 +48,7 @@ const SERVICES = [
         <path d="M9 21V9"/>
       </svg>
     ),
-    backText: 'Landing pages, dashboards, pitch decks, social media kits, and print collateral — designed in Figma and delivered pixel-perfect.',
+    gradient: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.04))',
   },
 ];
 
@@ -61,44 +65,16 @@ const Services = () => {
     if (prefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
-      // Cards entrance
-      gsap.fromTo('.svc-card',
-        { y: 60, opacity: 0 },
+      // CardSwap entrance
+      gsap.fromTo('.svc-cardswap',
+        { y: 80, opacity: 0 },
         {
           y: 0, opacity: 1,
-          duration: 0.8, stagger: 0.12,
+          duration: 1,
           ease: 'power3.out',
-          scrollTrigger: { trigger: '.svc-grid', start: 'top 85%' }
+          scrollTrigger: { trigger: '.svc-cardswap', start: 'top 85%' }
         }
       );
-
-      // Flip each card when it enters viewport
-      document.querySelectorAll('.svc-card').forEach((card) => {
-        const inner = card.querySelector('.svc-card-inner') as HTMLElement;
-        if (!inner) return;
-
-        ScrollTrigger.create({
-          trigger: card,
-          start: 'top 60%',
-          onEnter: () => {
-            gsap.to(inner, {
-              rotateY: 180,
-              duration: 0.7,
-              ease: 'power3.inOut',
-              delay: 0.2,
-            });
-            inner.dataset.flipped = 'true';
-          },
-          onLeaveBack: () => {
-            gsap.to(inner, {
-              rotateY: 0,
-              duration: 0.7,
-              ease: 'power3.inOut',
-            });
-            inner.dataset.flipped = 'false';
-          },
-        });
-      });
 
       // Marquee scroll
       if (marqueeRef.current) {
@@ -128,22 +104,30 @@ const Services = () => {
           </p>
         </div>
 
-        <div className="svc-grid">
-          {SERVICES.map((svc) => (
-            <div key={svc.title} className="svc-card">
-              <div className="svc-card-inner">
-                <div className="svc-card-face svc-card-front">
-                  <div className="svc-icon">{svc.icon}</div>
-                  <h3 className="svc-title">{svc.title}</h3>
-                  <p className="svc-desc">{svc.description}</p>
+        <div className="svc-swap-wrap">
+          <CardSwap
+            width={340}
+            height={420}
+            cardDistance={50}
+            verticalDistance={60}
+            delay={4000}
+            pauseOnHover
+            skewAmount={4}
+            easing="elastic"
+          >
+            {SERVICES.map((svc) => (
+              <Card key={svc.title} customClass="svc-swap-card">
+                <div className="svc-swap-inner" style={{ background: svc.gradient }}>
+                  <div className="svc-swap-icon">{svc.icon}</div>
+                  <h3 className="svc-swap-title">{svc.title}</h3>
+                  <p className="svc-swap-desc">{svc.description}</p>
+                  <div className="svc-swap-back">
+                    <p>{svc.backText}</p>
+                  </div>
                 </div>
-                <div className="svc-card-face svc-card-back">
-                  <div className="svc-icon svc-icon--accent">{svc.icon}</div>
-                  <p className="svc-back-text">{svc.backText}</p>
-                </div>
-              </div>
-            </div>
-          ))}
+              </Card>
+            ))}
+          </CardSwap>
         </div>
       </div>
 
