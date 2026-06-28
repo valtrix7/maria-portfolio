@@ -1,17 +1,21 @@
 /* ── Services Section ── */
 .services {
-  padding: 120px 0 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   position: relative;
   overflow: hidden;
+  padding: 60px 0 0;
 }
 
 /* ── Content layout: text left, cards right ── */
 .svc-content {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 60px;
-  margin-bottom: 80px;
   position: relative;
+  flex: 1;
 }
 
 .svc-text {
