@@ -113,9 +113,9 @@ const CardSwap: React.FC<CardSwapProps> = ({
                 transformOrigin: 'center center',
               });
             } else if (progress >= frontStart && progress < frontEnd) {
-              // Dropping — front card
+              // Dropping — front card (goes UP)
               const dropP = (progress - frontStart) / segLen;
-              const dropY = dropP * 600;
+              const dropY = dropP * -600;
 
               // Other cards promote forward
               refs.forEach((other, otherIdx) => {

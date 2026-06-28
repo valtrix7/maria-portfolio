@@ -85,22 +85,20 @@ const Services = () => {
   return (
     <section className="services" id="services" data-section="services" ref={sectionRef}>
       <div className="container">
-        <div className="svc-content">
-          <div className="svc-text">
-            <div className="label">Services</div>
-            <h2 className="display-lg">What I Do</h2>
-            <p className="body-lg svc-sub">
-              Three core disciplines, one unified approach — turning complex ideas into visual clarity.
-            </p>
-          </div>
+        <div className="svc-text">
+          <div className="label">Services</div>
+          <h2 className="display-lg">What I Do</h2>
+          <p className="body-lg svc-sub">
+            Three core disciplines, one unified approach — turning complex ideas into visual clarity.
+          </p>
+        </div>
 
+        <div className="svc-content">
           <CardSwap
             width={420}
             height={480}
             cardDistance={60}
             verticalDistance={70}
-            delay={4000}
-            pauseOnHover
             skewAmount={6}
             easing="elastic"
           >
