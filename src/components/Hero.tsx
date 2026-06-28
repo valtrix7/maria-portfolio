@@ -1,11 +1,9 @@
-import { useEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Hero.css';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const LiquidEther = lazy(() => import('./ui/liquid-ether'));
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
@@ -117,19 +115,6 @@ const Hero = () => {
 
   return (
     <section className="hero-wrapper" ref={heroRef} onMouseMove={handleMouseMove}>
-      <div className="hero-ether-bg">
-        <Suspense fallback={null}>
-          <LiquidEther
-            colors={['#E8611A', '#FF6B2B', '#FF9F43']}
-            autoDemo={true}
-            autoSpeed={0.4}
-            autoIntensity={1.8}
-            resolution={0.4}
-            mouseForce={15}
-            cursorSize={80}
-          />
-        </Suspense>
-      </div>
       <div className="hero-container">
         <div className="hero-glow" ref={glowRef} />
         <div className="hero-glow-spot hero-glow-spot--1" />
@@ -176,6 +161,11 @@ const Hero = () => {
               <span className="hero-expertise-label">{item.label}</span>
             </div>
           ))}
+        </div>
+
+        <div className="hero-signature">
+          <span className="hero-signature-text">Maria Islam</span>
+          <span className="hero-signature-line" />
         </div>
       </div>
     </section>
