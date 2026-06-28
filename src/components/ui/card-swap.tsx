@@ -39,6 +39,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(({ customClass, ...res
 Card.displayName = 'Card';
 
 type CardRef = RefObject<HTMLDivElement | null>;
+
 interface Slot {
   x: number;
   y: number;
@@ -50,21 +51,12 @@ const makeSlot = (i: number, distX: number, distY: number, total: number): Slot 
   x: i * distX,
   y: -i * distY,
   z: -i * distX * 1.5,
-  zIndex: total - i
+  zIndex: total - i,
 });
 
-const placeNow = (el: HTMLElement, slot: Slot, skew: number) =>
-  gsap.set(el, {
-    x: slot.x,
-    y: slot.y,
-    z: slot.z,
-    xPercent: -50,
-    yPercent: -50,
-    skewY: skew,
-    transformOrigin: 'center center',
-    zIndex: slot.zIndex,
-    force3D: true
-  });
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const CardSwap: React.FC<CardSwapProps> = ({
   width = 500,
@@ -73,65 +65,25 @@ const CardSwap: React.FC<CardSwapProps> = ({
   verticalDistance = 70,
   skewAmount = 6,
   easing = 'elastic',
-  children
+  children,
 }) => {
-  const config =
-    easing === 'elastic'
-      ? {
-          ease: 'elastic.out(0.6,0.9)',
-        }
-      : {
-          ease: 'power1.inOut',
-        };
-
   const childArr = useMemo(() => Children.toArray(children) as ReactElement<CardProps>[], [children]);
   const refs = useMemo<CardRef[]>(() => childArr.map(() => React.createRef<HTMLDivElement>()), [childArr.length]);
-  const container = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const pinWrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const total = refs.length;
     const trigger = pinWrapRef.current;
-    if (!trigger) return;
-
-    // Place cards in stack
-    refs.forEach((r, i) => {
-      if (r.current) placeNow(r.current, makeSlot(i, cardDistance, verticalDistance, total), skewAmount);
-    });
-
-    // Build the swap sequence for each card
-    // Each card needs to: drop down (y += 500), then move to back slot
-    const swapAnimations = [];
-
-    for (let s = 0; s < total; s++) {
-      const frontIdx = s;
-      const elFront = refs[frontIdx]?.current;
-      if (!elFront) continue;
-
-      // Calculate where this card ends up after all swaps ahead of it
-      // Front card drops, others promote, front goes to back
-      swapAnimations.push({
-        el: elFront,
-        dropY: 500,
-        finalSlot: makeSlot(total - 1, cardDistance, verticalDistance, total),
-      });
-    }
-
-    // Stagger offsets for each promotion step
-    const promoSlots: { idx: number; slot: Slot }[] = [];
-    for (let i = 0; i < total; i++) {
-      promoSlots.push({
-        idx: i,
-        slot: makeSlot(i, cardDistance, verticalDistance, total),
-      });
-    }
+    if (!trigger || prefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
+      // Pin the section and scrub progress
       ScrollTrigger.create({
         trigger,
         start: 'top top',
-        end: () => `+=${total * 600}`,
-        pin: container.current,
+        end: () => `+=${total * 700}`,
+        pin: containerRef.current,
         scrub: 1,
         anticipatePin: 1,
         invalidateOnRefresh: true,
@@ -139,42 +91,62 @@ const CardSwap: React.FC<CardSwapProps> = ({
           const progress = self.progress;
           const segLen = 1 / total;
 
-          // For each card, figure out which "swap" it's in and where it should be
           refs.forEach((r, cardIdx) => {
             const el = r.current;
             if (!el) return;
 
-            // Which swap cycle is this card's "turn" to be in front?
-            // Card at index 0 is front at progress 0, card at index 1 at segLen, etc.
-            const cardFrontStart = (cardIdx / total);
-            const cardFrontEnd = ((cardIdx + 1) / total);
+            // When this card is the front card
+            const frontStart = cardIdx * segLen;
+            const frontEnd = (cardIdx + 1) * segLen;
 
-            if (progress < cardFrontStart) {
-              // This card is still stacked behind, waiting its turn
-              const waitSlot = makeSlot(cardIdx, cardDistance, verticalDistance, total);
+            if (progress < frontStart) {
+              // Waiting in stack
+              const slot = makeSlot(cardIdx, cardDistance, verticalDistance, total);
               gsap.set(el, {
-                x: waitSlot.x,
-                y: waitSlot.y,
-                z: waitSlot.z,
-                zIndex: waitSlot.zIndex,
+                x: slot.x,
+                y: slot.y,
+                z: slot.z,
+                zIndex: slot.zIndex,
                 xPercent: -50,
                 yPercent: -50,
                 skewY: skewAmount,
                 transformOrigin: 'center center',
               });
-            } else if (progress >= cardFrontStart && progress < cardFrontEnd) {
-              // This card is the front card — it's dropping
-              const dropProgress = (progress - cardFrontStart) / segLen;
-              const dropY = gsap.utils.interpolate(0, 500, dropProgress);
+            } else if (progress >= frontStart && progress < frontEnd) {
+              // Dropping — front card
+              const dropP = (progress - frontStart) / segLen;
+              const dropY = dropP * 600;
+
+              // Other cards promote forward
+              refs.forEach((other, otherIdx) => {
+                if (otherIdx === cardIdx || !other.current) return;
+                const otherSlot = makeSlot(
+                  otherIdx < cardIdx ? otherIdx : otherIdx - 1,
+                  cardDistance,
+                  verticalDistance,
+                  total
+                );
+                gsap.set(other.current, {
+                  x: otherSlot.x,
+                  y: otherSlot.y,
+                  z: otherSlot.z,
+                  zIndex: otherSlot.zIndex,
+                  xPercent: -50,
+                  yPercent: -50,
+                  skewY: skewAmount,
+                  transformOrigin: 'center center',
+                });
+              });
+
               gsap.set(el, {
                 y: dropY,
                 xPercent: -50,
                 yPercent: -50,
                 skewY: skewAmount,
-                zIndex: total,
+                zIndex: total + 1,
               });
             } else {
-              // This card has already dropped — it's at the back
+              // Already dropped — at the back
               const backSlot = makeSlot(total - 1, cardDistance, verticalDistance, total);
               gsap.set(el, {
                 x: backSlot.x,
@@ -195,6 +167,26 @@ const CardSwap: React.FC<CardSwapProps> = ({
     return () => ctx.revert();
   }, [cardDistance, verticalDistance, skewAmount, easing, refs.length]);
 
+  // Place cards in initial stack
+  useEffect(() => {
+    const total = refs.length;
+    refs.forEach((r, i) => {
+      if (!r.current) return;
+      const slot = makeSlot(i, cardDistance, verticalDistance, total);
+      gsap.set(r.current, {
+        x: slot.x,
+        y: slot.y,
+        z: slot.z,
+        zIndex: slot.zIndex,
+        xPercent: -50,
+        yPercent: -50,
+        skewY: skewAmount,
+        transformOrigin: 'center center',
+        force3D: true,
+      });
+    });
+  }, [cardDistance, verticalDistance, skewAmount, refs.length]);
+
   const rendered = childArr.map((child, i) =>
     isValidElement<CardProps>(child)
       ? cloneElement(child, {
@@ -208,7 +200,7 @@ const CardSwap: React.FC<CardSwapProps> = ({
   return (
     <div ref={pinWrapRef} className="svc-cardswap-pinwrap">
       <div
-        ref={container}
+        ref={containerRef}
         className="svc-cardswap"
         style={{ width, height }}
       >
