@@ -61,8 +61,8 @@ function App() {
         <SelectedWork />
         <HowIWork />
         <Toolbox />
-        <Testimonials />
         <Recognition />
+        <Testimonials />
         <Contact />
       </main>
       <CinematicFooter />

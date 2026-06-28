@@ -13,28 +13,10 @@ const isMobile = () =>
   typeof window !== 'undefined' && window.innerWidth <= 768;
 
 const stats = [
-  { num: 50, suffix: '+', label: 'Projects Delivered' },
-  { num: 30, suffix: '+', label: 'Happy Clients' },
-  { num: 3, suffix: '+', label: 'Years Experience' },
-  { num: 100, suffix: '%', label: 'On-Time Delivery' },
-];
-
-const testimonials = [
-  {
-    quote: 'Maria transformed our pitch deck into a visual masterpiece. The animations told our story better than words ever could.',
-    name: 'Sarah Chen',
-    role: 'CEO, Urban Explorer',
-  },
-  {
-    quote: 'Her motion design elevated our entire brand. Every frame feels intentional, every transition meaningful.',
-    name: 'James Miller',
-    role: 'Creative Director, Summit Finance',
-  },
-  {
-    quote: 'Working with Maria was effortless. She understood our vision instantly and delivered beyond expectations.',
-    name: 'Aisha Patel',
-    role: 'Founder, Verde Sustainability',
-  },
+  { num: 50, suffix: '+', label: 'Projects Delivered', icon: '◆' },
+  { num: 30, suffix: '+', label: 'Happy Clients', icon: '●' },
+  { num: 3, suffix: '+', label: 'Years Experience', icon: '▲' },
+  { num: 100, suffix: '%', label: 'On-Time Delivery', icon: '■' },
 ];
 
 const Recognition: React.FC = () => {
@@ -52,7 +34,6 @@ const Recognition: React.FC = () => {
         return;
       }
 
-      // ---------- Header ----------
       gsap.fromTo('.rec-header > *',
         { y: 40, opacity: 0 },
         {
@@ -63,7 +44,6 @@ const Recognition: React.FC = () => {
         }
       );
 
-      // ---------- Scrubbed Bento Gallery: parallax-depth reveal ----------
       const tiles = gsap.utils.toArray<HTMLElement>('.rec-bento-item');
       tiles.forEach((tile, i) => {
         const depth = i % 3;
@@ -93,7 +73,6 @@ const Recognition: React.FC = () => {
         );
       });
 
-      // ---------- Counter animations ----------
       countersRef.current.forEach((el, i) => {
         if (!el) return;
         const target = stats[i].num;
@@ -113,7 +92,6 @@ const Recognition: React.FC = () => {
         });
       });
 
-      // ---------- Big display text ----------
       gsap.fromTo('.rec-display',
         { y: 80, opacity: 0, scale: 0.97 },
         {
@@ -123,7 +101,6 @@ const Recognition: React.FC = () => {
         }
       );
 
-      // ---------- Background SVG decorative drift ----------
       if (!mobile) {
         gsap.fromTo('.rec-deco',
           { scale: 0.5, opacity: 0 },
@@ -170,61 +147,30 @@ const Recognition: React.FC = () => {
         </div>
 
         <div className="rec-bento">
-          <div className="rec-bento-item rec-bento-stat rec-bento-stat--large">
+          <div className="rec-bento-item rec-bento-stat rec-bento-stat--wide">
+            <span className="rec-stat-icon">{stats[0].icon}</span>
             <span className="rec-stat-num" ref={(el) => (countersRef.current[0] = el)}>0{stats[0].suffix}</span>
             <span className="rec-stat-label">{stats[0].label}</span>
             <div className="rec-stat-glow" />
           </div>
 
-          <div className="rec-bento-item rec-bento-testimonial">
-            <div className="rec-quote-mark">"</div>
-            <p className="rec-quote">{testimonials[0].quote}</p>
-            <div className="rec-author">
-              <div className="rec-avatar"><span>{testimonials[0].name.charAt(0)}</span></div>
-              <div className="rec-author-info">
-                <span className="rec-author-name">{testimonials[0].name}</span>
-                <span className="rec-author-role">{testimonials[0].role}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="rec-bento-item rec-bento-stat rec-bento-stat--med">
+          <div className="rec-bento-item rec-bento-stat">
+            <span className="rec-stat-icon">{stats[1].icon}</span>
             <span className="rec-stat-num" ref={(el) => (countersRef.current[1] = el)}>0{stats[1].suffix}</span>
             <span className="rec-stat-label">{stats[1].label}</span>
           </div>
 
-          <div className="rec-bento-item rec-bento-stat rec-bento-stat--med">
+          <div className="rec-bento-item rec-bento-stat">
+            <span className="rec-stat-icon">{stats[2].icon}</span>
             <span className="rec-stat-num" ref={(el) => (countersRef.current[2] = el)}>0{stats[2].suffix}</span>
             <span className="rec-stat-label">{stats[2].label}</span>
           </div>
 
-          <div className="rec-bento-item rec-bento-testimonial">
-            <div className="rec-quote-mark">"</div>
-            <p className="rec-quote">{testimonials[1].quote}</p>
-            <div className="rec-author">
-              <div className="rec-avatar"><span>{testimonials[1].name.charAt(0)}</span></div>
-              <div className="rec-author-info">
-                <span className="rec-author-name">{testimonials[1].name}</span>
-                <span className="rec-author-role">{testimonials[1].role}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="rec-bento-item rec-bento-stat rec-bento-stat--full">
+          <div className="rec-bento-item rec-bento-stat rec-bento-stat--wide">
+            <span className="rec-stat-icon">{stats[3].icon}</span>
             <span className="rec-stat-num" ref={(el) => (countersRef.current[3] = el)}>0{stats[3].suffix}</span>
             <span className="rec-stat-label">{stats[3].label}</span>
-          </div>
-
-          <div className="rec-bento-item rec-bento-testimonial">
-            <div className="rec-quote-mark">"</div>
-            <p className="rec-quote">{testimonials[2].quote}</p>
-            <div className="rec-author">
-              <div className="rec-avatar"><span>{testimonials[2].name.charAt(0)}</span></div>
-              <div className="rec-author-info">
-                <span className="rec-author-name">{testimonials[2].name}</span>
-                <span className="rec-author-role">{testimonials[2].role}</span>
-              </div>
-            </div>
+            <div className="rec-stat-glow" />
           </div>
         </div>
 

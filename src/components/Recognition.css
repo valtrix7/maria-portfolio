@@ -45,7 +45,7 @@
   position: relative;
   overflow: hidden;
   justify-content: flex-end;
-  min-height: clamp(160px, 18vw, 240px);
+  min-height: clamp(180px, 20vw, 260px);
   transition: border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
@@ -54,26 +54,21 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(232, 97, 26, 0.05);
 }
 
-.rec-bento-stat--large {
+.rec-bento-stat--wide {
   grid-column: span 2;
-  min-height: clamp(200px, 22vw, 300px);
+  min-height: clamp(220px, 24vw, 320px);
 }
 
-.rec-bento-stat--full {
-  grid-column: span 3;
-  min-height: clamp(140px, 14vw, 180px);
-  flex-direction: row;
-  align-items: center;
-  gap: 24px;
-}
-
-.rec-bento-stat--full .rec-stat-num {
-  font-size: clamp(64px, 8vw, 120px);
+.rec-stat-icon {
+  font-size: clamp(14px, 1.2vw, 18px);
+  color: var(--accent);
+  opacity: 0.4;
+  margin-bottom: auto;
 }
 
 .rec-stat-num {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(56px, 7vw, 96px);
+  font-size: clamp(64px, 8vw, 120px);
   font-weight: 900;
   color: var(--accent);
   letter-spacing: -0.04em;
@@ -101,79 +96,6 @@
   height: 80%;
   background: radial-gradient(ellipse, rgba(232, 97, 26, 0.08) 0%, transparent 70%);
   pointer-events: none;
-}
-
-/* Testimonial cards */
-.rec-bento-testimonial {
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  justify-content: space-between;
-  transition: border-color 0.4s var(--ease), transform 0.4s var(--ease);
-}
-
-.rec-bento-testimonial:hover {
-  border-color: var(--border-light);
-  transform: translateY(-4px);
-}
-
-.rec-quote-mark {
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(48px, 5vw, 72px);
-  font-weight: 900;
-  color: var(--accent);
-  line-height: 0.8;
-  opacity: 0.3;
-}
-
-.rec-quote {
-  font-size: clamp(14px, 1.1vw, 17px);
-  color: var(--text-secondary);
-  line-height: 1.7;
-  flex: 1;
-  margin: 0;
-}
-
-.rec-author {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
-}
-
-.rec-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.rec-avatar span {
-  font-family: 'Outfit', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.rec-author-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.rec-author-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.rec-author-role {
-  font-size: 12px;
-  color: var(--text-muted);
 }
 
 /* ==========================================================================
@@ -228,8 +150,7 @@
   .rec-bento {
     grid-template-columns: repeat(2, 1fr);
   }
-  .rec-bento-stat--large { grid-column: span 2; }
-  .rec-bento-stat--full { grid-column: span 2; }
+  .rec-bento-stat--wide { grid-column: span 2; }
 }
 
 @media (max-width: 768px) {
@@ -237,17 +158,8 @@
     grid-template-columns: 1fr;
     gap: 14px;
   }
-  .rec-bento-stat--large,
-  .rec-bento-stat--full {
+  .rec-bento-stat--wide {
     grid-column: span 1;
-  }
-  .rec-bento-stat--full {
-    flex-direction: column;
-    align-items: flex-start;
-    min-height: 120px;
-  }
-  .rec-bento-stat--full .rec-stat-num {
-    font-size: clamp(48px, 12vw, 80px);
   }
   .rec-bento-item {
     padding: clamp(20px, 4vw, 28px);
@@ -255,36 +167,10 @@
     min-height: auto;
   }
   .rec-bento-stat {
-    min-height: 140px;
-  }
-  .rec-bento-stat--large {
-    min-height: 180px;
+    min-height: 160px;
   }
   .rec-stat-num {
-    font-size: clamp(40px, 10vw, 64px);
-  }
-  .rec-quote-mark {
-    font-size: 40px;
-  }
-  .rec-quote {
-    font-size: 14px;
-    line-height: 1.6;
-  }
-  .rec-author {
-    padding-top: 16px;
-  }
-  .rec-avatar {
-    width: 36px;
-    height: 36px;
-  }
-  .rec-avatar span {
-    font-size: 14px;
-  }
-  .rec-author-name {
-    font-size: 13px;
-  }
-  .rec-author-role {
-    font-size: 11px;
+    font-size: clamp(48px, 12vw, 80px);
   }
   .rec-display {
     font-size: clamp(28px, 8vw, 48px);
