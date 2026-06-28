@@ -100,7 +100,7 @@ const Services = () => {
             cardDistance={60}
             verticalDistance={70}
             skewAmount={6}
-            easing="elastic"
+            sectionRef={sectionRef}
           >
             {SERVICES.map((svc) => (
               <Card key={svc.title} customClass="svc-swap-card">

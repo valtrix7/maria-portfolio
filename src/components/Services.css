@@ -1,12 +1,12 @@
-/* ── Services Section ── */
 .services {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
   background: var(--bg);
+  display: flex;
+  flex-direction: column;
 }
 
-/* ── Text sits outside pin ── */
 .svc-text {
   padding: 80px 0 40px;
 }
@@ -16,24 +16,23 @@
   max-width: 480px;
 }
 
-/* ── Content layout ── */
 .svc-content {
+  flex: 1;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-bottom: 60px;
+  position: relative;
 }
 
 .svc-cardswap-pinwrap {
   position: relative;
-}
-
-.svc-content .svc-cardswap {
-  position: relative;
   margin-right: -80px;
 }
 
-/* ── Swap cards ── */
+.svc-cardswap-pinwrap .svc-cardswap {
+  position: relative;
+}
+
 .svc-swap-card {
   background: var(--bg) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -98,7 +97,6 @@
   text-align: center;
 }
 
-/* ── Tool marquee ── */
 .svc-marquee {
   overflow: hidden;
   padding: 20px 0;
@@ -125,18 +123,12 @@
   white-space: nowrap;
 }
 
-/* Mobile */
 @media (max-width: 768px) {
-  .svc-content {
-    justify-content: center;
-  }
-  .svc-cardswap {
-    transform: scale(0.65);
-  }
+  .svc-text { padding: 40px 0 20px; }
+  .svc-content { justify-content: center; }
+  .svc-cardswap-pinwrap { transform: scale(0.65); margin-right: 0; }
 }
 
 @media (max-width: 480px) {
-  .svc-cardswap {
-    transform: scale(0.5);
-  }
+  .svc-cardswap-pinwrap { transform: scale(0.5); }
 }

@@ -21,8 +21,8 @@ export interface CardSwapProps {
   cardDistance?: number;
   verticalDistance?: number;
   skewAmount?: number;
-  easing?: 'linear' | 'elastic';
   children: ReactNode;
+  sectionRef: React.RefObject<HTMLElement | null>;
 }
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -40,12 +40,7 @@ Card.displayName = 'Card';
 
 type CardRef = RefObject<HTMLDivElement | null>;
 
-interface Slot {
-  x: number;
-  y: number;
-  z: number;
-  zIndex: number;
-}
+interface Slot { x: number; y: number; z: number; zIndex: number; }
 
 const makeSlot = (i: number, distX: number, distY: number, total: number): Slot => ({
   x: i * distX,
@@ -53,6 +48,19 @@ const makeSlot = (i: number, distX: number, distY: number, total: number): Slot 
   z: -i * distX * 1.5,
   zIndex: total - i,
 });
+
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+const setCard = (el: HTMLElement, opts: { x: number; y: number; z: number; zIndex: number; skew: number }) => {
+  gsap.set(el, {
+    x: opts.x, y: opts.y, z: opts.z,
+    xPercent: -50, yPercent: -50,
+    zIndex: opts.zIndex,
+    skewY: opts.skew,
+    transformOrigin: 'center center',
+    force3D: true,
+  });
+};
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
@@ -64,97 +72,82 @@ const CardSwap: React.FC<CardSwapProps> = ({
   cardDistance = 60,
   verticalDistance = 70,
   skewAmount = 6,
-  easing = 'elastic',
   children,
+  sectionRef,
 }) => {
   const childArr = useMemo(() => Children.toArray(children) as ReactElement<CardProps>[], [children]);
   const refs = useMemo<CardRef[]>(() => childArr.map(() => React.createRef<HTMLDivElement>()), [childArr.length]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const pinWrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const total = refs.length;
-    const trigger = pinWrapRef.current;
-    if (!trigger || prefersReducedMotion()) return;
+    const section = sectionRef.current;
+    if (!section || prefersReducedMotion()) return;
+
+    // Place initial stack
+    refs.forEach((r, i) => {
+      if (!r.current) return;
+      const slot = makeSlot(i, cardDistance, verticalDistance, total);
+      setCard(r.current, { ...slot, skew: skewAmount });
+    });
 
     const ctx = gsap.context(() => {
-      // Pin the section and scrub progress
       ScrollTrigger.create({
-        trigger,
+        trigger: section,
         start: 'top top',
-        end: () => `+=${total * 700}`,
-        pin: containerRef.current,
+        end: `+=${total * 800}`,
+        pin: section,
         scrub: 1,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
           const progress = self.progress;
           const segLen = 1 / total;
+          const currentSeg = Math.min(Math.floor(progress * total), total - 1);
+          const segP = (progress - currentSeg * segLen) / segLen;
+
+          // Visual order: after currentSeg rotations
+          // order[0] = front (drops), order[total-1] = back (returns from drop)
+          const order = Array.from({ length: total }, (_, i) => (i + currentSeg) % total);
 
           refs.forEach((r, cardIdx) => {
             const el = r.current;
             if (!el) return;
 
-            // When this card is the front card
-            const frontStart = cardIdx * segLen;
-            const frontEnd = (cardIdx + 1) * segLen;
+            const posInOrder = order.indexOf(cardIdx);
 
-            if (progress < frontStart) {
-              // Waiting in stack
-              const slot = makeSlot(cardIdx, cardDistance, verticalDistance, total);
+            if (posInOrder === 0) {
+              // FRONT CARD: drops upward
+              const y = -600 * segP;
               gsap.set(el, {
-                x: slot.x,
-                y: slot.y,
-                z: slot.z,
-                zIndex: slot.zIndex,
-                xPercent: -50,
-                yPercent: -50,
+                x: 0, y, z: 0,
+                xPercent: -50, yPercent: -50,
+                zIndex: total + 1,
                 skewY: skewAmount,
                 transformOrigin: 'center center',
               });
-            } else if (progress >= frontStart && progress < frontEnd) {
-              // Dropping — front card (goes UP)
-              const dropP = (progress - frontStart) / segLen;
-              const dropY = dropP * -600;
-
-              // Other cards promote forward
-              refs.forEach((other, otherIdx) => {
-                if (otherIdx === cardIdx || !other.current) return;
-                const otherSlot = makeSlot(
-                  otherIdx < cardIdx ? otherIdx : otherIdx - 1,
-                  cardDistance,
-                  verticalDistance,
-                  total
-                );
-                gsap.set(other.current, {
-                  x: otherSlot.x,
-                  y: otherSlot.y,
-                  z: otherSlot.z,
-                  zIndex: otherSlot.zIndex,
-                  xPercent: -50,
-                  yPercent: -50,
-                  skewY: skewAmount,
-                  transformOrigin: 'center center',
-                });
-              });
-
+            } else if (posInOrder < total - 1 || currentSeg === 0) {
+              // PROMOTE: shift forward one slot
+              const fromSlot = makeSlot(posInOrder, cardDistance, verticalDistance, total);
+              const toSlot = makeSlot(posInOrder - 1, cardDistance, verticalDistance, total);
               gsap.set(el, {
-                y: dropY,
-                xPercent: -50,
-                yPercent: -50,
+                x: lerp(fromSlot.x, toSlot.x, segP),
+                y: lerp(fromSlot.y, toSlot.y, segP),
+                z: lerp(fromSlot.z, toSlot.z, segP),
+                zIndex: Math.round(lerp(fromSlot.zIndex, toSlot.zIndex, segP)),
+                xPercent: -50, yPercent: -50,
                 skewY: skewAmount,
-                zIndex: total + 1,
+                transformOrigin: 'center center',
               });
             } else {
-              // Already dropped — at the back
-              const backSlot = makeSlot(total - 1, cardDistance, verticalDistance, total);
+              // RETURN: last card comes back from y=-600 to slot total-2
+              const toSlot = makeSlot(total - 2, cardDistance, verticalDistance, total);
               gsap.set(el, {
-                x: backSlot.x,
-                y: backSlot.y,
-                z: backSlot.z,
-                zIndex: backSlot.zIndex,
-                xPercent: -50,
-                yPercent: -50,
+                x: lerp(0, toSlot.x, segP),
+                y: lerp(-600, toSlot.y, segP),
+                z: lerp(0, toSlot.z, segP),
+                zIndex: Math.round(lerp(total + 1, toSlot.zIndex, segP)),
+                xPercent: -50, yPercent: -50,
                 skewY: skewAmount,
                 transformOrigin: 'center center',
               });
@@ -162,30 +155,10 @@ const CardSwap: React.FC<CardSwapProps> = ({
           });
         },
       });
-    });
+    }, section);
 
     return () => ctx.revert();
-  }, [cardDistance, verticalDistance, skewAmount, easing, refs.length]);
-
-  // Place cards in initial stack
-  useEffect(() => {
-    const total = refs.length;
-    refs.forEach((r, i) => {
-      if (!r.current) return;
-      const slot = makeSlot(i, cardDistance, verticalDistance, total);
-      gsap.set(r.current, {
-        x: slot.x,
-        y: slot.y,
-        z: slot.z,
-        zIndex: slot.zIndex,
-        xPercent: -50,
-        yPercent: -50,
-        skewY: skewAmount,
-        transformOrigin: 'center center',
-        force3D: true,
-      });
-    });
-  }, [cardDistance, verticalDistance, skewAmount, refs.length]);
+  }, [cardDistance, verticalDistance, skewAmount, refs.length, sectionRef]);
 
   const rendered = childArr.map((child, i) =>
     isValidElement<CardProps>(child)
@@ -198,12 +171,8 @@ const CardSwap: React.FC<CardSwapProps> = ({
   );
 
   return (
-    <div ref={pinWrapRef} className="svc-cardswap-pinwrap">
-      <div
-        ref={containerRef}
-        className="svc-cardswap"
-        style={{ width, height }}
-      >
+    <div className="svc-cardswap-pinwrap">
+      <div ref={containerRef} className="svc-cardswap" style={{ width, height }}>
         {rendered}
       </div>
     </div>
