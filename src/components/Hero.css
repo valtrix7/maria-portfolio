@@ -443,17 +443,17 @@
   display: flex;
   align-items: center;
   gap: 0;
-  padding: 16px 40px;
+  padding: 16px 60px;
   width: max-content;
   will-change: transform;
 }
 
 /* Spacing between major groups */
-.hero-mq-chips { margin-right: 40px; }
-.hero-mq-card--t { margin-right: 40px; }
-.hero-mq-card--proj { margin-right: 12px; }
-.hero-mq-card--work { margin-right: 40px; }
-.hero-mq-badge-wrap { margin-right: 40px; }
+.hero-mq-chips { margin-right: 56px; }
+.hero-mq-card--t { margin-right: 56px; }
+.hero-mq-card--proj { margin-right: 16px; }
+.hero-mq-card--work { margin-right: 56px; }
+.hero-mq-badge-wrap { margin-right: 56px; }
 
 /* ── Base chip ── */
 .hero-mq-chip {
