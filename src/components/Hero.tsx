@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { MetalButton } from './ui/metal-button';
+import { LiquidButton } from './ui/liquid-button';
 import './Hero.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -295,9 +295,9 @@ const Hero = () => {
             <p className="hero-desc-right">
               From concept to screen, I craft visual stories through motion, design, and strategic thinking. Bringing brands to life with purposeful animation.
             </p>
-            <MetalButton variant="primary" className="hero-cta-btn">
+            <LiquidButton variant="default" size="lg" className="hero-cta-btn">
               Let's Talk
-            </MetalButton>
+            </LiquidButton>
           </div>
         </div>
 
