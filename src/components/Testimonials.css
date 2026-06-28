@@ -1,128 +1,116 @@
-/* ==========================================================================
-   Testimonials — Pinned card stack
-   ========================================================================== */
+/* ── Testimonials ─────────────────────────────────────────────────────────── */
 
+/* The section is purely a scroll container — no block padding needed. */
 .testimonials {
-  position: relative;
-  background: var(--bg);
-  overflow: hidden;
-  padding-block: var(--section-py);
+  padding-block: 0;
 }
 
-.test-header {
-  margin-bottom: clamp(32px, 4vw, 60px);
+/* The ContainerScroll div that provides 300vh of scroll distance. */
+.testimonials-scroll {
+  height: 300vh;
 }
 
-/* ─── Pin container ─── */
-.test-pin {
-  position: relative;
-  height: 100dvh;
+/* Sticky viewport that stays pinned while the container scrolls. */
+.testimonials-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: clamp(32px, 5vw, 56px);
+  padding: clamp(24px, 4vw, 48px) var(--container-px);
   overflow: hidden;
 }
 
-/* ─── Cards ─── */
-.test-cards-container {
-  position: relative;
-  height: 420px;
-  width: 380px;
-  max-width: 90vw;
-  perspective: 1000px;
-}
-
-/* ─── Card ─── */
-.test-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+/* Section header --------------------------------------------------------- */
+.testimonials-header {
   text-align: center;
-  gap: 20px !important;
-  will-change: transform, opacity;
-}
-
-.test-quote {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(14px, 1.2vw, 17px);
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.7;
-  margin: 0;
-  font-style: italic;
-  max-width: 85%;
-  margin-inline: auto;
-}
-
-/* ─── Stars ─── */
-.test-stars {
-  color: var(--accent, #E8611A);
-}
-
-/* ─── Author ─── */
-.test-author {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  width: 100%;
-}
-
-.test-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid rgba(120, 113, 108, 0.3);
   flex-shrink: 0;
 }
 
-.test-author-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  text-align: left;
+.testimonials-header .label {
+  margin-bottom: 12px;
 }
 
-.test-name {
-  font-family: 'Outfit', sans-serif;
+.testimonials-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4.5vw, 60px);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+/* Card stack container ---------------------------------------------------- */
+.testimonials-cards {
+  width: 360px;
+  height: 480px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .testimonials-cards {
+    width: calc(100vw - var(--container-px) * 2);
+    height: 420px;
+  }
+}
+
+/* Stars ------------------------------------------------------------------ */
+.testimonials-stars {
+  color: var(--accent);
+}
+
+/* Quote ------------------------------------------------------------------ */
+.testimonials-quote {
+  width: 100%;
+  margin: 0;              /* reset browser blockquote indent */
+  text-align: center;
+  font-size: clamp(13px, 1vw, 15px);
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* Author row ------------------------------------------------------------- */
+.testimonials-author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.testimonials-avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.testimonials-name {
+  display: block;
   font-size: 15px;
   font-weight: 600;
-  color: #fff;
-  letter-spacing: -0.01em;
+  color: var(--text);
+  line-height: 1.3;
 }
 
-.test-role {
+.testimonials-role {
+  display: block;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-/* ==========================================================================
-   Mobile
-   ========================================================================== */
-
-@media (max-width: 768px) {
-  .test-cards-container {
-    height: 380px;
-    width: 320px;
-  }
-
-  .test-card {
-    padding: 20px !important;
-  }
-
-  .test-quote {
-    font-size: 13px;
-  }
-
-  .test-avatar {
-    width: 40px;
-    height: 40px;
-  }
-
-  .test-name {
-    font-size: 14px;
-  }
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
 }

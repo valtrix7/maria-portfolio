@@ -12,8 +12,8 @@ import CreativeManifesto from './components/CreativeManifesto';
 import SelectedWork from './components/SelectedWork';
 import HowIWork from './components/HowIWork';
 import Toolbox from './components/Toolbox';
-import Recognition from './components/Recognition';
 import Testimonials from './components/Testimonials';
+import Recognition from './components/Recognition';
 import Contact from './components/Contact';
 import { CinematicFooter } from './components/ui/motion-footer';
 
@@ -61,8 +61,8 @@ function App() {
         <SelectedWork />
         <HowIWork />
         <Toolbox />
-        <Recognition />
         <Testimonials />
+        <Recognition />
         <Contact />
       </main>
       <CinematicFooter />
