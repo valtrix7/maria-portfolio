@@ -12,7 +12,7 @@ import About from './components/About';
 import CreativeManifesto from './components/CreativeManifesto';
 import SelectedWork from './components/SelectedWork';
 import HowIWork from './components/HowIWork';
-import Toolbox from './components/Toolbox';
+import Services from './components/Services';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
 import { CinematicFooter } from './components/ui/motion-footer';
@@ -63,7 +63,7 @@ function App() {
         <CreativeManifesto />
         <SelectedWork />
         <HowIWork />
-        <Toolbox />
+        <Services />
         <Testimonials />
         <Contact />
       </main>
