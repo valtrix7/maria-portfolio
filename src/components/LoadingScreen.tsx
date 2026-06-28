@@ -111,7 +111,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
     if (shapes) {
       gsap.set(shapes, { opacity: 0, scale: 0, rotation: -90 });
       tl.to(shapes, {
-        opacity: 0.15,
+        opacity: 0.25,
         scale: 1,
         rotation: 0,
         stagger: { each: 0.08, from: 'random' },

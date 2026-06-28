@@ -16,7 +16,8 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  z-index: 2;
+  position: relative;
+  z-index: 3;
 }
 
 /* Counter */
@@ -73,7 +74,7 @@
   width: 100%;
   height: 50%;
   background: #0a0a0a;
-  z-index: 1;
+  z-index: 4;
 }
 
 .ls-curtain-top {
@@ -90,7 +91,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
 }
 
