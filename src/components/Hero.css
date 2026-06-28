@@ -442,11 +442,18 @@
 .hero-mq-track {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 0;
   padding: 16px 40px;
   width: max-content;
   will-change: transform;
 }
+
+/* Spacing between major groups */
+.hero-mq-chips { margin-right: 40px; }
+.hero-mq-card--t { margin-right: 40px; }
+.hero-mq-card--proj { margin-right: 12px; }
+.hero-mq-card--work { margin-right: 40px; }
+.hero-mq-badge-wrap { margin-right: 40px; }
 
 /* ── Base chip ── */
 .hero-mq-chip {
@@ -758,14 +765,13 @@
 .hero-mq-chips {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
-  padding: 0 12px;
 }
 
 .hero-mq-skills-row {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 /* ── Mobile: hide marquee ── */
