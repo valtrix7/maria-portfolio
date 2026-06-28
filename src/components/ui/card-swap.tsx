@@ -5,10 +5,9 @@ import React, {
   isValidElement,
   ReactElement,
   ReactNode,
-  RefObject,
   useEffect,
   useMemo,
-  useRef
+  useRef,
 } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -38,8 +37,6 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(({ customClass, ...res
 ));
 Card.displayName = 'Card';
 
-type CardRef = RefObject<HTMLDivElement | null>;
-
 interface Slot { x: number; y: number; z: number; zIndex: number; }
 
 const makeSlot = (i: number, distX: number, distY: number, total: number): Slot => ({
@@ -48,19 +45,6 @@ const makeSlot = (i: number, distX: number, distY: number, total: number): Slot 
   z: -i * distX * 1.5,
   zIndex: total - i,
 });
-
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
-const setCard = (el: HTMLElement, opts: { x: number; y: number; z: number; zIndex: number; skew: number }) => {
-  gsap.set(el, {
-    x: opts.x, y: opts.y, z: opts.z,
-    xPercent: -50, yPercent: -50,
-    zIndex: opts.zIndex,
-    skewY: opts.skew,
-    transformOrigin: 'center center',
-    force3D: true,
-  });
-};
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
@@ -76,88 +60,93 @@ const CardSwap: React.FC<CardSwapProps> = ({
   sectionRef,
 }) => {
   const childArr = useMemo(() => Children.toArray(children) as ReactElement<CardProps>[], [children]);
-  const refs = useMemo<CardRef[]>(() => childArr.map(() => React.createRef<HTMLDivElement>()), [childArr.length]);
+  const refs = useMemo<React.RefObject<HTMLDivElement | null>[]>(
+    () => Array.from({ length: childArr.length }, () => React.createRef<HTMLDivElement>()),
+    [childArr.length]
+  );
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const total = refs.length;
     const section = sectionRef.current;
-    if (!section || prefersReducedMotion()) return;
+    if (!section || total === 0 || prefersReducedMotion()) return;
 
-    // Place initial stack
-    refs.forEach((r, i) => {
-      if (!r.current) return;
+    // Place cards in initial stack
+    const cards = refs.map((r) => r.current).filter(Boolean) as HTMLElement[];
+    if (cards.length !== total) return;
+
+    cards.forEach((el, i) => {
       const slot = makeSlot(i, cardDistance, verticalDistance, total);
-      setCard(r.current, { ...slot, skew: skewAmount });
+      gsap.set(el, {
+        x: slot.x, y: slot.y, z: slot.z,
+        xPercent: -50, yPercent: -50,
+        zIndex: slot.zIndex,
+        skewY: skewAmount,
+        transformOrigin: 'center center',
+        force3D: true,
+      });
     });
 
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
+    // Build timeline: one swap segment per card
+    const tl = gsap.timeline({
+      scrollTrigger: {
         trigger: section,
         start: 'top top',
         end: `+=${total * 800}`,
         pin: section,
-        scrub: 1,
+        scrub: 1.5,
         anticipatePin: 1,
         invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          const segLen = 1 / total;
-          const currentSeg = Math.min(Math.floor(progress * total), total - 1);
-          const segP = (progress - currentSeg * segLen) / segLen;
+      },
+    });
 
-          // Visual order: after currentSeg rotations
-          // order[0] = front (drops), order[total-1] = back (returns from drop)
-          const order = Array.from({ length: total }, (_, i) => (i + currentSeg) % total);
+    for (let s = 0; s < total; s++) {
+      const segment = gsap.timeline();
 
-          refs.forEach((r, cardIdx) => {
-            const el = r.current;
-            if (!el) return;
+      // The visual order at the START of this segment
+      // order[0] = front (will drop)
+      const order = Array.from({ length: total }, (_, i) => (i + s) % total);
 
-            const posInOrder = order.indexOf(cardIdx);
+      // Front card drops upward
+      const frontEl = refs[order[0]].current;
+      if (frontEl) {
+        segment.to(frontEl, { y: -600, duration: 0.7, ease: 'power3.out' }, 0);
+      }
 
-            if (posInOrder === 0) {
-              // FRONT CARD: drops upward
-              const y = -600 * segP;
-              gsap.set(el, {
-                x: 0, y, z: 0,
-                xPercent: -50, yPercent: -50,
-                zIndex: total + 1,
-                skewY: skewAmount,
-                transformOrigin: 'center center',
-              });
-            } else if (posInOrder < total - 1 || currentSeg === 0) {
-              // PROMOTE: shift forward one slot
-              const fromSlot = makeSlot(posInOrder, cardDistance, verticalDistance, total);
-              const toSlot = makeSlot(posInOrder - 1, cardDistance, verticalDistance, total);
-              gsap.set(el, {
-                x: lerp(fromSlot.x, toSlot.x, segP),
-                y: lerp(fromSlot.y, toSlot.y, segP),
-                z: lerp(fromSlot.z, toSlot.z, segP),
-                zIndex: Math.round(lerp(fromSlot.zIndex, toSlot.zIndex, segP)),
-                xPercent: -50, yPercent: -50,
-                skewY: skewAmount,
-                transformOrigin: 'center center',
-              });
-            } else {
-              // RETURN: last card comes back from y=-600 to slot total-2
-              const toSlot = makeSlot(total - 2, cardDistance, verticalDistance, total);
-              gsap.set(el, {
-                x: lerp(0, toSlot.x, segP),
-                y: lerp(-600, toSlot.y, segP),
-                z: lerp(0, toSlot.z, segP),
-                zIndex: Math.round(lerp(total + 1, toSlot.zIndex, segP)),
-                xPercent: -50, yPercent: -50,
-                skewY: skewAmount,
-                transformOrigin: 'center center',
-              });
-            }
+      // Other cards promote forward one slot
+      for (let p = 1; p < total; p++) {
+        const el = refs[order[p]].current;
+        if (!el) continue;
+        const toSlot = makeSlot(p - 1, cardDistance, verticalDistance, total);
+        segment.to(el, {
+          x: toSlot.x, y: toSlot.y, z: toSlot.z,
+          zIndex: toSlot.zIndex,
+          duration: 0.6, ease: 'power3.out',
+        }, 0);
+      }
+
+      // The dropped card returns to back of stack
+      // At end of segment, snap it to the back slot
+      segment.call(() => {
+        if (frontEl) {
+          const backSlot = makeSlot(total - 1, cardDistance, verticalDistance, total);
+          gsap.set(frontEl, {
+            x: backSlot.x, y: backSlot.y, z: backSlot.z,
+            zIndex: backSlot.zIndex,
+            xPercent: -50, yPercent: -50,
+            skewY: skewAmount,
+            transformOrigin: 'center center',
           });
-        },
+        }
       });
-    }, section);
 
-    return () => ctx.revert();
+      tl.add(segment, s * 0.5);
+    }
+
+    return () => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    };
   }, [cardDistance, verticalDistance, skewAmount, refs.length, sectionRef]);
 
   const rendered = childArr.map((child, i) =>
