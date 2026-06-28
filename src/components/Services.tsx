@@ -65,17 +65,6 @@ const Services = () => {
     if (prefersReducedMotion()) return;
 
     const ctx = gsap.context(() => {
-      // CardSwap entrance
-      gsap.fromTo('.svc-cardswap',
-        { y: 80, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.svc-cardswap', start: 'top 85%' }
-        }
-      );
-
       // Marquee scroll
       if (marqueeRef.current) {
         const track = marqueeRef.current.querySelector('.svc-mq-track') as HTMLElement;
