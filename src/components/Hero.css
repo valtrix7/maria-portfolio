@@ -442,7 +442,7 @@
 .hero-mq-track {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 32px;
   padding: 16px 40px;
   width: max-content;
   will-change: transform;
@@ -755,11 +755,12 @@
 }
 
 /* ── Skill chip grid ── */
-.hero-mq-skills {
+.hero-mq-chips {
   display: flex;
   flex-direction: column;
   gap: 8px;
   flex-shrink: 0;
+  padding: 0 12px;
 }
 
 .hero-mq-skills-row {

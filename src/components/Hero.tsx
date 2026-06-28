@@ -73,7 +73,7 @@ const MqTestimonialStack = () => {
             </div>
           </div>
           <p className="hero-mq-t-quote">{t.quote}</p>
-          <span className="hero-mq-t-more">Learn more</span>
+          <span className="hero-mq-t-more">View more</span>
         </div>
       ))}
       <div className="hero-mq-t-dots">
@@ -87,11 +87,6 @@ const MqTestimonialStack = () => {
 
 const MqSet = () => (
   <>
-    <div className="hero-mq-loose">
-      <MqChip>Animation</MqChip>
-      <MqChip href="#work">More</MqChip>
-    </div>
-
     <MqTestimonialStack />
 
     <div className="hero-mq-card hero-mq-card--proj">
@@ -136,20 +131,22 @@ const MqSet = () => (
         </div>
       </div>
     </a>
-
-    <div className="hero-mq-skills">
-      <div className="hero-mq-skills-row">
-        <MqChip>Design</MqChip>
-        <MqChip>Development</MqChip>
-        <MqChip>Animation</MqChip>
-      </div>
-      <div className="hero-mq-skills-row">
-        <MqChip>User Interface</MqChip>
-        <MqChip>GSAP</MqChip>
-        <MqChip href="#contact">More</MqChip>
-      </div>
-    </div>
   </>
+);
+
+const MqChips = () => (
+  <div className="hero-mq-chips">
+    <div className="hero-mq-skills-row">
+      <MqChip>Animation</MqChip>
+      <MqChip>Design</MqChip>
+      <MqChip>Development</MqChip>
+    </div>
+    <div className="hero-mq-skills-row">
+      <MqChip>User Interface</MqChip>
+      <MqChip>GSAP</MqChip>
+      <MqChip href="#contact">More</MqChip>
+    </div>
+  </div>
 );
 
 const Hero = () => {
@@ -303,8 +300,10 @@ const Hero = () => {
         {/* ── Card marquee strip ── */}
         <div className="hero-marquee-rail" aria-hidden="true">
           <div className="hero-mq-track" ref={marqueeRef}>
+            <MqChips />
             <MqSet />
             <MqSet />
+            <MqChips />
           </div>
         </div>
 
