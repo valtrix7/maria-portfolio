@@ -5,30 +5,30 @@
   overflow: hidden;
 }
 
-/* ── Content layout: text left, cards left-aligned ── */
+/* ── Content layout: text left, cards right ── */
 .svc-content {
   display: flex;
   align-items: flex-start;
-  gap: 40px;
+  gap: 60px;
   margin-bottom: 80px;
   position: relative;
 }
 
 .svc-text {
-  flex: 0 0 280px;
-  padding-top: 40px;
+  flex: 1;
+  padding-top: 60px;
 }
 
 .svc-sub {
   margin-top: 16px;
-  max-width: 280px;
+  max-width: 320px;
 }
 
 /* ── CardSwap wrapper ── */
 .svc-content .svc-cardswap {
   position: relative;
   flex-shrink: 0;
-  margin-left: -60px;
+  margin-right: -80px;
 }
 
 /* ── Swap cards ── */
