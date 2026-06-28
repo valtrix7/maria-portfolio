@@ -110,9 +110,11 @@ const CardSwap: React.FC<CardSwapProps> = ({
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container.current,
-        start: 'top 80%',
-        end: `+=${swapsNeeded * swapDuration * 100}`,
+        start: 'top top',
+        end: `+=${swapsNeeded * swapDuration * 800}`,
         scrub: 1,
+        pin: true,
+        anticipatePin: 1,
       }
     });
 
