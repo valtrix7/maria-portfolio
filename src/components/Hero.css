@@ -10,6 +10,15 @@
   overflow: hidden;
 }
 
+.hero-ether-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.6;
+  border-radius: clamp(24px, 3vw, 40px);
+  overflow: hidden;
+}
+
 .hero-container {
   position: relative;
   width: 100%;
