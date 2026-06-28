@@ -25,9 +25,9 @@ const About = () => {
         { y: mobile ? 30 : 50, opacity: 0 },
         {
           y: 0, opacity: 1,
-          stagger: mobile ? 0.08 : 0.12,
+          duration: mobile ? 0.7 : 1, stagger: mobile ? 0.08 : 0.12,
           ease: 'power3.out',
-          scrollTrigger: { trigger: '.about-text-block', start: 'top 80%', end: 'top 40%', scrub: 1 }
+          scrollTrigger: { trigger: '.about-text-block', start: 'top 82%' }
         }
       );
 
