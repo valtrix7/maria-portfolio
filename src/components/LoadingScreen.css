@@ -83,3 +83,18 @@
 .ls-curtain-bottom {
   bottom: 0;
 }
+
+/* Background SVG */
+.ls-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ls-shape {
+  transform-origin: center;
+  will-change: transform, opacity;
+}
