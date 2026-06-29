@@ -267,6 +267,7 @@
   .services-stage {
     min-height: auto;
     display: block;
+    overflow: visible;
   }
 
   .services-stage-inner {
@@ -282,8 +283,12 @@
     color: var(--text);
   }
 
+  .services-row.is-active .services-row-title {
+    transform: none;
+  }
+
   .services-row-mark {
-    transform: scaleX(0.4);
+    transform: scaleX(1);
   }
 
   .services-detail-inner {

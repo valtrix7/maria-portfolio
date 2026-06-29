@@ -74,14 +74,22 @@ const SelectedWork = () => {
 
       if (mobile) {
         gsap.set(track, { x: 0 });
-        gsap.set('.h-progress-fill', { scaleX: 1 });
-        if (counterRef.current) counterRef.current.textContent = `0${slides.length}`;
-        dotsRef.current.forEach((dot) => {
-          if (dot) {
-            dot.style.opacity = '1';
-            dot.style.width = '8px';
-          }
-        });
+
+        const updateMobileProgress = () => {
+          const maxScroll = Math.max(track.scrollWidth - track.clientWidth, 0);
+          const progress = maxScroll > 0 ? track.scrollLeft / maxScroll : 0;
+          const rawIndex = maxScroll > 0 ? Math.round(progress * (slides.length - 1)) : 0;
+          const index = Math.min(Math.max(rawIndex, 0), slides.length - 1);
+
+          if (counterRef.current) counterRef.current.textContent = `0${index + 1}`;
+          if (progressRef.current) progressRef.current.style.transform = `scaleX(${Math.max(progress, 0.08)})`;
+
+          dotsRef.current.forEach((dot, i) => {
+            if (!dot) return;
+            dot.style.opacity = i === index ? '1' : '0.3';
+            dot.style.width = i === index ? '24px' : '8px';
+          });
+        };
 
         gsap.utils.toArray<HTMLElement>('.h-slide').forEach((slide) => {
           const targets = slide.querySelectorAll('.h-slide-frame, .h-slide-info > *');
@@ -100,8 +108,17 @@ const SelectedWork = () => {
             }
           );
         });
-        return;
+
+        track.addEventListener('scroll', updateMobileProgress, { passive: true });
+        window.addEventListener('resize', updateMobileProgress);
+        updateMobileProgress();
+
+        return () => {
+          track.removeEventListener('scroll', updateMobileProgress);
+          window.removeEventListener('resize', updateMobileProgress);
+        };
       }
+      if (mobile) return;
 
       const getScrollAmount = () => track.scrollWidth - window.innerWidth;
 

@@ -13,19 +13,20 @@
 .hero-container {
   position: relative;
   width: 100%;
-  border-radius: clamp(24px, 3vw, 40px);
+  border-radius: clamp(26px, 3vw, 42px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(ellipse 90% 70% at 50% 45%, rgba(255, 106, 0, 0.35) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 50% at 70% 60%, rgba(255, 59, 31, 0.25) 0%, transparent 55%),
-    radial-gradient(ellipse 40% 40% at 30% 70%, rgba(106, 27, 61, 0.3) 0%, transparent 50%),
-    linear-gradient(170deg, #1a0a00 0%, #0d0508 40%, #0a0a0a 100%);
+    radial-gradient(ellipse 90% 70% at 50% 45%, rgba(255, 106, 0, 0.38) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 70% 60%, rgba(255, 59, 31, 0.28) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 30% 70%, rgba(106, 27, 61, 0.34) 0%, transparent 50%),
+    linear-gradient(170deg, #1f0c02 0%, #12070a 42%, #0a0a0a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04),
-    0 32px 100px -20px rgba(255, 106, 0, 0.12),
-    0 60px 140px -40px rgba(0, 0, 0, 0.7);
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 40px 120px -28px rgba(255, 106, 0, 0.16),
+    0 70px 160px -48px rgba(0, 0, 0, 0.82);
 }
 
 /* ---------- Cursor glow ---------- */
@@ -101,7 +102,7 @@
   grid-template-columns: 1fr 1.1fr 0.9fr;
   align-items: center;
   gap: clamp(16px, 2vw, 32px);
-  padding: 0 clamp(24px, 4vw, 60px);
+  padding: clamp(96px, 11vw, 140px) clamp(24px, 4vw, 60px) clamp(48px, 6vw, 72px);
 }
 
 /* ---------- Left: Name ---------- */
@@ -254,7 +255,7 @@
   }
 
   .hero-container {
-    min-height: clamp(620px, 100svh, 760px);
+    min-height: auto;
   }
 
   .hero-content {
@@ -343,8 +344,8 @@
   }
 
   .hero-container {
-    border-radius: 20px;
-    min-height: clamp(560px, 100svh - 16px, 700px);
+    border-radius: 22px;
+    min-height: auto;
   }
 
   .hero-content {

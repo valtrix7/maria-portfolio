@@ -177,22 +177,37 @@
   }
 
   .h-track {
-    display: grid;
-    gap: 18px;
+    display: flex;
+    gap: 16px;
+    height: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0 24px 8px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    will-change: auto;
+  }
+
+  .h-track::-webkit-scrollbar {
+    display: none;
   }
 
   .h-slide {
-    width: 100%;
+    width: min(82vw, 340px);
+    min-width: min(82vw, 340px);
     height: auto;
     flex-direction: column;
     align-items: stretch;
-    padding: 0 24px;
+    justify-content: flex-start;
+    padding: 0;
     gap: 16px;
+    scroll-snap-align: start;
   }
 
   .h-slide-frame {
     width: 100%;
-    height: clamp(220px, 52vw, 320px);
+    height: clamp(240px, 66vw, 340px);
     border-radius: 14px;
   }
 
@@ -220,6 +235,6 @@
   }
 
   .h-dots {
-    display: none;
+    display: flex;
   }
 }

@@ -89,6 +89,21 @@ const Services: React.FC = () => {
       if (row) row.classList.toggle('is-active', active);
     };
 
+    if (mobile) {
+      detailsRef.current.forEach((detail) => {
+        if (!detail) return;
+        detail.style.height = 'auto';
+        detail.style.opacity = '1';
+      });
+      marksRef.current.forEach((mark) => {
+        if (!mark) return;
+        mark.style.transform = 'scaleX(1)';
+        mark.style.transformOrigin = 'left center';
+      });
+      rowsRef.current.forEach((_, i) => setRowActive(i, true));
+      return;
+    }
+
     const ctx = gsap.context(() => {
       // ── Header reveal ──────────────────────────────────────────────────
       gsap.fromTo('.services-header > *',
@@ -103,22 +118,20 @@ const Services: React.FC = () => {
       );
 
       // ── Reduced motion / mobile: open every detail, no pin ─────────────
-      if (reduce || mobile) {
+      if (reduce) {
         detailsRef.current.forEach((d) => {
           if (d) gsap.set(d, { height: 'auto', opacity: 1 });
         });
         marksRef.current.forEach((m) => m && gsap.set(m, { scaleX: 1 }));
         rowsRef.current.forEach((_, i) => setRowActive(i, true));
-        if (!mobile) {
-          // Reduced-motion desktop still gets a gentle per-row fade-in.
-          gsap.fromTo('.services-row',
-            { opacity: 0, y: 24 },
-            {
-              opacity: 1, y: 0, duration: 0.6, stagger: 0.12, ease: 'power2.out',
-              scrollTrigger: { trigger: '.services-list', start: 'top 75%' },
-            }
-          );
-        }
+        // Reduced-motion desktop still gets a gentle per-row fade-in.
+        gsap.fromTo('.services-row',
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1, y: 0, duration: 0.6, stagger: 0.12, ease: 'power2.out',
+            scrollTrigger: { trigger: '.services-list', start: 'top 75%' },
+          }
+        );
         return;
       }
 
