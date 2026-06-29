@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
 import LoadingScreen from './components/LoadingScreen';
-import Header from './components/Header';
+import IslandNav from './components/IslandNav';
 import AnimationCanvas from './components/AnimationCanvas';
 import SmoothCursor from './components/SmoothCursor';
 import Hero from './components/Hero';
@@ -35,6 +35,10 @@ function App() {
 
     lenis.on('scroll', ScrollTrigger.update);
 
+    // Expose the single Lenis instance so scroll-driven sections can drive
+    // programmatic scrolls (e.g. Services row clicks) through the same engine.
+    (window as Window & { __lenis?: Lenis }).__lenis = lenis;
+
     const tickerCb = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tickerCb);
     gsap.ticker.lagSmoothing(0);
@@ -48,6 +52,7 @@ function App() {
     return () => {
       window.removeEventListener('load', refresh);
       gsap.ticker.remove(tickerCb);
+      delete (window as Window & { __lenis?: Lenis }).__lenis;
       lenis.destroy();
     };
   }, []);
@@ -57,7 +62,7 @@ function App() {
       {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
       <AnimationCanvas />
       <SmoothCursor />
-      <Header />
+      <IslandNav />
       <main>
         <Hero />
         <About />

@@ -142,6 +142,27 @@
   transform: translateX(clamp(8px, 1.2vw, 20px));
 }
 
+/* The title text is a real button (accordion pattern) — strip native chrome
+   and inherit the heading's type so it looks identical to a heading. */
+.services-row-btn {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  text-align: left;
+  display: inline;
+}
+
+.services-row-btn:focus-visible {
+  outline: 2px solid var(--accent, #E8611A);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
 .services-row.is-active .services-row-num {
   color: var(--accent);
 }
@@ -206,6 +227,23 @@
 .services-row.is-active .services-tag {
   border-color: rgba(232, 97, 26, 0.3);
   color: var(--text);
+}
+
+/* ── End CTA ───────────────────────────────────────────────────────────── */
+.services-cta {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 28px);
+  flex-wrap: wrap;
+  padding-top: clamp(28px, 4vw, 48px);
+}
+
+.services-cta-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0;
 }
 
 /* ── Decorative background ring ────────────────────────────────────────── */

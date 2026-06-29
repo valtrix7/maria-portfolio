@@ -1,0 +1,369 @@
+/* ==========================================================================
+   IslandNav — GreenSock "dynamic island" navbar (enlarged pill)
+   ========================================================================== */
+
+/* ── The pill ──────────────────────────────────────────────────────────── */
+.inav-island {
+  position: fixed;
+  top: 1.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.6rem;
+  background: var(--bg-elevated, #161616);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  /* Deeper, softer shadow so the pill reads as floating above the page. */
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  /* Resting pill — slightly narrower than the menu panel below it. */
+  width: min(90vw, 420px);
+  overflow: hidden;
+}
+
+/* Scroll-progress fill — clipped to the pill via the island's overflow. */
+.inav-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 0;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, rgba(232, 97, 26, 0.45), rgba(255, 122, 51, 0.18));
+  border-right: 1.5px solid rgba(255, 122, 51, 0.5);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.inav-logo-cont {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  height: 26px;
+}
+
+.inav-logo {
+  display: block;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  margin-left: 0.9rem;
+}
+
+/* ── Burger button ─────────────────────────────────────────────────────── */
+.inav-btn {
+  position: relative;
+  z-index: 1;
+  width: auto;
+  height: 38px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  color: var(--text-secondary, #bbbaa6);
+  transition: color 0.3s var(--ease);
+}
+
+.inav-btn:hover {
+  color: var(--text, #fff);
+}
+
+.inav-btn-cont {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inav-btn:focus-visible {
+  outline: 2px solid var(--accent, #E8611A);
+  outline-offset: 3px;
+}
+
+.inav-btn svg {
+  overflow: visible;
+  display: block;
+}
+
+/* ── Overlay + backdrop ────────────────────────────────────────────────── */
+.inav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.inav-overlay.is-open {
+  pointer-events: auto;
+}
+
+.inav-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.88);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+}
+
+/* ── Panel ─────────────────────────────────────────────────────────────── */
+.inav-panel {
+  position: absolute;
+  visibility: hidden;
+  top: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Match the resting pill width exactly. */
+  width: min(90vw, 420px);
+  padding: 0.5rem;
+  background: var(--bg-elevated, #161616);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Panel header ──────────────────────────────────────────────────────── */
+.inav-panel-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.85rem 0.7rem;
+}
+
+.inav-eyebrow {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted, #7c7c6f);
+}
+
+.inav-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #bbbaa6);
+}
+
+.inav-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2ecc71;
+  box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.6);
+  animation: inav-pulse 2s infinite;
+}
+
+@keyframes inav-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.55); }
+  70%  { box-shadow: 0 0 0 6px rgba(46, 204, 113, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+}
+
+/* ── Links ─────────────────────────────────────────────────────────────── */
+.inav-nav {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.inav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.95rem 1.1rem;
+  text-decoration: none;
+  color: var(--text-secondary, #bbbaa6);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  line-height: 1;
+  isolation: isolate;
+  transition: color 0.3s var(--ease);
+}
+
+.inav-link + .inav-link {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Accent wash that wipes in from the left on hover */
+.inav-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(232, 97, 26, 0.14), transparent 70%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.4s var(--ease);
+}
+
+.inav-link:hover { color: var(--text, #fff); }
+.inav-link:hover::before { transform: scaleX(1); }
+.inav-link:focus-visible {
+  outline: 2px solid var(--accent, #E8611A);
+  outline-offset: -2px;
+}
+
+.inav-link-num {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-muted, #7c7c6f);
+  transition: color 0.3s var(--ease);
+  min-width: 1.4em;
+}
+
+.inav-link:hover .inav-link-num { color: var(--accent, #E8611A); }
+
+.inav-link-label {
+  flex: 1;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+  transition: transform 0.35s var(--ease);
+}
+
+.inav-link:hover .inav-link-label {
+  transform: translateX(6px);
+}
+
+.inav-link-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--accent, #E8611A);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+}
+
+.inav-link:hover .inav-link-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Footer: socials + theme ───────────────────────────────────────────── */
+.inav-panel-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 0.5rem;
+  padding: 0.55rem 0.35rem 0.2rem;
+}
+
+.inav-socials {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inav-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: var(--text-secondary, #bbbaa6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease),
+    background 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.inav-social:hover {
+  color: var(--text, #fff);
+  border-color: rgba(232, 97, 26, 0.45);
+  background: rgba(232, 97, 26, 0.12);
+  transform: translateY(-2px);
+}
+
+.inav-social:focus-visible {
+  outline: 2px solid var(--accent, #E8611A);
+  outline-offset: 2px;
+}
+
+.inav-theme-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 6px 5px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.inav-theme-label {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary, #bbbaa6);
+}
+
+.inav-theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--text, #fff);
+  background: rgba(255, 255, 255, 0.06);
+  transition: background 0.3s var(--ease), color 0.3s var(--ease),
+    transform 0.4s var(--ease);
+}
+
+.inav-theme-btn:hover {
+  background: var(--accent, #E8611A);
+  color: #fff;
+  transform: rotate(35deg);
+}
+
+.inav-theme-btn:focus-visible {
+  outline: 2px solid var(--accent, #E8611A);
+  outline-offset: 2px;
+}
+
+/* ── Mobile ────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .inav-island { top: 1rem; padding: 0.6rem; }
+  .inav-btn,
+  .inav-btn-cont { height: 42px; width: 42px; }
+  .inav-panel { top: 5rem; border-radius: 18px; }
+  .inav-link { padding: 0.85rem 1rem; }
+  .inav-link-label { font-size: 1.15rem; }
+  .inav-social { width: 36px; height: 36px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inav-island,
+  .inav-backdrop,
+  .inav-panel,
+  .inav-logo,
+  .inav-link {
+    transition: none !important;
+  }
+}

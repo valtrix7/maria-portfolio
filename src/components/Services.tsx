@@ -54,8 +54,31 @@ const Services: React.FC = () => {
   const counterRef = useRef<HTMLSpanElement>(null);
   const railRef = useRef<HTMLDivElement>(null);
   const dotsRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
 
   const n = services.length;
+
+  // Jump to a service: on desktop scroll to its slot within the pinned
+  // timeline; on mobile/reduced (no pin) just bring the row into view.
+  const goToService = (i: number) => {
+    const lenis = (window as Window & { __lenis?: { scrollTo: (t: unknown, o?: object) => void } }).__lenis;
+    const tl = tlRef.current;
+    const st = tl?.scrollTrigger;
+
+    if (tl && st && st.start != null && st.end != null) {
+      // active === i once timeline time passes i + 0.25; aim past the midpoint.
+      const target = Math.min(1, (i + 0.6) / tl.duration());
+      const y = st.start + target * (st.end - st.start);
+      if (lenis) lenis.scrollTo(y, { duration: 0.8 });
+      else window.scrollTo({ top: y, behavior: 'smooth' });
+      return;
+    }
+
+    const row = rowsRef.current[i];
+    if (!row) return;
+    if (lenis) lenis.scrollTo(row, { offset: -80, duration: 0.8 });
+    else row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
 
   useEffect(() => {
     const reduce = prefersReducedMotion();
@@ -111,7 +134,7 @@ const Services: React.FC = () => {
       setRowActive(0, true);
 
       // ── Pinned, scrubbed focus-list accordion ──────────────────────────
-      const tl = gsap.timeline({
+      const tl = tlRef.current = gsap.timeline({
         scrollTrigger: {
           trigger: stageRef.current,
           start: 'top top',
@@ -215,7 +238,16 @@ const Services: React.FC = () => {
               >
                 <div className="services-row-head">
                   <span className="services-row-num">{s.num}</span>
-                  <h3 className="services-row-title">{s.title}</h3>
+                  <h3 className="services-row-title">
+                    <button
+                      type="button"
+                      className="services-row-btn hover-target"
+                      onClick={() => goToService(i)}
+                      aria-label={`View ${s.title} service`}
+                    >
+                      {s.title}
+                    </button>
+                  </h3>
                   <span className="services-row-mark" ref={(el) => (marksRef.current[i] = el)} />
                 </div>
                 <div className="services-detail" ref={(el) => (detailsRef.current[i] = el)}>
@@ -230,6 +262,13 @@ const Services: React.FC = () => {
                 </div>
               </div>
             ))}
+
+            <div className="services-cta">
+              <p className="services-cta-text">Have a project in mind?</p>
+              <a href="#contact" className="btn btn-primary hover-target">
+                Start a project
+              </a>
+            </div>
           </div>
         </div>
       </div>
