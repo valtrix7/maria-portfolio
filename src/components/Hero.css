@@ -261,44 +261,52 @@
   .hero-content {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
-    text-align: center;
-    gap: 18px;
-    padding: 72px 20px 88px;
+    text-align: left;
+    gap: 22px;
+    padding: 76px 20px 88px;
   }
 
   .hero-left {
-    align-items: center;
+    align-items: flex-start;
+    order: 1;
   }
 
   .hero-center {
-    order: -1;
+    order: 2;
+    justify-content: flex-end;
   }
 
   .hero-portrait {
-    width: 180px;
-    height: 250px;
+    width: min(58vw, 260px);
+    height: clamp(280px, 62vw, 360px);
   }
 
   .hero-portrait-glow {
-    width: 280px;
-    height: 320px;
+    width: min(76vw, 360px);
+    height: clamp(320px, 72vw, 420px);
   }
 
   .hero-right {
-    align-items: center;
-    text-align: center;
-    gap: 12px;
+    align-items: flex-start;
+    text-align: left;
+    gap: 14px;
+    order: 3;
+    max-width: 92%;
+    padding: 18px 18px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .hero-headline-right {
-    font-size: 20px;
-    line-height: 1.3;
+    font-size: 22px;
+    line-height: 1.18;
+    max-width: 12ch;
   }
 
   .hero-desc-right {
-    max-width: 34ch;
-    text-align: center;
+    max-width: 30ch;
+    text-align: left;
     font-size: 13px;
+    line-height: 1.6;
   }
 
   .hero-cta-btn {
@@ -349,26 +357,26 @@
   }
 
   .hero-content {
-    gap: 14px;
-    padding: 64px 16px 76px;
+    gap: 18px;
+    padding: 64px 16px 72px;
   }
 
   .hero-portrait {
-    width: 160px;
-    height: 220px;
+    width: min(64vw, 220px);
+    height: clamp(250px, 72vw, 320px);
   }
 
   .hero-portrait-glow {
-    width: 240px;
-    height: 280px;
+    width: min(82vw, 300px);
+    height: clamp(280px, 82vw, 360px);
   }
 
   .hero-name-word {
-    font-size: clamp(36px, 14vw, 56px);
+    font-size: clamp(38px, 14vw, 58px);
   }
 
   .hero-headline-right {
-    font-size: 18px;
+    font-size: 19px;
   }
 
   .hero-desc-right {
@@ -377,7 +385,11 @@
   }
 
   .hero-expertise {
-    margin: 0 12px;
+    margin: 2px 12px 0;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    overflow: hidden;
   }
 
   .hero-expertise-num {
@@ -386,6 +398,11 @@
 
   .hero-expertise-label {
     font-size: 11px;
+  }
+
+  .hero-right {
+    max-width: 100%;
+    padding-top: 16px;
   }
 }
 

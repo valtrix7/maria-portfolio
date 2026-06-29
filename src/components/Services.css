@@ -281,18 +281,63 @@
   .services-row-title {
     opacity: 1;
     color: var(--text);
+    font-size: clamp(26px, 8vw, 38px);
   }
 
   .services-row.is-active .services-row-title {
     transform: none;
   }
 
+  .services-list {
+    display: grid;
+    gap: 14px;
+    border-top: 0;
+  }
+
+  .services-row {
+    padding: 16px 16px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015));
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+  }
+
+  .services-row-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .services-row-num {
+    color: var(--accent);
+  }
+
   .services-row-mark {
     transform: scaleX(1);
+    position: static;
+    width: 72px;
+    margin-top: 2px;
   }
 
   .services-detail-inner {
     padding-top: 14px;
+    gap: 14px;
+  }
+
+  .services-detail-desc {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .services-tag {
+    font-size: 10px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .services-cta {
+    padding-top: 8px;
   }
 
   .services-deco-ring {

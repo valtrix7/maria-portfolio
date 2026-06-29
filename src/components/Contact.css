@@ -159,6 +159,12 @@
 
   .ct-sub {
     gap: 24px;
+    max-width: none;
+    padding: 18px 18px 20px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015));
+    border: 1px solid rgba(255,255,255,0.07);
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.18);
   }
 
   .ct-links {
@@ -183,6 +189,7 @@
     min-height: 44px;
     display: inline-flex;
     align-items: center;
+    color: var(--text);
   }
 
   .ct-morph {
