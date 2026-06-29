@@ -212,16 +212,24 @@
     min-height: auto;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 0 4px;
+    gap: 18px;
+    padding: 0 0 0 42px;
   }
 
   .hw-line-svg {
-    display: none;
+    display: block;
+    left: 12px;
+    transform: none;
+    width: 24px;
+    max-width: none;
   }
 
   .hw-dot {
-    display: none;
+    display: block;
+    left: 12px;
+    width: 10px;
+    height: 10px;
+    box-shadow: 0 0 14px rgba(232, 97, 26, 0.45);
   }
 
   .hw-card {
@@ -234,12 +242,16 @@
     padding: clamp(18px, 4vw, 24px);
     border-radius: 16px;
     gap: 10px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255,255,255,0.015));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.16);
   }
 
   .hw-card-num {
     position: static;
-    font-size: 32px;
-    margin-bottom: -4px;
+    font-size: 28px;
+    margin-bottom: 2px;
   }
 
   .hw-card--right .hw-card-num {
@@ -256,8 +268,8 @@
   }
 
   .hw-card-line {
-    width: 32px;
-    margin-top: 4px;
+    width: 52px;
+    margin-top: 8px;
   }
 
   .hw-card:hover .hw-card-line {
@@ -266,5 +278,16 @@
 
   .hw-deco-circle {
     display: none;
+  }
+
+  .hw-card::before {
+    content: '';
+    position: absolute;
+    left: -30px;
+    top: 26px;
+    width: 20px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), rgba(232, 97, 26, 0.18));
+    pointer-events: none;
   }
 }
