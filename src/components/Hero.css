@@ -249,13 +249,20 @@
    ========================================================================== */
 
 @media (max-width: 900px) {
+  .hero-wrapper {
+    min-height: auto;
+  }
+
+  .hero-container {
+    min-height: clamp(620px, 100svh, 760px);
+  }
+
   .hero-content {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
     text-align: center;
-    gap: 24px;
-    padding: 0 20px;
-    padding-bottom: 16px;
+    gap: 18px;
+    padding: 72px 20px 88px;
   }
 
   .hero-left {
@@ -279,7 +286,7 @@
   .hero-right {
     align-items: center;
     text-align: center;
-    gap: 16px;
+    gap: 12px;
   }
 
   .hero-headline-right {
@@ -288,7 +295,7 @@
   }
 
   .hero-desc-right {
-    max-width: 100%;
+    max-width: 34ch;
     text-align: center;
     font-size: 13px;
   }
@@ -331,12 +338,18 @@
 @media (max-width: 480px) {
   .hero-wrapper {
     padding: 8px;
-    min-height: 100dvh;
+    min-height: auto;
     min-height: -webkit-fill-available;
   }
 
   .hero-container {
     border-radius: 20px;
+    min-height: clamp(560px, 100svh - 16px, 700px);
+  }
+
+  .hero-content {
+    gap: 14px;
+    padding: 64px 16px 76px;
   }
 
   .hero-portrait {
@@ -351,6 +364,15 @@
 
   .hero-name-word {
     font-size: clamp(36px, 14vw, 56px);
+  }
+
+  .hero-headline-right {
+    font-size: 18px;
+  }
+
+  .hero-desc-right {
+    font-size: 12px;
+    line-height: 1.55;
   }
 
   .hero-expertise {
@@ -375,6 +397,22 @@
   align-items: center;
   gap: 12px;
   z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .hero-signature {
+    right: 16px;
+    bottom: 16px;
+    gap: 8px;
+  }
+
+  .hero-signature-text {
+    font-size: 11px;
+  }
+
+  .hero-signature-line {
+    width: 24px;
+  }
 }
 
 .hero-signature-text {

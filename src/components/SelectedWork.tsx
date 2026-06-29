@@ -72,6 +72,37 @@ const SelectedWork = () => {
       const track = trackRef.current;
       if (!wrapper || !track) return;
 
+      if (mobile) {
+        gsap.set(track, { x: 0 });
+        gsap.set('.h-progress-fill', { scaleX: 1 });
+        if (counterRef.current) counterRef.current.textContent = `0${slides.length}`;
+        dotsRef.current.forEach((dot) => {
+          if (dot) {
+            dot.style.opacity = '1';
+            dot.style.width = '8px';
+          }
+        });
+
+        gsap.utils.toArray<HTMLElement>('.h-slide').forEach((slide) => {
+          const targets = slide.querySelectorAll('.h-slide-frame, .h-slide-info > *');
+          gsap.fromTo(targets,
+            { y: 24, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.6,
+              stagger: 0.06,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: slide,
+                start: 'top 88%',
+              }
+            }
+          );
+        });
+        return;
+      }
+
       const getScrollAmount = () => track.scrollWidth - window.innerWidth;
 
       gsap.to(track, {
@@ -149,7 +180,7 @@ const SelectedWork = () => {
           Featured<br />Project
         </h2>
         <p className="body-lg">
-          A deep dive into one of my recent motion design projects.
+          A compact look at recent motion design work built for fast mobile browsing.
         </p>
       </div>
 

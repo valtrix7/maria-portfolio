@@ -672,6 +672,11 @@ section {
    ========================================================================== */
 
 @media (max-width: 768px) {
+  :root {
+    --section-py: clamp(52px, 14vw, 84px);
+    --container-px: clamp(18px, 5vw, 24px);
+  }
+
   .header {
     width: calc(100% - 32px);
     max-width: none;
@@ -713,7 +718,7 @@ section {
   }
 
   section {
-    padding-block: clamp(60px, 10vw, 100px);
+    padding-block: var(--section-py);
   }
 
   .horizontal-scroll-track {

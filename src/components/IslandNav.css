@@ -15,7 +15,7 @@
   padding: 0.35rem 0.6rem;
   background: var(--bg-elevated, #161616);
   border: 1.5px solid rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
+  border-radius: 20px;
   /* Deeper, softer shadow so the pill reads as floating above the page. */
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
   white-space: nowrap;
@@ -349,7 +349,7 @@
 
 /* ── Mobile ────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .inav-island { top: 1rem; padding: 0.6rem; }
+  .inav-island { top: 1rem; padding: 0.6rem; border-radius: 18px; }
   .inav-btn,
   .inav-btn-cont { height: 42px; width: 42px; }
   .inav-panel { top: 5rem; border-radius: 18px; }
