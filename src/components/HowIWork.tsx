@@ -40,6 +40,16 @@ const steps = [
   },
 ];
 
+const mobileTimelinePath =
+  'M130,48 C130,108 252,146 252,220 C252,292 94,334 94,408 C94,482 246,522 246,596 C246,670 126,706 126,760';
+
+const mobileDotPositions = [
+  { top: '10%', left: '11px' },
+  { top: '36%', left: '28px' },
+  { top: '62%', left: '9px' },
+  { top: '88%', left: '25px' },
+] as const;
+
 const HowIWork: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
@@ -76,15 +86,15 @@ const HowIWork: React.FC = () => {
         );
       } else if (path && mobile) {
         gsap.fromTo(path,
-          { drawSVG: '0%' },
+          { drawSVG: '0% 0%' },
           {
-            drawSVG: '100%',
+            drawSVG: '0% 100%',
             ease: 'none',
             scrollTrigger: {
-              trigger: '.hw-timeline',
-              start: 'top 80%',
-              end: 'bottom 80%',
-              scrub: 1,
+              trigger: sectionRef.current,
+              start: 'top 82%',
+              end: 'bottom 28%',
+              scrub: 1.2,
             },
           }
         );
@@ -212,7 +222,7 @@ const HowIWork: React.FC = () => {
             <path
               className="hw-line-base"
               d={isMobile()
-                ? 'M200,30 L200,760'
+                ? mobileTimelinePath
                 : 'M200,0 C200,100 80,180 80,260 C80,340 320,420 320,500 C320,580 80,660 80,740'}
               fill="none"
               stroke="rgba(255,255,255,0.05)"
@@ -221,7 +231,7 @@ const HowIWork: React.FC = () => {
             <path
               ref={pathRef}
               d={isMobile()
-                ? 'M200,30 L200,760'
+                ? mobileTimelinePath
                 : 'M200,0 C200,100 80,180 80,260 C80,340 320,420 320,500 C320,580 80,660 80,740'}
               fill="none"
               stroke="url(#hwGrad)"
@@ -238,7 +248,13 @@ const HowIWork: React.FC = () => {
           </svg>
 
           {steps.map((_, i) => (
-            <div key={i} className="hw-dot" style={{ top: `${10 + i * 26}%` }} />
+            <div
+              key={i}
+              className="hw-dot"
+              style={isMobile()
+                ? { top: mobileDotPositions[i].top, left: mobileDotPositions[i].left }
+                : { top: `${10 + i * 26}%` }}
+            />
           ))}
 
           {steps.map((step, i) => (
