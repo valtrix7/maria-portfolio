@@ -72,6 +72,15 @@ const SelectedWork = () => {
       const track = trackRef.current;
       if (!wrapper || !track) return;
 
+      const refreshOnAssetsReady = () => ScrollTrigger.refresh();
+      const images = Array.from(track.querySelectorAll('img'));
+      images.forEach((img) => {
+        if (!img.complete) {
+          img.addEventListener('load', refreshOnAssetsReady, { once: true });
+          img.addEventListener('error', refreshOnAssetsReady, { once: true });
+        }
+      });
+
       if (mobile) {
         gsap.set(track, { x: 0 });
 
@@ -116,6 +125,10 @@ const SelectedWork = () => {
         return () => {
           track.removeEventListener('scroll', updateMobileProgress);
           window.removeEventListener('resize', updateMobileProgress);
+          images.forEach((img) => {
+            img.removeEventListener('load', refreshOnAssetsReady);
+            img.removeEventListener('error', refreshOnAssetsReady);
+          });
         };
       }
       if (mobile) return;
@@ -184,6 +197,13 @@ const SelectedWork = () => {
           );
         }
       });
+
+      return () => {
+        images.forEach((img) => {
+          img.removeEventListener('load', refreshOnAssetsReady);
+          img.removeEventListener('error', refreshOnAssetsReady);
+        });
+      };
     }, sectionRef);
 
     return () => ctx.revert();

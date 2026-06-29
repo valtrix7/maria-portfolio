@@ -1,203 +1,108 @@
-/* ==========================================================================
-   Services — Pinned, scrubbed focus-list accordion
-   ========================================================================== */
-
 .services {
   position: relative;
   background: var(--bg, #0a0a0a);
   overflow: hidden;
   padding-top: var(--section-py);
+  padding-bottom: clamp(36px, 8vw, 120px);
 }
 
 .services-header {
-  margin-bottom: clamp(48px, 7vw, 96px);
+  margin-bottom: clamp(42px, 7vw, 88px);
   position: relative;
   z-index: 2;
 }
 
-/* ── Pinned stage ─────────────────────────────────────────────────────── */
-.services-stage {
+.services-stack-shell {
   position: relative;
+  z-index: 1;
+}
+
+.services-stack {
+  position: relative;
+  z-index: 2;
+}
+
+.scroll-stack-inner {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
+  padding: clamp(20px, 4vw, 48px) 0 clamp(280px, 34vw, 520px);
+}
+
+.services-stack-card {
+  height: auto;
+  min-height: clamp(330px, 44vh, 470px);
+  margin-block: 0;
+  padding: clamp(28px, 4vw, 56px);
+  border-radius: clamp(24px, 3vw, 40px);
+  background:
+    radial-gradient(ellipse at 86% 8%, rgba(232, 97, 26, 0.2), transparent 48%),
+    linear-gradient(145deg, rgba(31, 31, 31, 0.98), rgba(16, 16, 16, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: var(--text);
   overflow: hidden;
 }
 
-.services-stage-inner {
+.services-stack-card-grid {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: clamp(32px, 6vw, 96px);
+  grid-template-columns: minmax(96px, 0.25fr) 1fr;
+  gap: clamp(28px, 5vw, 72px);
+  min-height: inherit;
   align-items: center;
-  width: 100%;
 }
 
-/* ── Aside HUD: big index + progress rail + dots ──────────────────────── */
-.services-aside {
+.services-stack-meta {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  position: relative;
-  z-index: 2;
+  align-items: flex-start;
+  gap: 22px;
+  align-self: stretch;
 }
 
-.services-counter {
+.services-stack-num {
   font-family: 'Space Grotesk', monospace;
-  font-size: clamp(56px, 9vw, 120px);
+  font-size: clamp(44px, 7vw, 96px);
   font-weight: 700;
-  line-height: 1;
+  line-height: 0.9;
   letter-spacing: -0.04em;
-  color: var(--accent, #E8611A);
+  color: var(--accent);
+  opacity: 0.72;
   font-variant-numeric: tabular-nums;
 }
 
-.services-rail {
-  position: relative;
+.services-stack-rule {
   width: 2px;
-  height: clamp(120px, 22vh, 240px);
-  background: rgba(255, 255, 255, 0.08);
+  flex: 1;
+  min-height: 120px;
   border-radius: 2px;
-  overflow: hidden;
+  background: linear-gradient(180deg, var(--accent), rgba(232, 97, 26, 0.02));
 }
 
-.services-rail-fill {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--accent, #E8611A), var(--accent-light, #FF7A33));
-  transform-origin: top center;
-  transform: scaleY(0);
-  will-change: transform;
-}
-
-.services-dots {
+.services-stack-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: clamp(16px, 2vw, 24px);
+  max-width: 760px;
 }
 
-.services-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.18);
-  transition: background 0.4s var(--ease);
-  will-change: transform;
-}
-
-.services-total {
-  font-family: 'Space Grotesk', monospace;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--text-muted, rgba(255, 255, 255, 0.4));
-}
-
-/* ── The focus list ───────────────────────────────────────────────────── */
-.services-list {
-  position: relative;
-  z-index: 2;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.services-row {
-  position: relative;
-  padding: clamp(18px, 2.4vw, 30px) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.services-row-head {
-  display: flex;
-  align-items: baseline;
-  gap: clamp(16px, 2.5vw, 36px);
-  position: relative;
-}
-
-.services-row-num {
-  font-family: 'Space Grotesk', monospace;
-  font-size: clamp(12px, 1vw, 14px);
-  font-weight: 600;
-  color: var(--text-muted, rgba(255, 255, 255, 0.4));
-  letter-spacing: 0.1em;
-  flex-shrink: 0;
-  transition: color 0.4s var(--ease);
-}
-
-.services-row-title {
+.services-stack-title {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(28px, 5vw, 64px);
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  line-height: 1;
-  margin: 0;
-  color: var(--text-secondary, rgba(255, 255, 255, 0.55));
-  opacity: 0.55;
-  transition: color 0.4s var(--ease), opacity 0.4s var(--ease),
-    transform 0.5s var(--ease);
-}
-
-.services-row.is-active .services-row-title {
+  font-size: clamp(40px, 6vw, 82px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
   color: var(--text);
-  opacity: 1;
-  transform: translateX(clamp(8px, 1.2vw, 20px));
-}
-
-/* The title text is a real button (accordion pattern) — strip native chrome
-   and inherit the heading's type so it looks identical to a heading. */
-.services-row-btn {
-  font: inherit;
-  letter-spacing: inherit;
-  color: inherit;
-  background: none;
-  border: 0;
-  padding: 0;
   margin: 0;
-  cursor: pointer;
-  text-align: left;
-  display: inline;
 }
 
-.services-row-btn:focus-visible {
-  outline: 2px solid var(--accent, #E8611A);
-  outline-offset: 6px;
-  border-radius: 4px;
-}
-
-.services-row.is-active .services-row-num {
-  color: var(--accent);
-}
-
-/* Accent underline that wipes in for the active row */
-.services-row-mark {
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  height: 2px;
-  width: 100%;
-  background: linear-gradient(90deg, var(--accent, #E8611A), transparent);
-  transform: scaleX(0);
-  transform-origin: left center;
-  will-change: transform;
-}
-
-/* ── Collapsible detail ───────────────────────────────────────────────── */
-.services-detail {
-  overflow: hidden;
-}
-
-.services-detail-inner {
-  padding-top: 18px;
-  max-width: 620px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.services-detail-desc {
+.services-stack-desc {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(14px, 1.2vw, 18px);
-  line-height: 1.6;
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.65;
   color: var(--text-secondary);
+  max-width: 56ch;
   margin: 0;
 }
 
@@ -216,134 +121,130 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text-secondary);
-  padding: 6px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 100px;
-  background: rgba(255, 255, 255, 0.02);
-  transition: border-color 0.4s var(--ease), color 0.4s var(--ease);
-}
-
-.services-row.is-active .services-tag {
-  border-color: rgba(232, 97, 26, 0.3);
   color: var(--text);
+  padding: 7px 12px;
+  border: 1px solid rgba(232, 97, 26, 0.28);
+  border-radius: 100px;
+  background: rgba(232, 97, 26, 0.08);
 }
 
-/* ── End CTA ───────────────────────────────────────────────────────────── */
-.services-cta {
+.services-stack-card--cta {
+  min-height: 260px;
   display: flex;
   align-items: center;
-  gap: clamp(16px, 2vw, 28px);
-  flex-wrap: wrap;
-  padding-top: clamp(28px, 4vw, 48px);
+  justify-content: center;
+}
+
+.services-stack-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
 }
 
 .services-cta-text {
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(16px, 1.6vw, 22px);
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-size: clamp(28px, 5vw, 64px);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--text);
   margin: 0;
+  max-width: 12ch;
 }
 
-/* ── Decorative background ring ────────────────────────────────────────── */
 .services-deco-ring {
   position: absolute;
   width: clamp(360px, 50vw, 720px);
   height: clamp(360px, 50vw, 720px);
   right: -8%;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 28%;
   pointer-events: none;
   z-index: 0;
+  opacity: 0.72;
 }
 
-/* ── Mobile — static stacked list, no pin ─────────────────────────────── */
 @media (max-width: 768px) {
   .services {
-    padding-bottom: var(--section-py);
+    padding-bottom: clamp(24px, 8vw, 56px);
   }
 
-  .services-stage {
-    min-height: auto;
-    display: block;
-    overflow: visible;
+  .services-header {
+    margin-bottom: 22px;
   }
 
-  .services-stage-inner {
-    display: block;
+  .scroll-stack-inner {
+    padding: 10px 0 280px;
   }
 
-  .services-aside {
-    display: none;
+  .services-stack-card {
+    min-height: 360px;
+    height: auto;
+    padding: 22px;
+    border-radius: 22px;
   }
 
-  .services-row-title {
-    opacity: 1;
-    color: var(--text);
-    font-size: clamp(26px, 8vw, 38px);
+  .services-stack-card-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    align-items: start;
   }
 
-  .services-row.is-active .services-row-title {
-    transform: none;
-  }
-
-  .services-list {
-    display: grid;
-    gap: 14px;
-    border-top: 0;
-  }
-
-  .services-row {
-    padding: 16px 16px 18px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015));
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
-  }
-
-  .services-row-head {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .services-row-num {
-    color: var(--accent);
-  }
-
-  .services-row-mark {
-    transform: scaleX(1);
-    position: static;
-    width: 72px;
-    margin-top: 2px;
-  }
-
-  .services-detail-inner {
-    padding-top: 14px;
+  .services-stack-meta {
+    flex-direction: row;
+    align-items: center;
     gap: 14px;
   }
 
-  .services-detail-desc {
-    font-size: 13px;
+  .services-stack-num {
+    font-size: 46px;
+  }
+
+  .services-stack-rule {
+    width: 78px;
+    height: 2px;
+    min-height: 0;
+    flex: none;
+    background: linear-gradient(90deg, var(--accent), rgba(232, 97, 26, 0.02));
+  }
+
+  .services-stack-content {
+    gap: 16px;
+  }
+
+  .services-stack-title {
+    font-size: clamp(34px, 11vw, 48px);
+  }
+
+  .services-stack-desc {
+    font-size: 14px;
     line-height: 1.55;
   }
 
   .services-tag {
     font-size: 10px;
     padding: 6px 10px;
-    background: rgba(255, 255, 255, 0.035);
   }
 
-  .services-cta {
-    padding-top: 8px;
+  .services-stack-card--cta {
+    min-height: 240px;
+  }
+
+  .services-stack-cta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .services-cta-text {
+    font-size: clamp(32px, 10vw, 46px);
   }
 
   .services-deco-ring {
     width: 320px;
     height: 320px;
-    right: -30%;
-    opacity: 0.6;
+    right: -34%;
+    top: 12%;
+    opacity: 0.42;
   }
 }

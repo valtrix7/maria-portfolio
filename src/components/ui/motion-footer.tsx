@@ -88,6 +88,11 @@ const STYLES = `
   background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 60%);
   -webkit-background-clip: text;
   background-clip: text;
+  transition:
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    -webkit-text-stroke-color 0.35s ease,
+    filter 0.35s ease,
+    background 0.35s ease;
 }
 
 .footer-text-glow {
@@ -96,6 +101,30 @@ const STYLES = `
   -webkit-text-fill-color: transparent;
   background-clip: text;
   filter: drop-shadow(0px 0px 20px rgba(255,255,255,0.15));
+}
+
+.footer-giant-bg-text:hover {
+  transform: translateX(-50%) scale(1.03);
+  -webkit-text-stroke: 1px rgba(255,255,255,0.14);
+  background: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(232,97,26,0.12) 55%, transparent 88%);
+  filter: drop-shadow(0 0 26px rgba(232,97,26,0.16));
+}
+
+.footer-giant-bg-text:active {
+  transform: translateX(-50%) scale(1.015);
+  -webkit-text-stroke: 1px rgba(255,255,255,0.18);
+  filter: drop-shadow(0 0 20px rgba(232,97,26,0.18));
+}
+
+@media (max-width: 768px) {
+  .footer-giant-bg-text {
+    font-size: min(30vw, 9rem);
+    line-height: 0.88;
+  }
+
+  .animate-footer-scroll-marquee {
+    animation-duration: 26s;
+  }
 }
 `;
 
@@ -252,13 +281,13 @@ export function CinematicFooter() {
 
           <div
             ref={giantTextRef}
-            className="footer-giant-bg-text absolute -bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none"
+            className="footer-giant-bg-text absolute bottom-20 md:-bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 select-none"
           >
             MARIA
           </div>
 
           {/* Marquee */}
-          <div className="absolute top-12 left-0 w-full overflow-hidden border-y border-white/5 bg-background/60 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-2xl">
+          <div className="absolute top-12 left-0 w-full overflow-hidden border-y border-white/5 bg-background/60 backdrop-blur-md py-4 z-10 md:-rotate-2 md:scale-110 shadow-2xl">
             <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.3em] text-secondary uppercase">
               <MarqueeItem />
               <MarqueeItem />
@@ -306,30 +335,16 @@ export function CinematicFooter() {
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="relative z-20 w-full pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
-
-            <div className="text-secondary text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1">
-              &copy; 2026 Maria Islam. All rights reserved.
-            </div>
-
-            <div className="footer-glass-pill px-6 py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default border-white/5">
-              <span className="text-secondary text-[10px] md:text-xs font-bold uppercase tracking-widest">Crafted with</span>
-              <span className="animate-footer-heartbeat text-sm md:text-base text-primary">&#10084;</span>
-              <span className="text-secondary text-[10px] md:text-xs font-bold uppercase tracking-widest">by</span>
-              <span className="text-foreground font-black text-xs md:text-sm tracking-normal ml-1">Maria Islam</span>
-            </div>
-
+          <div className="relative z-20 w-full pb-8 px-6 md:px-12 flex justify-center md:justify-end">
             <MagneticButton
               as="button"
               onClick={scrollToTop}
-              className="w-12 h-12 rounded-full footer-glass-pill flex items-center justify-center text-secondary hover:text-foreground group order-3"
+              className="w-12 h-12 rounded-full footer-glass-pill flex items-center justify-center text-secondary hover:text-foreground group"
             >
               <svg className="w-5 h-5 transform group-hover:-translate-y-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
               </svg>
             </MagneticButton>
-
           </div>
         </footer>
       </div>

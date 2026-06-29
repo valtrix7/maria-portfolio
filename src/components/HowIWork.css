@@ -218,9 +218,9 @@
 
   .hw-line-svg {
     display: block;
-    left: -6px;
+    left: 0;
     transform: none;
-    width: 88px;
+    width: 72px;
     max-width: none;
   }
 
@@ -282,9 +282,9 @@
   .hw-card::before {
     content: '';
     position: absolute;
-    left: -40px;
+    left: -32px;
     top: 26px;
-    width: 30px;
+    width: 22px;
     height: 1px;
     background: linear-gradient(90deg, var(--accent), rgba(232, 97, 26, 0.18));
     pointer-events: none;
