@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import type { CSSProperties } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
@@ -9,9 +10,6 @@ gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const isMobile = () =>
-  typeof window !== 'undefined' && window.innerWidth <= 768;
 
 const steps = [
   {
@@ -43,6 +41,9 @@ const steps = [
 const mobileTimelinePath =
   'M130,48 C130,108 252,146 252,220 C252,292 94,334 94,408 C94,482 246,522 246,596 C246,670 126,706 126,760';
 
+const desktopTimelinePath =
+  'M200,0 C200,100 80,180 80,260 C80,340 320,420 320,500 C320,580 80,660 80,740';
+
 const mobileDotPositions = [
   { top: '10%', left: '11px' },
   { top: '36%', left: '28px' },
@@ -52,39 +53,49 @@ const mobileDotPositions = [
 
 const HowIWork: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const pathRef = useRef<SVGPathElement>(null);
+  const desktopPathRef = useRef<SVGPathElement>(null);
+  const mobilePathRef = useRef<SVGPathElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const reduce = prefersReducedMotion();
-    const mobile = isMobile();
 
     const ctx = gsap.context(() => {
-      const path = pathRef.current;
+      const timeline = sectionRef.current?.querySelector('.hw-timeline');
+      const mm = gsap.matchMedia();
 
       if (reduce) {
         gsap.set('.hw-card', { opacity: 1, clipPath: 'none', y: 0 });
-        if (path) gsap.set(path, { drawSVG: '100%' });
+        gsap.set([desktopPathRef.current, mobilePathRef.current].filter(Boolean), { drawSVG: '100%' });
         return;
       }
 
       // ---------- DrawSVG: the connector path draws itself as you scroll ----------
-      // Desktop uses the SVG curve; mobile uses a vertical line fallback.
-      if (path && !mobile) {
+      // Desktop and mobile have separate SVG paths so the mobile layout cannot affect desktop.
+      mm.add('(min-width: 769px)', () => {
+        const path = desktopPathRef.current;
+        if (!path || !timeline) return;
+
         gsap.fromTo(path,
           { drawSVG: '0%' },
           {
             drawSVG: '100%',
             ease: 'none',
             scrollTrigger: {
-              trigger: '.hw-timeline',
+              trigger: timeline,
               start: 'top 70%',
               end: 'bottom 70%',
               scrub: 1,
+              invalidateOnRefresh: true,
             },
           }
         );
-      } else if (path && mobile) {
+      });
+
+      mm.add('(max-width: 768px)', () => {
+        const path = mobilePathRef.current;
+        if (!path) return;
+
         gsap.fromTo(path,
           { drawSVG: '0% 0%' },
           {
@@ -95,10 +106,11 @@ const HowIWork: React.FC = () => {
               start: 'top 82%',
               end: 'bottom 28%',
               scrub: 1.2,
+              invalidateOnRefresh: true,
             },
           }
         );
-      }
+      });
 
       // ---------- Cards reveal alongside their drawn segment ----------
       cardsRef.current.forEach((card, i) => {
@@ -161,7 +173,7 @@ const HowIWork: React.FC = () => {
       });
 
       // ---------- Decorative shapes drift in with parallax ----------
-      if (!mobile) {
+      mm.add('(min-width: 769px)', () => {
         gsap.fromTo('.hw-deco-circle',
           { scale: 0.8 },
           {
@@ -195,7 +207,9 @@ const HowIWork: React.FC = () => {
             scrub: 2.5,
           },
         });
-      }
+      });
+
+      return () => mm.revert();
     }, sectionRef);
 
     return () => ctx.revert();
@@ -214,25 +228,21 @@ const HowIWork: React.FC = () => {
 
         <div className="hw-timeline">
           <svg
-            className="hw-line-svg"
+            className="hw-line-svg hw-line-svg--desktop"
             viewBox="0 0 400 800"
             preserveAspectRatio="none"
             aria-hidden="true"
           >
             <path
               className="hw-line-base"
-              d={isMobile()
-                ? mobileTimelinePath
-                : 'M200,0 C200,100 80,180 80,260 C80,340 320,420 320,500 C320,580 80,660 80,740'}
+              d={desktopTimelinePath}
               fill="none"
               stroke="rgba(255,255,255,0.05)"
               strokeWidth="1.5"
             />
             <path
-              ref={pathRef}
-              d={isMobile()
-                ? mobileTimelinePath
-                : 'M200,0 C200,100 80,180 80,260 C80,340 320,420 320,500 C320,580 80,660 80,740'}
+              ref={desktopPathRef}
+              d={desktopTimelinePath}
               fill="none"
               stroke="url(#hwGrad)"
               strokeWidth="2"
@@ -247,13 +257,45 @@ const HowIWork: React.FC = () => {
             </defs>
           </svg>
 
+          <svg
+            className="hw-line-svg hw-line-svg--mobile"
+            viewBox="0 0 280 800"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path
+              className="hw-line-base"
+              d={mobileTimelinePath}
+              fill="none"
+              stroke="rgba(255,255,255,0.05)"
+              strokeWidth="1.5"
+            />
+            <path
+              ref={mobilePathRef}
+              d={mobileTimelinePath}
+              fill="none"
+              stroke="url(#hwGradMobile)"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <defs>
+              <linearGradient id="hwGradMobile" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#E8611A" />
+                <stop offset="50%" stopColor="#FF7A33" />
+                <stop offset="100%" stopColor="#E8611A" />
+              </linearGradient>
+            </defs>
+          </svg>
+
           {steps.map((_, i) => (
             <div
               key={i}
               className="hw-dot"
-              style={isMobile()
-                ? { top: mobileDotPositions[i].top, left: mobileDotPositions[i].left }
-                : { top: `${10 + i * 26}%` }}
+              style={{
+                top: `${10 + i * 26}%`,
+                '--mobile-dot-top': mobileDotPositions[i].top,
+                '--mobile-dot-left': mobileDotPositions[i].left,
+              } as CSSProperties}
             />
           ))}
 

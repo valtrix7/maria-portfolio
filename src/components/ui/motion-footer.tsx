@@ -79,10 +79,10 @@ const STYLES = `
 }
 
 .footer-giant-bg-text {
-  font-size: 26vw;
-  line-height: 0.75;
+  font-size: clamp(6rem, min(24vw, 28vh), 22rem);
+  line-height: 0.82;
   font-weight: 900;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.035em;
   color: transparent;
   -webkit-text-stroke: 1px rgba(255,255,255,0.05);
   background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 60%);
@@ -118,12 +118,20 @@ const STYLES = `
 
 @media (max-width: 768px) {
   .footer-giant-bg-text {
-    font-size: min(30vw, 9rem);
-    line-height: 0.88;
+    font-size: clamp(4.8rem, min(31vw, 16vh), 9rem);
+    line-height: 0.9;
+    letter-spacing: -0.025em;
   }
 
   .animate-footer-scroll-marquee {
     animation-duration: 26s;
+  }
+}
+
+@media (max-width: 420px) {
+  .footer-giant-bg-text {
+    font-size: clamp(4.2rem, min(34vw, 14vh), 7.2rem);
+    line-height: 0.95;
   }
 }
 `;
@@ -281,7 +289,7 @@ export function CinematicFooter() {
 
           <div
             ref={giantTextRef}
-            className="footer-giant-bg-text absolute bottom-20 md:-bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 select-none"
+            className="footer-giant-bg-text absolute bottom-[clamp(5.5rem,12vh,8.5rem)] md:bottom-[clamp(1rem,3vh,3rem)] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 select-none"
           >
             MARIA
           </div>

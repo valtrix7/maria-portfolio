@@ -41,6 +41,10 @@
   overflow: visible;
 }
 
+.hw-line-svg--mobile {
+  display: none;
+}
+
 /* Timeline dots */
 .hw-dot {
   position: absolute;
@@ -209,32 +213,48 @@
 
 @media (max-width: 768px) {
   .hw-timeline {
+    position: relative;
     min-height: auto;
     display: flex;
     flex-direction: column;
     gap: 18px;
-    padding: 0 0 0 52px;
+    padding: 4px 0 4px 58px;
   }
 
   .hw-line-svg {
     display: block;
-    left: 0;
+    left: 2px;
+    top: 0;
     transform: none;
-    width: 72px;
+    width: 64px;
+    height: 100%;
     max-width: none;
+    z-index: 1;
+  }
+
+  .hw-line-svg--desktop {
+    display: none;
+  }
+
+  .hw-line-svg--mobile {
+    display: block;
   }
 
   .hw-dot {
     display: block;
+    left: var(--mobile-dot-left);
+    top: var(--mobile-dot-top);
     width: 10px;
     height: 10px;
     box-shadow: 0 0 14px rgba(232, 97, 26, 0.45);
+    z-index: 4;
   }
 
   .hw-card {
-    position: static;
+    position: relative;
     width: 100%;
     will-change: transform, clip-path;
+    z-index: 2;
   }
 
   .hw-card-inner {
@@ -282,11 +302,12 @@
   .hw-card::before {
     content: '';
     position: absolute;
-    left: -32px;
+    left: -34px;
     top: 26px;
-    width: 22px;
+    width: 26px;
     height: 1px;
     background: linear-gradient(90deg, var(--accent), rgba(232, 97, 26, 0.18));
     pointer-events: none;
+    z-index: 1;
   }
 }

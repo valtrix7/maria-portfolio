@@ -12,7 +12,6 @@ import About from './components/About';
 import CreativeManifesto from './components/CreativeManifesto';
 import SelectedWork from './components/SelectedWork';
 import HowIWork from './components/HowIWork';
-import Services from './components/Services';
 import SectionDivider from './components/SectionDivider';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
@@ -36,7 +35,7 @@ function App() {
     lenis.on('scroll', ScrollTrigger.update);
 
     // Expose the single Lenis instance so scroll-driven sections can drive
-    // programmatic scrolls (e.g. Services row clicks) through the same engine.
+    // programmatic scrolls through the same engine.
     (window as Window & { __lenis?: Lenis }).__lenis = lenis;
 
     const tickerCb = (time: number) => lenis.raf(time * 1000);
@@ -69,7 +68,6 @@ function App() {
         <CreativeManifesto />
         <SelectedWork />
         <HowIWork />
-        <Services />
         <SectionDivider />
         <Testimonials />
         <Contact />

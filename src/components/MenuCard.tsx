@@ -10,7 +10,6 @@ interface NavItem {
 const NAV_LINKS: NavItem[] = [
   { label: 'Home', href: '#hero' },
   { label: 'My Project', href: '#my-project' },
-  { label: 'Services', href: '#toolbox' },
   { label: 'Contact', href: '#contact' },
 ];
 

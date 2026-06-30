@@ -10,9 +10,8 @@ const getLenis = () =>
 const LINKS = [
   { label: 'Work', href: '#my-project', num: '01' },
   { label: 'About', href: '#about', num: '02' },
-  { label: 'Services', href: '#services', num: '03' },
-  { label: 'Process', href: '#process', num: '04' },
-  { label: 'Contact', href: '#contact', num: '05' },
+  { label: 'Process', href: '#process', num: '03' },
+  { label: 'Contact', href: '#contact', num: '04' },
 ];
 
 // Edit these hrefs to your real profiles.
