@@ -7,39 +7,32 @@ gsap.registerPlugin(ScrollTrigger);
 
 const slides = [
   {
-    img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1400&h=800&fit=crop',
-    category: 'Brand Identity',
-    title: 'Urban Explorer',
-    subtitle: 'Brand Reveal Sequence',
-    year: '2026',
+    img: 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?w=1400&h=800&fit=crop',
+    category: 'Fiverr Service',
+    title: 'Morph PPT',
+    subtitle: 'Animated PowerPoint presentations with morph transitions for fast, polished storytelling.',
+    year: 'From $15',
   },
   {
-    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&h=800&fit=crop',
-    category: 'Motion Design',
-    title: 'Data Narrative',
-    subtitle: 'Infographic Motion System',
-    year: '2025',
+    img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1400&h=800&fit=crop',
+    category: 'Fiverr Service',
+    title: 'Slide To Video',
+    subtitle: 'PowerPoint decks converted into YouTube-ready videos with voiceover and music.',
+    year: 'From $15',
   },
   {
-    img: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1400&h=800&fit=crop',
-    category: '3D Animation',
-    title: 'Product Film',
-    subtitle: 'Morphing Transition Reel',
-    year: '2025',
+    img: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=1400&h=800&fit=crop',
+    category: 'Specialty',
+    title: 'Pitch Decks',
+    subtitle: 'Investor decks built around clear narrative structure, modern layouts, and presentation flow.',
+    year: '3+ years',
   },
   {
-    img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&h=800&fit=crop',
-    category: 'Pitch Deck',
-    title: 'Summit Finance',
-    subtitle: 'Investor Presentation',
-    year: '2024',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&h=800&fit=crop',
-    category: 'Visual System',
-    title: 'Aether Studio',
-    subtitle: 'Brand Motion Language',
-    year: '2024',
+    img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1400&h=800&fit=crop',
+    category: 'Profile Signal',
+    title: 'Client Trust',
+    subtitle: '4.6 rating across 12 Fiverr reviews with 1-hour average response time and repeat clients.',
+    year: '4.6 / 12',
   },
 ];
 
@@ -214,11 +207,19 @@ const SelectedWork = () => {
       <div className="container work-header">
         <div className="label">My Project</div>
         <h2 className="display-lg" style={{ marginTop: '16px', marginBottom: '20px' }}>
-          Featured<br />Project
+          Fiverr<br />Work
         </h2>
         <p className="body-lg">
-          A compact look at recent motion design work built for fast mobile browsing.
+          Services and focus areas pulled from the live Fiverr profile for Maria Islam, centered on animated presentations and slideshow video delivery.
         </p>
+        <a
+          className="work-link"
+          href="https://www.fiverr.com/mriajtt"
+          target="_blank"
+          rel="noreferrer"
+        >
+          View Fiverr profile
+        </a>
       </div>
 
       <div className="h-wrapper" ref={wrapperRef}>

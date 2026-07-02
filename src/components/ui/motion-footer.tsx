@@ -289,7 +289,7 @@ export function CinematicFooter() {
 
           <div
             ref={giantTextRef}
-            className="footer-giant-bg-text absolute bottom-[clamp(5.5rem,12vh,8.5rem)] md:bottom-[clamp(1rem,3vh,3rem)] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 select-none"
+            className="footer-giant-bg-text absolute bottom-[clamp(8rem,18vh,14rem)] md:bottom-[clamp(6rem,12vh,10rem)] left-1/2 -translate-x-1/2 w-full text-center z-0 select-none px-4"
           >
             MARIA
           </div>
@@ -359,3 +359,4 @@ export function CinematicFooter() {
     </>
   );
 }
+
