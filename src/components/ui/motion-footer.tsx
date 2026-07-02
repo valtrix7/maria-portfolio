@@ -79,7 +79,7 @@ const STYLES = `
 }
 
 .footer-giant-bg-text {
-  font-size: clamp(6rem, min(24vw, 28vh), 22rem);
+  font-size: clamp(5rem, min(20vw, 22vh), 18rem);
   line-height: 0.82;
   font-weight: 900;
   letter-spacing: -0.035em;
@@ -88,6 +88,7 @@ const STYLES = `
   background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 60%);
   -webkit-background-clip: text;
   background-clip: text;
+  white-space: nowrap;
   transition:
     transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
     -webkit-text-stroke-color 0.35s ease,
